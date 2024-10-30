@@ -1,0 +1,64 @@
+<!-- multi-step-form.component.html -->
+<div class="container" id="grad1">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8">
+        <div class="card mt-4">
+          <div class="card-body">
+            <h2 class="text-center">Une formulaire d'identité</h2>
+            <p class="text-center">Fill all form field to go to next step</p>
+            <ul id="progressbar">
+              <li [ngClass]="{'active': currentStep === 0}"><strong>Account</strong></li>
+              <li [ngClass]="{'active': currentStep === 1}"><strong>Personal</strong></li>
+              <li [ngClass]="{'active': currentStep === 2}"><strong>Payment</strong></li>
+              <li [ngClass]="{'active': currentStep === 3}"><strong>Finish</strong></li>
+            </ul>
+  
+            <form (ngSubmit)="onSubmit()">
+              <div [ngSwitch]="currentStep">
+                <div *ngSwitchCase="0">
+                  <h4>Account Information</h4>
+                  <input type="email" [(ngModel)]="user.email" name="email" placeholder="Email Id" required />
+                  <input type="text" [(ngModel)]="user.username" name="username" placeholder="Username" required />
+                  <input type="password" [(ngModel)]="user.password" name="password" placeholder="Password" required />
+                  <input type="password" [(ngModel)]="user.confirmPassword" name="confirmPassword" placeholder="Confirm Password" required />
+                </div>
+  
+                <div *ngSwitchCase="1">
+                  <h4>Personal Information</h4>
+                  <input type="text" [(ngModel)]="user.firstName" name="firstName" placeholder="First Name" required />
+                  <input type="text" [(ngModel)]="user.lastName" name="lastName" placeholder="Last Name" required />
+                  <input type="text" [(ngModel)]="user.phone" name="phone" placeholder="Contact No." required />
+                  <input type="text" [(ngModel)]="user.altPhone" name="altPhone" placeholder="Alternate Contact No." />
+                </div>
+  
+                <div *ngSwitchCase="2">
+                  <h4>Payment Information</h4>
+                  <input type="text" [(ngModel)]="user.cardHolderName" name="holderName" placeholder="Card Holder Name" required />
+                  <input type="text" [(ngModel)]="user.cardNumber" name="cardNumber" placeholder="Card Number" required />
+                  <input type="password" [(ngModel)]="user.cvc" name="cvc" placeholder="CVC" required />
+                  <select [(ngModel)]="user.expiryMonth" name="expiryMonth" required>
+                    <option value="" disabled selected>Month</option>
+                    <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+                  </select>
+                  <select [(ngModel)]="user.expiryYear" name="expiryYear" required>
+                    <option value="" disabled selected>Year</option>
+                    <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+                  </select>
+                </div>
+  
+                <div *ngSwitchCase="3">
+                  <h4>Success!</h4>
+                  <p>You Have Successfully Signed Up</p>
+                </div>
+              </div>
+  
+              <button type="button" class="btn btn-primary" (click)="nextStep()" *ngIf="currentStep < 3">Next</button>
+              <button type="button" class="btn btn-secondary" (click)="previousStep()" *ngIf="currentStep > 0">Previous</button>
+              <button type="submit" class="btn btn-success" *ngIf="currentStep === 3">Finish</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

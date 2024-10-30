@@ -1,0 +1,37 @@
+<div class="card">
+    <div class="card-header">
+        <h3>Liste des Utilisateurs</h3>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="display dataTable" id="userTable" style="text-align: center;">
+                    <thead>
+                        <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Rôle</th>
+                        <th>Code Producteur</th>
+                        <th>Bloqué</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let user of users">
+                        <td>{{ user.nom }}</td>
+                        <td>{{ user.prenom }}</td>
+                        <td>{{ user.role }}</td>
+                        <td>{{ user.codeProducteur }}</td>
+                        <td>{{ user.bloque ? 'Oui' : 'Non' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+</div>

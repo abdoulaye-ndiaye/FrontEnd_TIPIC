@@ -1,0 +1,29 @@
+/* utilisateur.component.css */
+
+/* Styliser le tableau pour qu'il soit bien bordé */
+table.dataTable {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.dataTable th, table.dataTable td {
+    border: 1px solid #dee2e6; /* Bordure gris clair */
+    padding: 8px; /* Espace intérieur */
+    text-align: left; /* Alignement à gauche */
+}
+
+/* Ajouter un style au header */
+table.dataTable th {
+    background-color: #f8f9fa; /* Couleur de fond gris clair */
+    font-weight: bold; /* Gras pour le texte */
+}
+
+/* Ajouter un style pour les lignes impaires */
+table.dataTable tr:nth-child(odd) {
+    background-color: #f2f2f2; /* Couleur de fond des lignes impaires */
+}
+
+/* Style pour les lignes survolées */
+table.dataTable tr:hover {
+    background-color: #e9ecef; /* Couleur de fond lors du survol */
+}

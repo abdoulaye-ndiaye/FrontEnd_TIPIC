@@ -1,0 +1,39 @@
+<div class="notification-box" (click)="notification()">
+  <svg>
+    <use href="assets/svg/icon-sprite.svg#fill-Bell"></use>
+  </svg>
+  <span class="badge rounded-pill badge-primary">3</span>
+</div>
+<div class="onhover-show-div notification-dropdown" [ngClass]="{'active' : notifications == true}">
+  <h6 class="f-18 mb-0 dropdown-title">Notitications</h6>
+  <div class="d-flex align-items-center"><img src="assets/images/dashboard/user/5.png" alt="">
+    <div class="flex-grow-1 ms-2"><a href="javascript:void(0)">
+        <h5>
+          Ralph Edwards <strong> wants to edit </strong> tetrisly design system</h5><span>2hrs Ago</span>
+      </a>
+    </div>
+    <div class="flex-shrink-0">
+      <div class="activity-dot-primary"></div>
+    </div>
+  </div>
+  <div class="d-flex align-items-center">
+    <img src="assets/images/dashboard/user/6.png" alt="">
+    <div class="flex-grow-1 ms-2">
+      <a href="javascript:void(0)">
+        <h5>
+          Jenny Wilson <strong> Completed </strong> Create new component</h5><span>2.15pm</span>
+      </a>
+    </div>
+    <div class="flex-shrink-0">
+      <div class="activity-dot-secondary"></div>
+    </div>
+  </div>
+  <div class="d-flex align-items-center figma-line">
+    <img src="assets/images/dashboard/user/7.png" alt="">
+    <div class="flex-grow-1 ms-2">
+      <a href="javascript:void(0)">
+        <h5>Jenny Wilson mentioned you in rewrite button component</h5><span>3.10pm</span>
+      </a>
+    </div>
+  </div>
+</div>

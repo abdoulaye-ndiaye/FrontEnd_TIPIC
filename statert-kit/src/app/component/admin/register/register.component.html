@@ -1,0 +1,61 @@
+<div class="card">
+    <div class="card-header pb-0">
+        <h4>Création d'un nouvel utilisateur</h4>
+        <p class="f-m-light mt-1">
+            Veuillez compléter le formulaire ci-dessous. Le champ <code>codeProducteur</code> apparaîtra si le rôle sélectionné est "PRODUCTEUR".
+        </p>
+    </div>
+    <div class="card-body">
+        <form class="row g-3 needs-validation custom-input" novalidate [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <div class="col-md-6 position-relative">
+                <label class="form-label" for="email">Email</label>
+                <input class="form-control" id="email" type="email" placeholder="email@example.com" formControlName="email" [ngClass]="{ 'is-invalid' : (email?.touched || validate) && email?.errors , 'is-valid' : !email?.errors}">
+                <div class="invalid-tooltip">Veuillez entrer un email valide.</div>
+            </div>
+
+            <div class="col-md-6 position-relative">
+                <label class="form-label" for="password">Mot de passe</label>
+                <input class="form-control" id="password" type="password" placeholder="Mot de passe" formControlName="password" [ngClass]="{ 'is-invalid' : (password?.touched || validate) && password?.errors , 'is-valid' : !password?.errors}">
+                <div class="invalid-tooltip">Veuillez fournir un mot de passe (min. 6 caractères).</div>
+            </div>
+
+            <div class="col-md-6 position-relative">
+                <label class="form-label" for="nom">Nom</label>
+                <input class="form-control" id="nom" type="text" placeholder="Dupont" formControlName="nom" [ngClass]="{ 'is-invalid' : (nom?.touched || validate) && nom?.errors , 'is-valid' : !nom?.errors}">
+                <div class="valid-tooltip">C'est bon !</div>
+            </div>
+
+            <div class="col-md-6 position-relative">
+                <label class="form-label" for="prenom">Prénom</label>
+                <input class="form-control" id="prenom" type="text" placeholder="Jean" formControlName="prenom" [ngClass]="{ 'is-invalid' : (prenom?.touched || validate) && prenom?.errors , 'is-valid' : !prenom?.errors}">
+                <div class="valid-tooltip">C'est bon !</div>
+            </div>
+
+            <div class="col-md-6 position-relative">
+                <label class="form-label" for="role">Rôle</label>
+                <select class="form-select" id="role" formControlName="role" [ngClass]="{ 'is-invalid' : (role?.touched || validate) && role?.errors , 'is-valid' : !role?.errors}">
+                    <option selected disabled value="">Choisissez...</option>
+                    <option value="ADMIN">ADMIN</option>
+                    <option value="PRODUCTEUR">PRODUCTEUR</option>
+                    <option value="SYNDICAT_AOP">SYNDICAT_AOP</option>
+                    <option value="PARTENAIRE_PTF2A">PARTENAIRE_PTF2A</option>
+                    <option value="TECHNICIEN_IPREM">TECHNICIEN_IPREM</option>
+                    <option value="INGENIEUR_PREM">INGENIEUR_PREM</option>
+                    <option value="CHEF_PROJET_IPREM">CHEF_PROJET_IPREM</option>
+                </select>
+                <div class="invalid-tooltip">Veuillez sélectionner un rôle.</div>
+            </div>
+
+            <!-- Afficher codeProducteur uniquement si role = PRODUCTEUR -->
+            <div class="col-md-6 position-relative" *ngIf="isProducer">
+                <label class="form-label" for="codeProducteur">Code Producteur</label>
+                <input class="form-control" id="codeProducteur" type="text" formControlName="codeProducteur" [ngClass]="{ 'is-invalid' : (codeProducteur?.touched || validate) && codeProducteur?.errors , 'is-valid' : !codeProducteur?.errors}">
+                <div class="invalid-tooltip">Veuillez fournir un code valide.</div>
+            </div>
+
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">Soumettre le formulaire</button>
+            </div>
+        </form>
+    </div>
+</div>
