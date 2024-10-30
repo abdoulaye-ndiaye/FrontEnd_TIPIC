@@ -29,6 +29,7 @@
     "datatables.net-dt": "^2.1.8",
     "date-fns": "^3.3.1",
     "feather-icons": "^4.29.1",
+    "fontawesome-free": "^1.0.4",
     "jquery": "^3.7.1",
     "jwt-decode": "^4.0.0",
     "ngx-toastr": "^19.0.0",
