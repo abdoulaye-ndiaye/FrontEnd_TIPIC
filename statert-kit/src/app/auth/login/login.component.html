@@ -5,22 +5,41 @@
                 <div>
                     <div><a class="logo">
                             <img class="img-fluid for-light" src="assets/images/logo/logo.png" alt="page de connexion">
-                            <img class="img-fluid for-dark" src="assets/images/logo/logo.png" alt="page de connexion"></a>
+                            <img class="img-fluid for-dark" src="assets/images/logo/logo.png"
+                                alt="page de connexion"></a>
                     </div>
                     <div class="login-main">
-                        <form class="row g-3 needs-validation custom-input">
+                        <form [formGroup]='loginForm' (ngSubmit)='onSubmit()'
+                            class="row g-3 needs-validation custom-input">
                             <h3>Se connecter à un compte</h3>
                             <p>Entrez votre e-mail et mot de passe pour vous connecter</p>
                             <div class="form-group">
                                 <label class="col-form-label">Adresse e-mail</label>
-                                <input class="form-control" type="email" placeholder="Test@gmail.com">
+                                <input formControlName="email" class="form-control" type="email"
+                                    placeholder="Test@gmail.com" autocomplete="email" [ngClass]="{
+												'is-invalid': f['email'].errors && (f['email'].dirty || f['email'].touched)
+												}" required>
+                                <div *ngIf=" f['email'].errors && (f['email'].dirty || f['email'].touched)"
+                                    class=" input-group mb-3 invalid-feedback">
+                                    <div *ngIf="f['email'].errors['required']"> vueillez saisir votre email
+                                    </div>
+                                    <div *ngIf="f['email'].errors['email']"> votre email est invalide </div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label">Mot de passe</label>
                                 <div class="form-input position-relative">
-                                    <input class="form-control" type="password"
-                                        name="login[password]" required="" placeholder="*********"
-                                       >
+                                    <input class="form-control" type="password" formControlName="password"
+                                        class="form-control" placeholder="***********" autocomplete="new-password"
+                                        [ngClass]="{
+											  'is-invalid': f['password'].errors && (f['password'].dirty || f['password'].touched)
+											}" required>
+                                    <div *ngIf=" f['password'].errors && (f['password'].dirty || f['password'].touched)"
+                                        class="input-group mb-3 invalid-feedback">
+                                        <div *ngIf="f['password'].errors['required']">
+                                            veuillez saisir votre mot de passe
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group mb-0">
@@ -29,8 +48,10 @@
                                     <label class="text-muted" for="checkbox1">Se souvenir du mot de passe</label>
                                 </div><a class="link" href="javascript:void(0)">Mot de passe oublié ?</a>
                                 <div class="text-end mt-3">
-                                    <button class="btn btn-primary btn-block w-100" type="submit">Se connecter</button>
+                                    <button class="btn btn-primary btn-block w-100" type="submit"
+                                        [disabled]="!loginForm.valid">Se connecter</button>
                                 </div>
+                                <p style="color: red;">{{ message }}</p>
                             </div>
                         </form>
                     </div>
