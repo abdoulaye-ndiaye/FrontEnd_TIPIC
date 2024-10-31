@@ -4,58 +4,174 @@
       <div class="col-12 col-md-8">
         <div class="card mt-4">
           <div class="card-body">
-            <h2 class="text-center">Une formulaire d'identité</h2>
-            <p class="text-center">Fill all form field to go to next step</p>
-            <ul id="progressbar">
-              <li [ngClass]="{'active': currentStep === 0}"><strong>Account</strong></li>
-              <li [ngClass]="{'active': currentStep === 1}"><strong>Personal</strong></li>
-              <li [ngClass]="{'active': currentStep === 2}"><strong>Payment</strong></li>
-              <li [ngClass]="{'active': currentStep === 3}"><strong>Finish</strong></li>
-            </ul>
-  
-            <form (ngSubmit)="onSubmit()">
-              <div [ngSwitch]="currentStep">
-                <div *ngSwitchCase="0">
-                  <h4>Account Information</h4>
-                  <input type="email" [(ngModel)]="user.email" name="email" placeholder="Email Id" required />
-                  <input type="text" [(ngModel)]="user.username" name="username" placeholder="Username" required />
-                  <input type="password" [(ngModel)]="user.password" name="password" placeholder="Password" required />
-                  <input type="password" [(ngModel)]="user.confirmPassword" name="confirmPassword" placeholder="Confirm Password" required />
-                </div>
-  
-                <div *ngSwitchCase="1">
-                  <h4>Personal Information</h4>
-                  <input type="text" [(ngModel)]="user.firstName" name="firstName" placeholder="First Name" required />
-                  <input type="text" [(ngModel)]="user.lastName" name="lastName" placeholder="Last Name" required />
-                  <input type="text" [(ngModel)]="user.phone" name="phone" placeholder="Contact No." required />
-                  <input type="text" [(ngModel)]="user.altPhone" name="altPhone" placeholder="Alternate Contact No." />
-                </div>
-  
-                <div *ngSwitchCase="2">
-                  <h4>Payment Information</h4>
-                  <input type="text" [(ngModel)]="user.cardHolderName" name="holderName" placeholder="Card Holder Name" required />
-                  <input type="text" [(ngModel)]="user.cardNumber" name="cardNumber" placeholder="Card Number" required />
-                  <input type="password" [(ngModel)]="user.cvc" name="cvc" placeholder="CVC" required />
-                  <select [(ngModel)]="user.expiryMonth" name="expiryMonth" required>
-                    <option value="" disabled selected>Month</option>
-                    <option *ngFor="let month of months" [value]="month">{{ month }}</option>
-                  </select>
-                  <select [(ngModel)]="user.expiryYear" name="expiryYear" required>
-                    <option value="" disabled selected>Year</option>
-                    <option *ngFor="let year of years" [value]="year">{{ year }}</option>
-                  </select>
-                </div>
-  
-                <div *ngSwitchCase="3">
-                  <h4>Success!</h4>
-                  <p>You Have Successfully Signed Up</p>
-                </div>
-              </div>
-  
-              <button type="button" class="btn btn-primary" (click)="nextStep()" *ngIf="currentStep < 3">Next</button>
-              <button type="button" class="btn btn-secondary" (click)="previousStep()" *ngIf="currentStep > 0">Previous</button>
-              <button type="submit" class="btn btn-success" *ngIf="currentStep === 3">Finish</button>
-            </form>
+            <h2 class="text-center">Formulaire d'identité pour le fromage</h2>
+            <br>
+            <div class="card-body mb-4">
+                <ul id="progressbar" class="text-center">
+                    <li [ngClass]="{'active': currentStep === 0}"><strong>Identifiants</strong></li>
+                    <li [ngClass]="{'active': currentStep === 1}"><strong>Production</strong></li>
+                    <li [ngClass]="{'active': currentStep === 2}"><strong>Fabrication</strong></li>
+                    <li [ngClass]="{'active': currentStep === 3}"><strong>Affinage</strong></li>
+                  </ul>
+                  <div class="card-body mb-4">
+                    <form (ngSubmit)="onSubmit()">
+                        <div [ngSwitch]="currentStep">
+                          <!-- IDENTIFIANTS -->
+                          <div *ngSwitchCase="0">
+                            <div class="card p-3 mb-4">
+                              <h4 class="mb-3">Identifiants</h4>
+                              <div class="form-group mb-3">
+                                <label for="datePrelevement">Date de prélèvement</label>
+                                <input type="date" class="form-control" id="datePrelevement" [(ngModel)]="cheese.datePrelevement" name="datePrelevement" required />
+                              </div>
+                              <div class="form-group mb-3">
+                                <label for="numeroEchantillon">Numéro de l'échantillon</label>
+                                <input type="text" class="form-control" id="numeroEchantillon" [(ngModel)]="cheese.numeroEchantillon" name="numeroEchantillon" required />
+                              </div>
+                              <div class="form-group mb-3">
+                                <label for="identifiantProducteur">Identifiant du producteur</label>
+                                <input type="text" class="form-control" id="identifiantProducteur" [(ngModel)]="cheese.identifiantProducteur" name="identifiantProducteur" required />
+                              </div>
+                              <div class="form-group mb-3">
+                                <label for="typicite">Typicité</label>
+                                <input type="text" class="form-control" id="typicite" [(ngModel)]="cheese.typicite" name="typicite" required />
+                              </div>
+                            </div>
+                          </div>
+            
+                          <!-- PRODUCTION -->
+                          <div *ngSwitchCase="1">
+                            <div class="card p-3 mb-4">
+                              <h4 class="mb-3">Production</h4>
+                              <div class="form-group mb-3">
+                                <label for="categorie">Catégorie</label>
+                                <select class="form-control" id="categorie" [(ngModel)]="cheese.categorie" name="categorie" required>
+                                  <option value="" disabled selected>Sélectionnez une catégorie</option>
+                                  <option value="Fermier">Fermier</option>
+                                  <option value="Laitier">Laitier</option>
+                                </select>
+                              </div>
+                              <div class="form-group mb-3">
+                                <label for="raceDominante">Race dominante</label>
+                                <select class="form-control" id="raceDominante" [(ngModel)]="cheese.raceDominante" name="raceDominante" required>
+                                  <option value="" disabled selected>Sélectionnez la race dominante</option>
+                                  <option value="Basco-béarnaise">Basco-béarnaise</option>
+                                  <option value="Manech tête rousse">Manech tête rousse</option>
+                                  <option value="Manech tête noire">Manech tête noire</option>
+                                  <option value="Mix">Mix</option>
+                                </select>
+                              </div>
+                              <div class="form-group mb-3">
+                                <label for="nbBrebis">Nombre de brebis (+6 mois)</label>
+                                <input type="number" class="form-control" id="nbBrebis" [(ngModel)]="cheese.nbBrebis" name="nbBrebis" required />
+                              </div>
+                              <div class="form-group mb-3">
+                                <label for="productivite">Productivité précédente (en litres)</label>
+                                <input type="number" class="form-control" id="productivite" [(ngModel)]="cheese.productivite" name="productivite" required />
+                              </div>
+                              <div class="form-group mb-3">
+                                <label for="periodeAgnelage">Période d'agnelage</label>
+                                <select class="form-control" id="periodeAgnelage" [(ngModel)]="cheese.periodeAgnelage" name="periodeAgnelage" required>
+                                  <option value="" disabled selected>Sélectionnez la période d'agnelage</option>
+                                  <option value="oct-nov">Oct-Nov</option>
+                                  <option value="nov-janv">Nov-Janv</option>
+                                  <option value="janv-mars">Janv-Mars</option>
+                                  <option value="avril">Avril</option>
+                                </select>
+                              </div>
+                              <div class="form-group mb-3">
+                                <label>Ce fromage a-t-il été fabriqué en estive ?</label>
+                                <div class="form-check">
+                                  <input type="radio" class="form-check-input" id="estiveOui" [(ngModel)]="cheese.estive" name="estive" [value]="true" required />
+                                  <label for="estiveOui" class="form-check-label">Oui</label>
+                                </div>
+                                <div class="form-check">
+                                  <input type="radio" class="form-check-input" id="estiveNon" [(ngModel)]="cheese.estive" name="estive" [value]="false" required />
+                                  <label for="estiveNon" class="form-check-label">Non</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+            
+                          <!-- FABRICATION -->
+                          <div *ngSwitchCase="2">
+                            <div class="card p-3 mb-4">
+                              <h4 class="mb-3">Fabrication</h4>
+                              <div class="form-group mb-3">
+                                <label for="dateFabrication">Date de fabrication</label>
+                                <input type="date" class="form-control" id="dateFabrication" [(ngModel)]="cheese.dateFabrication" name="dateFabrication" required />
+                              </div>
+                              <div class="form-group mb-3">
+                                <label for="nombreTraites">Nombre de traites</label>
+                                <input type="number" class="form-control" id="nombreTraites" [(ngModel)]="cheese.nombreTraites" name="nombreTraites" required />
+                              </div>
+                              <div class="form-group mb-3">
+                                <label for="temperatureEmpressurage">Température d'emprésurage (°C)</label>
+                                <input type="number" class="form-control" id="temperatureEmpressurage" [(ngModel)]="cheese.temperatureEmpressurage" name="temperatureEmpressurage" required />
+                              </div>
+                              <div class="form-group mb-3">
+                                <label for="quantitePresure">Quantité de présure (ml)</label>
+                                <input type="number" class="form-control" id="quantitePresure" [(ngModel)]="cheese.quantitePresure" name="quantitePresure" required />
+                              </div>
+                              <div class="form-group mb-3">
+                                <label for="typeFerments">Type de ferments lactiques</label>
+                                <input type="text" class="form-control" id="typeFerments" [(ngModel)]="cheese.typeFerments" name="typeFerments" required />
+                              </div>
+                              <div class="form-group mb-3">
+                                <label for="dureeCoagulation">Durée de coagulation (min)</label>
+                                <input type="number" class="form-control" id="dureeCoagulation" [(ngModel)]="cheese.dureeCoagulation" name="dureeCoagulation" required />
+                              </div>
+                              <div class="form-group mb-3">
+                                <label for="temperatureCaillage">Température de chauffage du caillé (°C)</label>
+                                <input type="number" class="form-control" id="temperatureCaillage" [(ngModel)]="cheese.temperatureCaillage" name="temperatureCaillage" required />
+                              </div>
+                              <div class="form-group mb-3">
+                                <label>Salage</label>
+                                <div class="form-check">
+                                  <input type="radio" class="form-check-input" id="salageSec" [(ngModel)]="cheese.salage" name="salage" [value]="'sec'" required />
+                                  <label for="salageSec" class="form-check-label">À sec</label>
+                                </div>
+                                <div class="form-check">
+                                  <input type="radio" class="form-check-input" id="salageSaumure" [(ngModel)]="cheese.salage" name="salage" [value]="'saumure'" required />
+                                  <label for="salageSaumure" class="form-check-label">En saumure</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+            
+                          <!-- AFFINAGE -->
+                          <div *ngSwitchCase="3">
+                            <div class="card p-3 mb-4">
+                              <h4 class="mb-3">Affinage</h4>
+                              <div class="form-group mb-3">
+                                <label for="dateAffinage">Date de début d'affinage</label>
+                                <input type="date" class="form-control" id="dateAffinage" [(ngModel)]="cheese.dateAffinage" name="dateAffinage" required />
+                              </div>
+                              <div class="form-group mb-3">
+                                <label for="dureeAffinage">Durée d'affinage (jours)</label>
+                                <input type="number" class="form-control" id="dureeAffinage" [(ngModel)]="cheese.dureeAffinage" name="dureeAffinage" required />
+                              </div>
+                              <div class="form-group mb-3">
+                                <label for="hygrometrie">Hygrométrie (%)</label>
+                                <input type="number" class="form-control" id="hygrometrie" [(ngModel)]="cheese.hygrometrie" name="hygrometrie" required />
+                              </div>
+                              <div class="form-group mb-3">
+                                <label for="temperatureAffinage">Température d'affinage (°C)</label>
+                                <input type="number" class="form-control" id="temperatureAffinage" [(ngModel)]="cheese.temperatureAffinage" name="temperatureAffinage" required />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+            
+                        <!-- Boutons de navigation -->
+                        <div class="d-flex justify-content-between mt-4">
+                          <button type="button" class="btn btn-secondary" (click)="previousStep()" *ngIf="currentStep > 0">Précédent</button>
+                          <button type="button" class="btn btn-primary" (click)="nextStep()" *ngIf="currentStep < 3">Suivant</button>
+                          <button type="submit" class="btn btn-success" *ngIf="currentStep === 3">Terminer</button>
+                        </div>
+                      </form>
+                  </div> 
+            </div>  
           </div>
         </div>
       </div>

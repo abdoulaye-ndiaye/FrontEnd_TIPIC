@@ -1,36 +1,55 @@
 import { CommonModule } from '@angular/common';
-import { ApplicationModule, Component, NgModule } from '@angular/core';
+import { ApplicationModule, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-formulaire-identite',
   standalone: true,
-  imports: [CommonModule, ApplicationModule, FormsModule ],
+  imports: [CommonModule, ApplicationModule, FormsModule],
   templateUrl: './formulaire-identite.component.html',
-  styleUrl: './formulaire-identite.component.scss'
+  styleUrls: ['./formulaire-identite.component.scss']
 })
 export class FormulaireIdentiteComponent {
-
   currentStep: number = 0;
-  user = {
-    email: '',
-    username: '',
-    password: '',
-    confirmPassword: '',
-    firstName: '',
-    lastName: '',
-    phone: '',
-    altPhone: '',
-    cardHolderName: '',
-    cardNumber: '',
-    cvc: '',
-    expiryMonth: '',
-    expiryYear: ''
-  };
-  months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  years = Array.from({length: 10}, (_, i) => new Date().getFullYear() + i);
 
+  // Définition de l'objet user avec les champs adaptés aux étapes
+  cheese = {
+    // Identifiants
+    datePrelevement: '',
+    numeroEchantillon: '',
+    identifiantProducteur: '',
+    typicite: '',
+    
+    // Production
+    categorie: '',
+    raceDominante: '',
+    nbBrebis: null,
+    productivite: null,
+    periodeAgnelage: '',
+    estive: null,
+
+    // Fabrication
+    dateFabrication: '',
+    nombreTraites: null,
+    temperatureEmpressurage: null,
+    quantitePresure: null,
+    typeFerments: '',
+    dureeCoagulation: null,
+    temperatureCaillage: null,
+    salage: '',
+    
+    // Affinage
+    affineur: '',
+    preAffinage: null,
+    brossageManuel: null,
+    dateAffinage: '',
+    dureeAffinage: null,
+    hygrometrie: null,
+    temperatureAffinage: null,
+    humidificationCave: null
+  };
+
+  // Méthodes pour gérer la navigation entre étapes
   nextStep() {
     if (this.currentStep < 3) {
       this.currentStep++;
@@ -45,7 +64,7 @@ export class FormulaireIdentiteComponent {
 
   onSubmit() {
     // Traitement lors de la soumission finale
-    console.log('User Data:', this.user);
-    alert('Form submitted successfully!');
+    console.log('Données du fromage:', this.cheese);
+    alert('Formulaire soumis avec succès !');
   }
 }
