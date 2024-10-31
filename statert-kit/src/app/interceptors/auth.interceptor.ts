@@ -4,9 +4,9 @@ import { AuthService } from "../services/auth.service";
 import { inject } from "@angular/core";
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-    const token = (localStorage.getItem("token") as string) || "";
-    const refreshToken = (localStorage.getItem("refreshToken") as string) || "";
     const authService = inject(AuthService);
+    const token = localStorage.getItem("token") as string;
+    const refreshToken = (localStorage.getItem("refreshToken") as string) || "";
 
     // Clone the request and add the authorization header
     const authReq = req.clone({
@@ -32,6 +32,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
                         // Retry the request with the new token
                         return next(newAuthReq);
+                    }),
+                    catchError((refreshError) => {
+                        // Si le rafraîchissement échoue, déconnectez l’utilisateur
+                        authService.logout(); // Ou redirection vers la page de connexion
+                        return throwError(() => refreshError);
                     })
                 );
             } else {

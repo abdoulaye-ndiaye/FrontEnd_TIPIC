@@ -4,12 +4,13 @@ import { map } from "rxjs/operators";
 import { jwtDecode } from "jwt-decode";
 import { environment } from "../environments/environment";
 import { Observable } from "rxjs";
+import { Router } from "@angular/router";
 
 @Injectable({
     providedIn: "root",
 })
 export class AuthService {
-    constructor(private httpClient: HttpClient) {}
+    constructor(private httpClient: HttpClient, private router: Router) {}
 
     getDecodedToken(token: string) {
         try {
@@ -38,6 +39,8 @@ export class AuthService {
 
     logout() {
         localStorage.removeItem("token");
+        localStorage.removeItem("refreshToken");
+        this.router.navigate(["/auth/login"]);
     }
 
     isLoggedIn() {
@@ -49,6 +52,7 @@ export class AuthService {
         if (!decodedToken) {
             return false;
         }
+
         return true;
     }
 
@@ -98,5 +102,20 @@ export class AuthService {
                     return response.token;
                 })
             );
+    }
+
+    isTokenExpired() {
+        const token = localStorage.getItem("token") as string;
+
+        // Décode le payload du token en base64
+        const payload = JSON.parse(atob(token.split(".")[1]));
+
+        // Récupère les timestamps pour calculer l'expiration
+        const createdAt = new Date(payload.createdAt).getTime();
+        const expiresIn = payload.expiresIn * 1000; // Convertit expiresIn en millisecondes
+        //console.log(createdAt + expiresIn);
+        //console.log(Date.now());
+        // Vérifie si le token est expiré
+        return createdAt + expiresIn < Date.now();
     }
 }

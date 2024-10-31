@@ -47,7 +47,6 @@ export class LoginComponent implements OnInit {
         if (this.loginForm.invalid) {
             return;
         } else {
-            console.log(this.loginForm.value);
             this.authService
                 .login(
                     this.loginForm.value.email,
@@ -55,11 +54,10 @@ export class LoginComponent implements OnInit {
                 )
                 .subscribe(
                     (result) => {
-                        console.log(result);
                         this.router.navigate(["/admin/dashboard"]);
                     },
                     (error) => {
-                        console.log(error);
+                        //console.log(error);
                         if (error.error.text == "compte bloqué") {
                             this.message = "Ce compte a été bloqué";
                         } else if (error.error.text == "email invalide") {
