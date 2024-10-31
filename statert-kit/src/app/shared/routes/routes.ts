@@ -1,51 +1,61 @@
-import { Routes } from '@angular/router';
-import { LoginComponent } from '../../auth/login/login.component';
+import { Routes } from "@angular/router";
+import { LoginComponent } from "../../auth/login/login.component";
+import { authGuard } from "../../guard/auth.guard";
 
 export const dashData: Routes = [
     {
-        path: 'pages',
+        path: "pages",
         data: {
             title: "sample-page",
             breadcrumb: "sample-page",
-
         },
-        loadChildren: () => import('../../../app/component/pages/pages.routes').then(r => r.pages)
+
+        loadChildren: () =>
+            import("../../../app/component/pages/pages.routes").then(
+                (r) => r.pages
+            ),
     },
     {
-        path: 'sample-page',
+        path: "sample-page",
         data: {
             title: "sample-page",
             breadcrumb: "sample-page",
-
         },
-        loadChildren: () => import('../../../app/component/sample-page/sample-pages.routes').then(r => r.samplePages)
+        loadChildren: () =>
+            import(
+                "../../../app/component/sample-page/sample-pages.routes"
+            ).then((r) => r.samplePages),
     },
     {
-        path: 'admin',
+        path: "admin",
         data: {
             title: "admin",
             breadcrumb: "admin",
-
+            expectedRole: "ADMIN",
         },
-        loadChildren: () => import('../../../app/component/admin/admin.routes').then(r => r.admin)
+        canActivate: [authGuard],
+        loadChildren: () =>
+            import("../../../app/component/admin/admin.routes").then(
+                (r) => r.admin
+            ),
     },
     {
-        path: 'auth/login',
+        path: "auth/login",
         data: {
             title: "auth",
             breadcrumb: "auth",
-
         },
         component: LoginComponent,
     },
     {
-        path: 'syndicat',
+        path: "syndicat",
         data: {
             title: "syndicat",
             breadcrumb: "syndicat",
-
         },
-        loadChildren: () => import('../../../app/component/syndicat-AOP/syndicat-AOP.routes').then(r => r.syndicat)
-    }
-]
-
+        loadChildren: () =>
+            import(
+                "../../../app/component/syndicat-AOP/syndicat-AOP.routes"
+            ).then((r) => r.syndicat),
+    },
+];
