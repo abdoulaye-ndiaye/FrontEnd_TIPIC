@@ -1,7 +1,7 @@
 <div class="d-flex align-items-center profile-media" (click)="open()">
     <img class="b-r-10 img-40" src="assets/images/dashboard/profile.png" alt="img">
-    <div class="flex-grow-1"><span>Alen Miller</span>
-        <p class="mb-0">UI Designer </p>
+    <div class="flex-grow-1"><span>{{prenom}} {{nom}}</span>
+        <p class="mb-0"> {{role}} </p>
     </div>
 </div>
 <ul class="profile-dropdown onhover-show-div" [ngClass]="{'active' : show == true}">
@@ -12,27 +12,9 @@
         </a>
     </li>
     <li>
-        <a href="javascript:void(0)">
-            <app-feather-icon [icon]="'mail'"></app-feather-icon>
-            <span>Inbox</span>
-        </a>
-    </li>
-    <li>
-        <a href="javascript:void(0)">
-            <app-feather-icon [icon]="'file-text'"></app-feather-icon>
-            <span>Taskboard</span>
-        </a>
-    </li>
-    <li>
-        <a href="javascript:void(0)">
-            <app-feather-icon [icon]="'settings'"></app-feather-icon>
-            <span>Settings</span>
-        </a>
-    </li>
-    <li>
-        <a href="javascript:void(0)">
-            <app-feather-icon [icon]="'log-in'"></app-feather-icon>
-            <span>Log in</span>
+        <a (click)="logout()">
+            <app-feather-icon [icon]="'log-out'"></app-feather-icon>
+            <span>Déconnexion</span>
         </a>
     </li>
 </ul>

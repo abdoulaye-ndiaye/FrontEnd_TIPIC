@@ -3,6 +3,8 @@ import { ApplicationModule, Component, OnDestroy, OnInit } from "@angular/core";
 import $ from "jquery";
 import "datatables.net"; // Importation des types DataTables
 import { UtilisateurService } from "../../../services/utilisateur.service";
+import Swal from 'sweetalert2';
+
 
 @Component({
     selector: "app-utilisateur",
@@ -19,7 +21,6 @@ export class UtilisateurComponent implements OnInit, OnDestroy {
         // Récupération des utilisateurs
         this.utilisateurService.getAll().subscribe((data) => {
             this.users = data;
-            //console.log(data);
         });
 
         // Initialisation de DataTables avec setTimeout
@@ -50,4 +51,52 @@ export class UtilisateurComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         $("#userTable").DataTable().destroy(); // Détruire le DataTable pour éviter les fuites de mémoire
     }
+    bloquer(id: string) {
+        Swal.fire({
+          title: 'Voulez-vous vraiment bloquer cet utilisateur ?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Oui, bloquer'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.utilisateurService.bloquer(id).subscribe((data) => {
+              this.users = data;
+              Swal.fire(
+                'Bloqué !',
+                'L\'utilisateur a été bloqué avec succès.',
+                'success'
+              );
+            });
+          }
+          this.refresh();
+        });
+      }
+      
+      debloquer(id: string) {
+        Swal.fire({
+          title: 'Voulez-vous vraiment débloquer cet utilisateur ?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#28a745',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Oui, débloquer'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.utilisateurService.debloquer(id).subscribe((data) => {
+              this.users = data;
+              Swal.fire(
+                'Débloqué !',
+                'L\'utilisateur a été débloqué avec succès.',
+                'success'
+              );    
+            });
+          }
+          this.refresh();
+        });
+      }
+      refresh() {
+       window.location.reload();
+      }
 }

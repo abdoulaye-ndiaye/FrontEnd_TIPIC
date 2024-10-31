@@ -23,7 +23,14 @@
                         <td>{{ user.prenom }}</td>
                         <td>{{ user.role }}</td>
                         <td>{{ user.codeProducteur }}</td>
-                        <td>{{ user.bloque ? 'Oui' : 'Non' }}</td>
+                        <td>
+                          <button
+                            [ngClass]="user.isBlocked ? 'btn btn-outline-success-2x' : 'btn btn-outline-danger-2x'"
+                            (click)="user.isBlocked ? debloquer(user._id) : bloquer(user._id)"
+                          >
+                            {{ user.isBlocked ? 'Débloquer' : 'Bloquer' }}
+                          </button>
+                        </td>
                         </tr>
                     </tbody>
                 </table>
