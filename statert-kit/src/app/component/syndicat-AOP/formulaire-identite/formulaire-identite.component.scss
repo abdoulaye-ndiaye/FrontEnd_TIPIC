@@ -1,50 +1,150 @@
-/* multi-step-form.component.css */
 
-* {
-    margin: 0;
-    padding: 0;
-  }
-  
-  #grad1 {
-    background-color: #9C27B0;
-    background-image: linear-gradient(120deg, #3b8748, #c74848);
-  }
-  
-  #progressbar {
+
+#msform input, #msform textarea {
+    padding: 0px 8px 4px 8px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0px;
+    margin-bottom: 25px;
+    margin-top: 2px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: montserrat;
+    color: #2C3E50;
+    font-size: 16px;
+    letter-spacing: 1px;
+}
+
+#msform input:focus, #msform textarea:focus {
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    border: none;
+    font-weight: bold;
+    border-bottom: 2px solid rgb(60, 223, 122);
+    outline-width: 0;
+}
+
+/*Blue Buttons*/
+#msform .action-button {
+    width: 100px;
+    background: rgb(60, 223, 122);
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 0px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+
+#msform .action-button:hover, #msform .action-button:focus {
+    box-shadow: 0 0 0 2px white, 0 0 0 3px rgb(41, 154, 84);
+}
+
+/*Previous Buttons*/
+#msform .action-button-previous {
+    width: 100px;
+    background: #e07373;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 0px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+
+#msform .action-button-previous:hover, #msform .action-button-previous:focus {
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #9a5151;
+}
+
+/*Dropdown List Exp Date*/
+select.list-dt {
+    border: none;
+    outline: 0;
+    border-bottom: 1px solid #ccc;
+    padding: 2px 5px 3px 5px;
+    margin: 2px;
+}
+
+select.list-dt:focus {
+    border-bottom: 2px solid rgb(41, 154, 84);
+}
+
+/*The background card*/
+.card {
+    z-index: 0;
+    border: none;
+    border-radius: 0.5rem;
+    position: relative;
+}
+
+/*FieldSet headings*/
+.fs-title {
+    text-align: center;
+    font-size: 25px;
+    color: #2C3E50;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+/*progressbar*/
+#progressbar {
     margin-bottom: 30px;
     overflow: hidden;
     color: lightgrey;
-  }
-  
-  #progressbar li {
+}
+
+#progressbar .active {
+    color: #000000;
+}
+
+#progressbar li {
     list-style-type: none;
     font-size: 12px;
     width: 25%;
     float: left;
     position: relative;
-  }
-  
-  #progressbar li.active {
-    color: #000;
-  }
-  
-  #progressbar li:before {
+}
+
+/*Icons in the ProgressBar*/
+#progressbar #account:before {
+    font-family: FontAwesome;
+    content: "\f023";
+}
+
+#progressbar #personal:before {
+    font-family: FontAwesome;
+    content: "\f007";
+}
+
+#progressbar #payment:before {
+    font-family: FontAwesome;
+    content: "\f09d";
+}
+
+#progressbar #confirm:before {
+    font-family: FontAwesome;
+    content: "\f00c";
+}
+
+/*ProgressBar before any progress*/
+#progressbar li:before {
     width: 50px;
     height: 50px;
     line-height: 45px;
     display: block;
     font-size: 18px;
-    color: #fff;
+    color: #ffffff;
     background: lightgray;
     border-radius: 50%;
     margin: 0 auto 10px auto;
-  }
-  
-  #progressbar li.active:before {
-    background: skyblue;
-  }
-  
-  #progressbar li:after {
+    padding: 2px;
+}
+
+/*ProgressBar connectors*/
+#progressbar li:after {
     content: '';
     width: 100%;
     height: 2px;
@@ -53,13 +153,34 @@
     left: 0;
     top: 25px;
     z-index: -1;
-  }
-  
-  #progressbar li.active:after {
-    background: skyblue;
-  }
-  
-  button {
-    margin: 5px;
-  }
-  
+}
+
+/*Color number of the step and the connector before it*/
+#progressbar li.active:before, #progressbar li.active:after {
+    background: rgb(135, 235, 148);
+}
+
+/*Imaged Radio Buttons*/
+
+
+.radio {
+    background: rgb(113, 228, 118);
+    box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    cursor:pointer;
+    margin: 8px 2px; 
+}
+
+.radio:hover {
+    box-shadow: 2px 2px 2px 2px rgba(49, 110, 77, 0.3);
+}
+
+.radio.selected {
+    box-shadow: 1px 1px 2px 2px rgba(49, 110, 77, 0.3);
+}
+
+/*Fit image in bootstrap div*/
+.fit-image{
+    width: 100%;
+    object-fit: cover;
+}

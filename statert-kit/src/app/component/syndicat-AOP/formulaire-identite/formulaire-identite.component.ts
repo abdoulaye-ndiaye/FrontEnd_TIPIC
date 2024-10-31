@@ -27,6 +27,8 @@ export class FormulaireIdentiteComponent {
     productivite: null,
     periodeAgnelage: '',
     estive: null,
+    paturage: '',
+    laitCru: null,
 
     // Fabrication
     dateFabrication: '',
@@ -37,16 +39,20 @@ export class FormulaireIdentiteComponent {
     dureeCoagulation: null,
     temperatureCaillage: null,
     salage: '',
+    reportVide: '',
+    dateMiseVide: '',
+    dateSortieVide: '',
     
     // Affinage
-    affineur: '',
-    preAffinage: null,
-    brossageManuel: null,
-    dateAffinage: '',
+    preAffinage: false,
     dureeAffinage: null,
-    hygrometrie: null,
     temperatureAffinage: null,
-    humidificationCave: null
+    brossageManuel: false,
+    tempPreAffinage: null,
+    tempAffinage: null,
+    humidificationCave: '',
+    dureeHumidification: null,
+    temperatureHumidification: null
   };
 
   // Méthodes pour gérer la navigation entre étapes
@@ -61,6 +67,14 @@ export class FormulaireIdentiteComponent {
       this.currentStep--;
     }
   }
+
+  showPreAffinageFields() {
+    if (!this.cheese.preAffinage) {
+      this.cheese.dureeAffinage = null;
+      this.cheese.tempAffinage = null;
+    }
+  }
+
 
   onSubmit() {
     // Traitement lors de la soumission finale
