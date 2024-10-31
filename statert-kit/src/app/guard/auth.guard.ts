@@ -15,11 +15,9 @@ export const authGuard: CanActivateFn = (route, state) => {
     if (token) {
         decodedToken = jwtDecode(token);
         role = decodedToken.user.role;
-        console.log(role);
     }
 
     var expectedRole = role;
-    console.log(route.data);
     if (route.data["expectedRole"]) {
         expectedRole = route.data["expectedRole"];
     }
