@@ -1,4 +1,21 @@
+/* Styles généraux pour les boutons radio */
+.form-check {
+    display: flex; /* Utiliser flexbox pour aligner les éléments sur la même ligne */
+    align-items: center; /* Aligne les éléments au centre verticalement */
+    margin-right: 20px; /* Ajoute un espace entre les boutons radio */
+}
 
+/* Spécificités pour les labels */
+.form-check-label {
+    margin-left: 5px; /* Espace entre le bouton et le label */
+}
+
+/* S'assurer que les conteneurs du formulaire utilisent la flexbox */
+.form-group {
+    display: flex; /* Utiliser flexbox pour le conteneur du groupe */
+    flex-direction: column; /* Aligne les enfants en colonne */
+    margin-bottom: 15px; /* Espacement entre les groupes de formulaires */
+}
 
 #msform input, #msform textarea {
     padding: 0px 8px 4px 8px;
@@ -21,14 +38,14 @@
     box-shadow: none !important;
     border: none;
     font-weight: bold;
-    border-bottom: 2px solid rgb(60, 223, 122);
+    border-bottom: 2px solid #3b8748;
     outline-width: 0;
 }
 
 /*Blue Buttons*/
 #msform .action-button {
     width: 100px;
-    background: rgb(60, 223, 122);
+    background: #3b8748;
     font-weight: bold;
     color: white;
     border: 0 none;
@@ -38,14 +55,21 @@
     margin: 10px 5px;
 }
 
+
 #msform .action-button:hover, #msform .action-button:focus {
-    box-shadow: 0 0 0 2px white, 0 0 0 3px rgb(41, 154, 84);
+    box-shadow: 0 0 0 2px white, 0 0 0 3px rgb(23, 124, 61);
+}
+
+#msform .action-button:disabled{
+    background-color: #93cb9c; /* Couleur lorsque désactivé */
+    color: white; /* Couleur du texte lorsque désactivé */
+    cursor: not-allowed; /* Changer le curseur pour indiquer que c'est désactivé */
 }
 
 /*Previous Buttons*/
 #msform .action-button-previous {
     width: 100px;
-    background: #e07373;
+    background: #c74848;
     font-weight: bold;
     color: white;
     border: 0 none;
@@ -56,7 +80,7 @@
 }
 
 #msform .action-button-previous:hover, #msform .action-button-previous:focus {
-    box-shadow: 0 0 0 2px white, 0 0 0 3px #9a5151;
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #c74848;
 }
 
 /*Dropdown List Exp Date*/
@@ -69,7 +93,7 @@ select.list-dt {
 }
 
 select.list-dt:focus {
-    border-bottom: 2px solid rgb(41, 154, 84);
+    border-bottom: 2px solid #3b8748;
 }
 
 /*The background card*/
@@ -93,11 +117,11 @@ select.list-dt:focus {
 #progressbar {
     margin-bottom: 30px;
     overflow: hidden;
-    color: lightgrey;
+    color: #000000;
 }
 
 #progressbar .active {
-    color: #000000;
+    color: lightgrey;
 }
 
 #progressbar li {
@@ -157,14 +181,14 @@ select.list-dt:focus {
 
 /*Color number of the step and the connector before it*/
 #progressbar li.active:before, #progressbar li.active:after {
-    background: rgb(135, 235, 148);
+    background: #3b8748;
 }
 
 /*Imaged Radio Buttons*/
 
 
 .radio {
-    background: rgb(113, 228, 118);
+    background: #3b8748;
     box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
     box-sizing: border-box;
     cursor:pointer;

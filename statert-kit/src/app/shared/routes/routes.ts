@@ -4,29 +4,6 @@ import { authGuard } from "../../guard/auth.guard";
 
 export const dashData: Routes = [
     {
-        path: "pages",
-        data: {
-            title: "sample-page",
-            breadcrumb: "sample-page",
-        },
-
-        loadChildren: () =>
-            import("../../../app/component/pages/pages.routes").then(
-                (r) => r.pages
-            ),
-    },
-    {
-        path: "sample-page",
-        data: {
-            title: "sample-page",
-            breadcrumb: "sample-page",
-        },
-        loadChildren: () =>
-            import(
-                "../../../app/component/sample-page/sample-pages.routes"
-            ).then((r) => r.samplePages),
-    },
-    {
         path: "admin",
         data: {
             title: "admin",
