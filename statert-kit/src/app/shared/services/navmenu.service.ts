@@ -30,37 +30,12 @@ export class NavmenuService {
   MENUITEMS: Menu[] = [
     {
       id: 1,
-      headTitle1: 'page',
-      active:true,
-    },
-    {
-      title: 'pages',
-      icon: 'sample-page',
-      type: 'sub',
-      level: 1,
-      active: true,
-      children: [
-        { path: '/pages/sample-page1', title: 'Sample-page1', type: 'link' },
-        { path: '/pages/sample-page2', title: 'Sample-page2', type: 'link' },
-      ],
-    },
-    {
-      title: 'Sample-page',
-      icon: 'sample-page',
-      type: 'link',
-      level: 1,
-      active: false,
-      path: '/sample-page',
-      bookmark:true
-    },
-    {
-      id: 2,
       headTitle1: 'admin',
       active:true,
     },
     {
       title: 'admin',
-      icon: 'admin',
+      icon: 'home',
       type: 'sub',
       level: 1,
       active: false,
@@ -71,13 +46,13 @@ export class NavmenuService {
       ],
     },
     {
-      id: 3,
+      id: 1,
       headTitle1: 'syndicat-AOP',
       active:true,
     },
     {
       title: 'syndicat-AOP',
-      icon: 'syndicat-AOP',
+      icon: 'table',
       type: 'sub',
       level: 1,
       active: false,

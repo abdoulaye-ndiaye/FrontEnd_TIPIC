@@ -7,14 +7,14 @@ import {
     Validators,
 } from "@angular/forms";
 import { AuthService } from "../../../services/auth.service";
-import { data } from "jquery";
+import Swal from 'sweetalert2';
 
 @Component({
     selector: "app-register",
     standalone: true,
     imports: [ReactiveFormsModule, CommonModule],
     templateUrl: "./register.component.html",
-    styleUrl: "./register.component.scss",
+    styleUrls: ["./register.component.scss"],
 })
 export class RegisterComponent {
     registerForm: FormGroup;
@@ -66,8 +66,7 @@ export class RegisterComponent {
     onSubmit() {
         this.validate = true;
         if (this.registerForm.valid) {
-            // console.log("Form Data:", this.registerForm.value);
-            // Envoyer les données au backend ici
+            // Traitement du formulaire
             if (this.role!.value === "PRODUCTEUR") {
                 this.authService
                     .registerProducteur(
@@ -78,8 +77,23 @@ export class RegisterComponent {
                         this.role!.value,
                         this.codeProducteur!.value
                     )
-                    .subscribe((data) => {
-                        console.log(data);
+                    .subscribe({
+                        next: (data) => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Succès',
+                                text: 'L\'utilisateur producteur a été enregistré avec succès!',
+                            });
+                            console.log(data);
+                        },
+                        error: (err) => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erreur',
+                                text: 'Une erreur s\'est produite lors de l\'enregistrement.',
+                            });
+                            console.error(err);
+                        }
                     });
             } else {
                 this.authService
@@ -90,11 +104,31 @@ export class RegisterComponent {
                         this.prenom!.value,
                         this.role!.value
                     )
-                    .subscribe((data) => {
-                        console.log(data);
+                    .subscribe({
+                        next: (data) => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Succès',
+                                text: 'L\'utilisateur a été enregistré avec succès!',
+                            });
+                            console.log(data);
+                        },
+                        error: (err) => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erreur',
+                                text: 'Une erreur s\'est produite lors de l\'enregistrement.',
+                            });
+                            console.error(err);
+                        }
                     });
             }
         } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Formulaire invalide',
+                text: 'Veuillez vérifier les champs et réessayer.',
+            });
             console.log("Form is invalid");
         }
     }

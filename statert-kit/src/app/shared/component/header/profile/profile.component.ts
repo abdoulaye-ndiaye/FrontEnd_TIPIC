@@ -1,40 +1,43 @@
-import { Component, OnInit } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { RouterModule } from "@angular/router";
+import { UtilisateurService } from './../../../../services/utilisateur.service';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 
-import { FeathericonComponent } from "../../feathericon/feathericon.component";
-import { AuthService } from "../../../../services/auth.service";
+import { FeathericonComponent } from '../../feathericon/feathericon.component';
 
 @Component({
-    selector: "app-profile",
-    standalone: true,
-    imports: [CommonModule, FeathericonComponent, RouterModule],
-    templateUrl: "./profile.component.html",
-    styleUrl: "./profile.component.scss",
+  selector: 'app-profile',
+  standalone: true,
+  imports: [CommonModule, FeathericonComponent, RouterModule],
+  templateUrl: './profile.component.html',
+  styleUrl: './profile.component.scss'
 })
 export class ProfileComponent implements OnInit {
-    public show: boolean = false;
-    profile: any;
-    token: string;
-    nom: any;
-    prenom: any;
-    role: any;
 
-    constructor(private authService: AuthService) {}
+  public show: boolean = false;
+  profile: any;
+  token: string;
+  nom: any;
+  prenom: any;
+  role: any;
 
-    ngOnInit(): void {
-        const token = localStorage.getItem("token") as string;
-        this.profile = this.authService.getDecodedToken(token);
-        this.nom = this.profile.user.nom;
-        this.prenom = this.profile.user.prenom;
-        this.role = this.profile.user.role;
-    }
+  constructor(private router: Router,private UtilisateurService:UtilisateurService) { }
 
-    open() {
-        this.show = !this.show;
-    }
+  ngOnInit(): void {
+    const token = localStorage.getItem("token") as string;
+    this.profile = this.UtilisateurService.getDecodedToken(token);
+    this.nom = this.profile.user.nom;
+    this.prenom = this.profile.user.prenom;
+    this.role = this.profile.user.role;
+  }
 
-    logout() {
-        this.authService.logout();
-    }
+  open() {
+    this.show = !this.show
+  }
+
+  logout() {
+    localStorage.removeItem("token");
+    this.router.navigate(["/auth/login"]);
+  }
+
 }

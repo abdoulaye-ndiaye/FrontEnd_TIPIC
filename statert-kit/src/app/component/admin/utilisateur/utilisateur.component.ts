@@ -4,6 +4,7 @@ import $ from "jquery";
 import "datatables.net"; // Importation des types DataTables
 import { UtilisateurService } from "../../../services/utilisateur.service";
 import Swal from 'sweetalert2';
+import { Route, Router } from "@angular/router";
 
 
 @Component({
@@ -15,7 +16,7 @@ import Swal from 'sweetalert2';
 })
 export class UtilisateurComponent implements OnInit, OnDestroy {
     users: any[] = [];
-    constructor(private utilisateurService: UtilisateurService) {}
+    constructor(private utilisateurService: UtilisateurService, private router:Router) {}
 
     ngOnInit(): void {
         // Récupération des utilisateurs
@@ -98,5 +99,10 @@ export class UtilisateurComponent implements OnInit, OnDestroy {
       }
       refresh() {
        window.location.reload();
+      }
+      update(id:any){
+        localStorage.removeItem('id_utilisateur')
+        localStorage.setItem('id_utilisateur', id);
+        this.router.navigate(['/admin/update-utilisateur']);
       }
 }

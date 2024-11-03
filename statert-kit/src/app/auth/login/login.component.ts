@@ -9,33 +9,34 @@ import {
     FormsModule,
 } from "@angular/forms";
 import { CommonModule } from "@angular/common";
+import Swal from 'sweetalert2';
 
 @Component({
     selector: "app-login",
     standalone: true,
     imports: [ReactiveFormsModule, FormsModule, CommonModule],
     templateUrl: "./login.component.html",
-    styleUrl: "./login.component.scss",
+    styleUrls: ["./login.component.scss"],
 })
 export class LoginComponent implements OnInit {
     public validate: boolean = false;
     public show: boolean = false;
     loginForm: FormGroup;
     submitted = false;
-    message = "";
 
     constructor(
         private authService: AuthService,
-        private formBulder: FormBuilder,
+        private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router
     ) {}
+
     showPassword() {
         this.show = !this.show;
     }
 
     ngOnInit(): void {
-        this.loginForm = this.formBulder.group({
+        this.loginForm = this.formBuilder.group({
             email: ["", [Validators.required, Validators.email]],
             password: ["", Validators.required],
         });
@@ -43,8 +44,13 @@ export class LoginComponent implements OnInit {
 
     onSubmit() {
         this.submitted = true;
-        this.message = "";
+
         if (this.loginForm.invalid) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Formulaire invalide',
+                text: 'Veuillez remplir tous les champs requis.',
+            });
             return;
         } else {
             this.authService
@@ -54,20 +60,39 @@ export class LoginComponent implements OnInit {
                 )
                 .subscribe(
                     (result) => {
-                        this.router.navigate(["/admin/dashboard"]);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Connexion réussie',
+                            text: 'Vous serez redirigé vers le tableau de bord.',
+                        }).then(() => {
+                            this.router.navigate(["/admin/dashboard"]);
+                        });
                     },
                     (error) => {
-                        //console.log(error);
-                        if (error.error.text == "compte bloqué") {
-                            this.message = "Ce compte a été bloqué";
-                        } else if (error.error.text == "email invalide") {
-                            this.message =
-                                "Email et/ou mot de passe incorrect !";
-                        } else if (
-                            error.error.text == "mot de passe incorrect"
-                        ) {
-                            this.message =
-                                "Email et/ou mot de passe incorrect !";
+                        if (error.error.text === "compte bloqué") {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erreur',
+                                text: 'Ce compte a été bloqué.',
+                            });
+                        } else if (error.error.text === "email invalide") {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erreur',
+                                text: 'Email et/ou mot de passe incorrect !',
+                            });
+                        } else if (error.error.text === "mot de passe incorrect") {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erreur',
+                                text: 'Email et/ou mot de passe incorrect !',
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erreur inconnue',
+                                text: 'Une erreur inattendue s\'est produite. Veuillez réessayer.',
+                            });
                         }
                     }
                 );
