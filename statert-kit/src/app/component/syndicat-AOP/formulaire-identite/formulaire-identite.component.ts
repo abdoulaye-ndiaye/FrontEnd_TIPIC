@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { ApplicationModule, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FromageService } from '../../../services/fromage.service';
+import { firstValueFrom } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-formulaire-identite',
@@ -14,14 +17,14 @@ export class FormulaireIdentiteComponent implements OnInit {
   cheeseForm: FormGroup;
   validate: boolean = false; // Initialiser à false
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private fromage: FromageService) { }
 
   ngOnInit(): void {
     this.cheeseForm = this.fb.group({
       // Identifiants
       datePrelevement: ['', Validators.required],
-      numeroEchantillon: ['', Validators.required],
-      identifiantProducteur: ['', Validators.required],
+      numeroEchantillon: ['', [Validators.required, Validators.maxLength(10)]],
+      identifiantProducteur: ['', [Validators.required, Validators.maxLength(6)]],
       typicite: ['', Validators.required],
 
       // Production
@@ -48,15 +51,13 @@ export class FormulaireIdentiteComponent implements OnInit {
       dateSortieVide: ['', Validators.required],
 
       // Affinage
-      preAffinage: [false,Validators.required],
-      dureeAffinage: [null,Validators.required],
-      temperatureAffinage: [null,Validators.required],
-      brossageManuel: [false,Validators.required],
-      tempPreAffinage: [null,Validators.required],
-      tempAffinage: [null,Validators.required],
-      humidificationCave: ['', Validators.required],
-      dureeHumidification: ['', Validators.required],
-      temperatureHumidification: ['', Validators.required]
+      nomAffineur: ['', Validators.required],
+      preAffinage: [false, Validators.required],
+      dureeAffinage: [null, Validators.required],
+      brossageManuel: [false, Validators.required],
+      tempPreAffinage: [null, Validators.required],
+      tempAffinage: [null, Validators.required],
+      humidificationCave: ['', Validators.required]
     });
 
     // Surveiller les changements du champ "preAffinage"
@@ -81,42 +82,45 @@ export class FormulaireIdentiteComponent implements OnInit {
     }
   }
 
-  isNextDisabled(): boolean {
-    switch (this.currentStep) {
-      case 0:
-        return !this.datePrelevement?.valid || !this.numeroEchantillon?.valid || 
-               !this.identifiantProducteur?.valid || !this.typicite?.valid;
-      case 1:
-        return !this.categorie?.valid || !this.raceDominante?.valid || 
-               !this.nbBrebis?.valid || !this.productivite?.valid || 
-               !this.periodeAgnelage?.valid || !this.estive?.valid || 
-               !this.paturage?.valid || !this.laitCru?.valid;
-      case 2:
-        return !this.dateFabrication?.valid || !this.nombreTraites?.valid || 
-               !this.temperatureEmpressurage?.valid || !this.quantitePresure?.valid || 
-               !this.typeFerments?.valid || !this.dureeCoagulation?.valid || 
-               !this.temperatureCaillage?.valid || !this.salage?.valid || 
-               !this.reportVide?.valid || !this.dateMiseVide?.valid || 
-               !this.dateSortieVide?.valid;
-      case 3:
-        return !this.preAffinage?.valid || 
-               (!this.preAffinage?.value && 
-                (!this.dureeAffinage?.valid || !this.tempAffinage?.valid)) || 
-               !this.brossageManuel?.valid || 
-               !this.humidificationCave?.valid;
-      default:
-        return true; // Par défaut, le bouton est activé
-    }
+  cleanInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+
+    // Retire tous les caractères non numériques de la valeur actuelle de l'input
+    input.value = input.value.replace(/[^0-9]/g, '');
+  }
+
+  replaceCommaWithDot(event: Event) {
+    
   }
   
 
-  onSubmit() {
-    this.validate = true; // Activer la validation globale lors de la soumission
-    if (this.cheeseForm.valid) {
-      console.log('Données du fromage:', this.cheeseForm.value);
-      alert('Formulaire soumis avec succès !');
-    } else {
-      alert('Veuillez remplir tous les champs obligatoires.');
+
+
+  isNextDisabled(): boolean {
+    switch (this.currentStep) {
+      case 0:
+        return !this.datePrelevement?.valid || !this.numeroEchantillon?.valid ||
+          !this.identifiantProducteur?.valid || !this.typicite?.valid;
+      case 1:
+        return !this.categorie?.valid || !this.raceDominante?.valid ||
+          !this.nbBrebis?.valid || !this.productivite?.valid ||
+          !this.periodeAgnelage?.valid || !this.estive?.valid ||
+          !this.paturage?.valid || !this.laitCru?.valid;
+      case 2:
+        return !this.dateFabrication?.valid || !this.nombreTraites?.valid ||
+          !this.temperatureEmpressurage?.valid || !this.quantitePresure?.valid ||
+          !this.typeFerments?.valid || !this.dureeCoagulation?.valid ||
+          !this.temperatureCaillage?.valid || !this.salage?.valid ||
+          !this.reportVide?.valid || !this.dateMiseVide?.valid ||
+          !this.dateSortieVide?.valid;
+      case 3:
+        return !this.nomAffineur?.valid || !this.preAffinage?.valid ||
+          (!this.preAffinage?.value &&
+            (!this.dureeAffinage?.valid || !this.tempAffinage?.valid)) ||
+          !this.brossageManuel?.valid ||
+          !this.humidificationCave?.valid;
+      default:
+        return true; // Par défaut, le bouton est activé
     }
   }
 
@@ -217,11 +221,15 @@ export class FormulaireIdentiteComponent implements OnInit {
     return this.cheeseForm.get('dureeAffinage');
   }
 
-  get preAffinage(){
+  get nomAffineur() {
+    return this.cheeseForm.get('nomAffineur');
+  }
+
+  get preAffinage() {
     return this.cheeseForm.get('preAffinage');
   }
 
-  get brossageManuel(){
+  get brossageManuel() {
     return this.cheeseForm.get('brossageManuel');
   }
 
@@ -237,5 +245,96 @@ export class FormulaireIdentiteComponent implements OnInit {
     return this.cheeseForm.get('humidificationCave');
   }
 
+  async onSubmit() {
+    this.validate = true;
+    console.log(this.cheeseForm.value)
+    if (this.cheeseForm.valid) {
+      const formValue = this.cheeseForm.value;
 
+      try {
+        console.log('entrer')
+        // Utilisation de firstValueFrom
+        const echantillonResponse = await firstValueFrom(
+          this.fromage.createEchantillon(
+            formValue.numeroEchantillon,
+            formValue.typicite,
+            formValue.datePrelevement,
+            formValue.identifiantProducteur
+          )
+        );
+
+        const echantillonId = echantillonResponse._id;
+        console.log(echantillonId)
+
+        // Appel au service createProduction
+        await firstValueFrom(
+          this.fromage.createProduction(
+            formValue.categorie,
+            formValue.raceDominante,
+            formValue.nbBrebis,
+            formValue.productivite,
+            formValue.periodeAgnelage,
+            formValue.estive,
+            formValue.paturage,
+            formValue.laitCru,
+            echantillonId
+          )
+        );
+
+        // Appel au service createFabrication
+        await firstValueFrom(
+          this.fromage.createFabrication(
+            formValue.dateFabrication,
+            formValue.nombreTraites,
+            formValue.temperatureEmpressurage,
+            formValue.quantitePresure,
+            formValue.typeFerments,
+            formValue.dureeCoagulation,
+            formValue.temperatureCaillage,
+            formValue.salage,
+            formValue.reportVide,
+            formValue.dateMiseVide,
+            formValue.dateSortieVide,
+            echantillonId
+          )
+        );
+
+        // Appel au service createAffinage
+        await firstValueFrom(
+          this.fromage.createAffinage(
+            formValue.nomAffineur,
+            formValue.preAffinage,
+            formValue.dureeAffinage,
+            formValue.tempAffinage,
+            formValue.brossageManuel,
+            formValue.tempAffinage,
+            formValue.humidificationCave,
+            echantillonId
+          )
+        );
+
+        // Utilisation de Swal pour une alerte de succès
+        Swal.fire({
+          icon: 'success',
+          title: 'Succès',
+          text: 'Formulaire soumis avec succès !',
+        });
+      } catch (error) {
+        console.error('Erreur lors de la soumission du formulaire:', error);
+
+        // Utilisation de Swal pour une alerte d'erreur
+        Swal.fire({
+          icon: 'error',
+          title: 'Erreur',
+          text: 'Erreur lors de la soumission du formulaire.',
+        });
+      }
+    } else {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Attention',
+        text: 'Veuillez remplir tous les champs obligatoires.',
+      });
+    }
+  }
 }

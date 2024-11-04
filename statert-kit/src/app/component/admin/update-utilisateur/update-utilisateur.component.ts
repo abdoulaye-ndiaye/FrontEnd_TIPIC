@@ -2,6 +2,7 @@ import { UtilisateurService } from './../../../services/utilisateur.service';
 import { CommonModule } from '@angular/common';
 import { ApplicationModule, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -19,7 +20,7 @@ export class UpdateUtilisateurComponent implements OnInit {
   id_utilisateur: any;
   utilisateur: any;
 
-  constructor(private formBuilder: FormBuilder, private utilisateurService: UtilisateurService) {
+  constructor(private formBuilder: FormBuilder, private utilisateurService: UtilisateurService, private router:Router) {
     this.updateUserForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -77,7 +78,10 @@ export class UpdateUtilisateurComponent implements OnInit {
                 icon: 'success',
                 title: 'Mise à jour réussie',
                 text: 'L\'utilisateur producteur a été mis à jour avec succès!',
-              });
+                confirmButtonColor: 'var(--theme-default)',
+              }).then(() => {
+                this.router.navigate(["/admin/utilisateur"]);
+            });
               console.log(data);
             },
             error: (err) => {
@@ -85,6 +89,7 @@ export class UpdateUtilisateurComponent implements OnInit {
                 icon: 'error',
                 title: 'Erreur',
                 text: 'Une erreur s\'est produite lors de la mise à jour.',
+                confirmButtonColor: 'var(--theme-default)',
               });
               console.error(err);
             }
@@ -105,7 +110,10 @@ export class UpdateUtilisateurComponent implements OnInit {
                 icon: 'success',
                 title: 'Mise à jour réussie',
                 text: 'L\'utilisateur a été mis à jour avec succès!',
-              });
+                confirmButtonColor: 'var(--theme-default)',
+              }).then(() => {
+                this.router.navigate(["/admin/utilisateur"]);
+            });
               console.log(data);
             },
             error: (err) => {
@@ -113,6 +121,7 @@ export class UpdateUtilisateurComponent implements OnInit {
                 icon: 'error',
                 title: 'Erreur',
                 text: 'Une erreur s\'est produite lors de la mise à jour.',
+                confirmButtonColor: 'var(--theme-default)',
               });
               console.error(err);
             }
@@ -123,6 +132,7 @@ export class UpdateUtilisateurComponent implements OnInit {
         icon: 'warning',
         title: 'Formulaire invalide',
         text: 'Veuillez vérifier les champs et réessayer.',
+        confirmButtonColor: 'var(--theme-default)',
       });
       console.log("Form is invalid");
     }

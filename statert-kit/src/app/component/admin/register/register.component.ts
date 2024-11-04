@@ -83,6 +83,7 @@ export class RegisterComponent {
                                 icon: 'success',
                                 title: 'Succès',
                                 text: 'L\'utilisateur producteur a été enregistré avec succès!',
+                                confirmButtonColor: 'var(--theme-default)',
                             });
                             console.log(data);
                         },
@@ -91,6 +92,7 @@ export class RegisterComponent {
                                 icon: 'error',
                                 title: 'Erreur',
                                 text: 'Une erreur s\'est produite lors de l\'enregistrement.',
+                                confirmButtonColor: 'var(--theme-default)',
                             });
                             console.error(err);
                         }
