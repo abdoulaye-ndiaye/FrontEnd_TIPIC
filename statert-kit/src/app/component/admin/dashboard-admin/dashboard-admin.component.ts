@@ -1,11 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../../../services/auth.service";
 import { jwtDecode } from "jwt-decode";
+import { CommonModule } from "@angular/common";
 
 @Component({
     selector: "app-dashboard-admin",
     standalone: true,
-    imports: [],
+    imports: [CommonModule],
     templateUrl: "./dashboard-admin.component.html",
     styleUrl: "./dashboard-admin.component.scss",
 })
