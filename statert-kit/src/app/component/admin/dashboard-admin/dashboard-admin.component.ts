@@ -2,11 +2,13 @@ import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../../../services/auth.service";
 import { jwtDecode } from "jwt-decode";
 import { CommonModule } from "@angular/common";
+import { RouterModule } from "@angular/router";
+import { NgApexchartsModule } from "ng-apexcharts";
 
 @Component({
     selector: "app-dashboard-admin",
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, RouterModule, NgApexchartsModule],
     templateUrl: "./dashboard-admin.component.html",
     styleUrl: "./dashboard-admin.component.scss",
 })

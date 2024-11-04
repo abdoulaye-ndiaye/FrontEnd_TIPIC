@@ -64,7 +64,8 @@ export class LoginComponent implements OnInit {
                             icon: 'success',
                             title: 'Connexion réussie',
                             text: 'Vous serez redirigé vers le tableau de bord.',
-                            timer: 30000,
+                            showConfirmButton: false,
+                            timer: 2000,
                         }).then(() => {
                             this.router.navigate(["/admin/dashboard"]);
                         });

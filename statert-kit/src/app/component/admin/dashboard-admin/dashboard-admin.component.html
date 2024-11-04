@@ -1,1 +1,21 @@
-<h2>Bonjour {{prenom}} {{nom}} ! </h2>
+<div class="container-fluid default-dashboard">
+    <div class="row">
+        <!-- Carte de bienvenue -->
+        <div class="col-xl-4 col-lg-4 col-md-7 mb-4">
+            <div class="card welcome-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h1>Bonjour, {{prenom}} {{nom}}.</h1>
+                            <p>Bienvenue dans votre tableau de bord.</p>
+                            <a class="btn btn-primary" [routerLink]="['/admin/dashboard']" routerLinkActive="router-link-active">Mon profil</a>
+                        </div>
+                        <div class="flex-shrink-0 ms-4">
+                            <img src="assets/images/dashboard/welcome.png" alt="Bienvenue" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
