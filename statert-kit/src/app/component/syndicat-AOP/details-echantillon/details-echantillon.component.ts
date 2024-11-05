@@ -2,6 +2,9 @@ import { ApplicationModule, Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FromageService } from "../../../services/fromage.service";
 import { CommonModule } from "@angular/common";
+import Swal from "sweetalert2";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 
 @Component({
     selector: "app-details-echantillon",
@@ -54,6 +57,78 @@ export class DetailsEchantillonComponent implements OnInit {
     update(id: string) {
         this.router.navigate(["/syndicat/update-echantillon"], {
             queryParams: { id: id },
+        });
+    }
+    deleteEchantillon(id: string) {
+        Swal.fire({
+            title: "Voulez-vous vraiment supprimer cet enregistrement ?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Oui, supprimer",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.fromageService
+                    .deleteFabrication(this.fabrication._id)
+                    .subscribe((data) => {
+                        this.fromageService
+                            .deleteAffinage(this.affinage._id)
+                            .subscribe((data) => {
+                                this.fromageService
+                                    .deleteProduction(this.production._id)
+                                    .subscribe((data) => {
+                                        this.fromageService
+                                            .deleteEchantillon(id)
+                                            .subscribe((data) => {
+                                                Swal.fire(
+                                                    "Supprimé !",
+                                                    "L'enregistrement a été supprimé avec succès.",
+                                                    "success"
+                                                ).then(() => {
+                                                    this.router.navigate([
+                                                        "/syndicat/liste-echantillons",
+                                                    ]);
+                                                });
+                                            });
+                                    });
+                            });
+                    });
+            }
+        });
+    }
+    refresh() {
+        window.location.reload();
+    }
+
+    downloadPDF() {
+        const element = document.querySelector(
+            ".echantillon-details"
+        ) as HTMLElement;
+        const pdf = new jsPDF("p", "mm", "a4"); // Format PDF A4 portrait
+
+        html2canvas(element).then((canvas) => {
+            const imgData = canvas.toDataURL("image/png");
+
+            const imgWidth = 210; // Largeur du PDF (A4)
+            const pageHeight = 297; // Hauteur du PDF (A4)
+            const imgHeight = (canvas.height * imgWidth) / canvas.width; // Calculer la hauteur proportionnelle
+            let heightLeft = imgHeight;
+
+            let position = 0;
+
+            pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+
+            // Ajouter d'autres pages si nécessaire
+            while (heightLeft > 0) {
+                position = heightLeft - imgHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+
+            pdf.save("echantillon-details-" + this.id_echantillon + ".pdf"); // Sauvegarder le fichier PDF
         });
     }
 }

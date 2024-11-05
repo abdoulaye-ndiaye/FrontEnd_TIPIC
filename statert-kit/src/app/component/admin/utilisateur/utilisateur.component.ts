@@ -70,10 +70,11 @@ export class UtilisateurComponent implements OnInit, OnDestroy {
                         "Bloqué !",
                         "L'utilisateur a été bloqué avec succès.",
                         "success"
-                    );
+                    ).then(() => {
+                        this.refresh();
+                    });
                 });
             }
-            this.refresh();
         });
     }
 
@@ -93,10 +94,11 @@ export class UtilisateurComponent implements OnInit, OnDestroy {
                         "Débloqué !",
                         "L'utilisateur a été débloqué avec succès.",
                         "success"
-                    );
+                    ).then(() => {
+                        this.refresh();
+                    });
                 });
             }
-            this.refresh();
         });
     }
     refresh() {

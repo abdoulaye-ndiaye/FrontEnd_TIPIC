@@ -229,4 +229,25 @@ export class FromageService {
             `${environment.apiUrl}/echantillon/${id}/fabrication`
         );
     }
+
+    deleteEchantillon(id: string) {
+        return this.httpClient.delete<any>(
+            `${environment.apiUrl}/echantillon/${id}`
+        );
+    }
+    deleteProduction(id: string) {
+        return this.httpClient.delete<any>(
+            `${environment.apiUrl}/production/${id}`
+        );
+    }
+    deleteAffinage(id: string) {
+        return this.httpClient.delete<any>(
+            `${environment.apiUrl}/affinage/${id}`
+        );
+    }
+    deleteFabrication(id: string) {
+        return this.httpClient.delete<any>(
+            `${environment.apiUrl}/fabrication/${id}`
+        );
+    }
 }
