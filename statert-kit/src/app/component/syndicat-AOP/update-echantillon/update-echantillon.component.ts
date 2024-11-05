@@ -1,4 +1,3 @@
-import { CommonModule } from "@angular/common";
 import { ApplicationModule, Component, OnInit } from "@angular/core";
 import {
     FormBuilder,
@@ -6,25 +5,37 @@ import {
     ReactiveFormsModule,
     Validators,
 } from "@angular/forms";
-import { FromageService } from "../../../services/fromage.service";
+import { ActivatedRoute, Router } from "@angular/router";
 import { firstValueFrom } from "rxjs";
 import Swal from "sweetalert2";
+import { FromageService } from "../../../services/fromage.service";
+import { CommonModule, DatePipe } from "@angular/common";
 
 @Component({
-    selector: "app-formulaire-identite",
+    selector: "app-update-echantillon",
     standalone: true,
     imports: [CommonModule, ApplicationModule, ReactiveFormsModule],
-    templateUrl: "./formulaire-identite.component.html",
-    styleUrls: ["./formulaire-identite.component.scss"],
+    providers: [DatePipe],
+    templateUrl: "./update-echantillon.component.html",
+    styleUrl: "./update-echantillon.component.scss",
 })
-export class FormulaireIdentiteComponent implements OnInit {
+export class UpdateEchantillonComponent implements OnInit {
     currentStep: number = 0;
     cheeseForm: FormGroup;
     validate: boolean = false; // Initialiser à false
+    id_echantillon: string;
+    echantillon: any;
+    production: any;
+    affinage: any;
+    fabrication: any;
 
-    constructor(private fb: FormBuilder, private fromage: FromageService) {}
-
-    ngOnInit(): void {
+    constructor(
+        private fb: FormBuilder,
+        private fromageService: FromageService,
+        private route: ActivatedRoute,
+        private datePipe: DatePipe,
+        private router: Router
+    ) {
         this.cheeseForm = this.fb.group({
             // Identifiants
             datePrelevement: ["", Validators.required],
@@ -70,6 +81,12 @@ export class FormulaireIdentiteComponent implements OnInit {
             tempAffinage: [null, Validators.required],
             humidificationCave: ["", Validators.required],
         });
+    }
+
+    ngOnInit(): void {
+        this.route.queryParams.subscribe((params) => {
+            this.id_echantillon = params["id"];
+        });
 
         // Surveiller les changements du champ "preAffinage"
         this.cheeseForm.get("preAffinage")?.valueChanges.subscribe((value) => {
@@ -78,6 +95,89 @@ export class FormulaireIdentiteComponent implements OnInit {
                 this.cheeseForm.get("tempAffinage")?.setValue(null);
             }
         });
+
+        this.fromageService
+            .getEchantillonById(this.id_echantillon)
+            .subscribe((data) => {
+                this.echantillon = data;
+                this.cheeseForm.patchValue({
+                    datePrelevement: this.datePipe.transform(
+                        data.datePrelevement,
+                        "yyyy-MM-dd"
+                    ),
+                    numeroEchantillon: data.numeroEchan,
+                    identifiantProducteur: data.codeProducteur,
+                    typicite: data.typicite,
+                });
+                this.fromageService
+                    .getProductionByIdEchantilon(this.id_echantillon)
+                    .subscribe((data1) => {
+                        this.production = data1[0];
+                        this.cheeseForm.patchValue({
+                            categorie: data1[0].categorie,
+                            raceDominante: data1[0].raceDominante,
+                            nbBrebis: data1[0].nbreBrebis,
+                            productivite: data1[0].productivite,
+                            periodeAgnelage: data1[0].periodeAgnelage,
+                            estive: data1[0].fabriqueEstive,
+                            paturage: data1[0].fabriquePaturage,
+                            laitCru: data1[0].fabriqueLaitCru,
+                        });
+                        this.fromageService
+                            .getAffinageByIdEchantilon(this.id_echantillon)
+                            .subscribe((data2) => {
+                                this.affinage = data2[0];
+
+                                this.cheeseForm.patchValue({
+                                    nomAffineur: data2[0].affineur,
+                                    preAffinage: data2[0].preAffinage,
+                                    dureeAffinage: data2[0].dureePreAffinage,
+                                    tempAffinage: data2[0].tempAffinage,
+                                    tempPreAffinage: data2[0].tempPreAffinage,
+                                    brossageManuel: data2[0].brossManuel,
+                                    humidificationCave: data2[0].sysHumidCave,
+                                });
+                                this.fromageService
+                                    .getFabricationByIdEchantilon(
+                                        this.id_echantillon
+                                    )
+                                    .subscribe((data3) => {
+                                        this.fabrication = data3[0];
+                                        this.cheeseForm.patchValue({
+                                            dateFabrication:
+                                                this.datePipe.transform(
+                                                    data3[0].dateFabri,
+                                                    "yyyy-MM-dd"
+                                                ),
+                                            nombreTraites:
+                                                data3[0].nbreTraitesFabri,
+                                            temperatureEmpressurage:
+                                                data3[0].tempEmpresurage,
+                                            quantitePresure:
+                                                data3[0].quantEmpresurage,
+                                            typeFerments: data3[0].typeFerment,
+                                            dureeCoagulation:
+                                                data3[0].dureeCoagulation,
+                                            temperatureCaillage:
+                                                data3[0].tempChauffage,
+                                            salage: data3[0].typeSalage,
+                                            reportVide:
+                                                data3[0].reportSvAvAffinage,
+                                            dateMiseVide:
+                                                this.datePipe.transform(
+                                                    data3[0].dateMiseSousVide,
+                                                    "yyyy-MM-dd"
+                                                ),
+                                            dateSortieVide:
+                                                this.datePipe.transform(
+                                                    data3[0].dateSortieSousVide,
+                                                    "yyyy-MM-dd"
+                                                ),
+                                        });
+                                    });
+                            });
+                    });
+            });
     }
 
     // Méthodes pour naviguer entre les étapes
@@ -280,7 +380,8 @@ export class FormulaireIdentiteComponent implements OnInit {
             try {
                 // Utilisation de firstValueFrom
                 const echantillonResponse = await firstValueFrom(
-                    this.fromage.createEchantillon(
+                    this.fromageService.updateEchantillon(
+                        this.id_echantillon,
                         formValue.numeroEchantillon,
                         formValue.typicite,
                         formValue.datePrelevement,
@@ -292,7 +393,8 @@ export class FormulaireIdentiteComponent implements OnInit {
 
                 // Appel au service createProduction
                 await firstValueFrom(
-                    this.fromage.createProduction(
+                    this.fromageService.updateProduction(
+                        this.production._id,
                         formValue.categorie,
                         formValue.raceDominante,
                         formValue.nbBrebis,
@@ -307,7 +409,8 @@ export class FormulaireIdentiteComponent implements OnInit {
 
                 // Appel au service createFabrication
                 await firstValueFrom(
-                    this.fromage.createFabrication(
+                    this.fromageService.updateFabrication(
+                        this.fabrication._id,
                         formValue.dateFabrication,
                         formValue.nombreTraites,
                         formValue.temperatureEmpressurage,
@@ -325,7 +428,8 @@ export class FormulaireIdentiteComponent implements OnInit {
 
                 // Appel au service createAffinage
                 await firstValueFrom(
-                    this.fromage.createAffinage(
+                    this.fromageService.updateAffinage(
+                        this.affinage._id,
                         formValue.nomAffineur,
                         formValue.preAffinage,
                         formValue.dureeAffinage,
@@ -341,7 +445,10 @@ export class FormulaireIdentiteComponent implements OnInit {
                 Swal.fire({
                     icon: "success",
                     title: "Succès",
-                    text: "Formulaire soumis avec succès !",
+                    text: "Echantillon mis à jour avec succès !",
+                }).then(() => {
+                    // Redirection vers la page d'accueil
+                    this.router.navigate(["/syndicat/liste-echantillons"]);
                 });
             } catch (error) {
                 console.error(

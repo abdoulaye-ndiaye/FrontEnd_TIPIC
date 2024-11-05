@@ -24,6 +24,23 @@ export class FromageService {
             codeProducteur,
         });
     }
+    updateEchantillon(
+        id: string,
+        numeroEchan: string,
+        typicite: string,
+        datePrelevement: Date,
+        codeProducteur: string
+    ) {
+        return this.httpClient.put<any>(
+            `${environment.apiUrl}/echantillon/${id}`,
+            {
+                numeroEchan,
+                typicite,
+                datePrelevement,
+                codeProducteur,
+            }
+        );
+    }
 
     createProduction(
         categorie: string,
@@ -47,6 +64,33 @@ export class FromageService {
             fabriqueLaitCru,
             echantillonId,
         });
+    }
+    updateProduction(
+        id: string,
+        categorie: string,
+        raceDominante: string,
+        nbreBrebis: Number,
+        productivite: Number,
+        periodeAgnelage: string,
+        fabriqueEstive: Boolean,
+        fabriquePaturage: Boolean,
+        fabriqueLaitCru: Boolean,
+        echantillonId: string
+    ) {
+        return this.httpClient.put<any>(
+            `${environment.apiUrl}/production/${id}`,
+            {
+                categorie,
+                raceDominante,
+                nbreBrebis,
+                productivite,
+                periodeAgnelage,
+                fabriqueEstive,
+                fabriquePaturage,
+                fabriqueLaitCru,
+                echantillonId,
+            }
+        );
     }
 
     createFabrication(
@@ -78,6 +122,39 @@ export class FromageService {
             echantillonId,
         });
     }
+    updateFabrication(
+        id: string,
+        dateFabri: Date,
+        nbreTraitesFabri: Number,
+        tempEmpresurage: Number,
+        quantEmpresurage: Number,
+        typeFerment: string,
+        dureeCoagulation: Number,
+        tempChauffage: Number,
+        typeSalage: string,
+        reportSvAvAffinage: Boolean,
+        dateMiseSousVide: Date,
+        dateSortieSousVide: Date,
+        echantillonId: string
+    ) {
+        return this.httpClient.put<any>(
+            `${environment.apiUrl}/fabrication/${id}`,
+            {
+                dateFabri,
+                nbreTraitesFabri,
+                tempEmpresurage,
+                quantEmpresurage,
+                typeFerment,
+                dureeCoagulation,
+                tempChauffage,
+                typeSalage,
+                reportSvAvAffinage,
+                dateMiseSousVide,
+                dateSortieSousVide,
+                echantillonId,
+            }
+        );
+    }
 
     createAffinage(
         affineur: string,
@@ -99,6 +176,31 @@ export class FromageService {
             sysHumidCave,
             echantillonId,
         });
+    }
+    updateAffinage(
+        id: string,
+        affineur: string,
+        preAffinage: Boolean,
+        dureePreAffinage: Number,
+        tempPreAffinage: Number,
+        brossManuel: Boolean,
+        tempAffinage: Number,
+        sysHumidCave: string,
+        echantillonId: string
+    ) {
+        return this.httpClient.put<any>(
+            `${environment.apiUrl}/affinage/${id}`,
+            {
+                affineur,
+                preAffinage,
+                dureePreAffinage,
+                tempPreAffinage,
+                brossManuel,
+                tempAffinage,
+                sysHumidCave,
+                echantillonId,
+            }
+        );
     }
 
     getEchantillonByProducteur(codeProducteur: string) {

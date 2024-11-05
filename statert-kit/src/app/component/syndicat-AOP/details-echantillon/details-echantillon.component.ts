@@ -1,5 +1,5 @@
 import { ApplicationModule, Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { FromageService } from "../../../services/fromage.service";
 import { CommonModule } from "@angular/common";
 
@@ -19,7 +19,8 @@ export class DetailsEchantillonComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
-        private fromageService: FromageService
+        private fromageService: FromageService,
+        private router: Router
     ) {}
 
     ngOnInit(): void {
@@ -48,5 +49,11 @@ export class DetailsEchantillonComponent implements OnInit {
                             });
                     });
             });
+    }
+
+    update(id: string) {
+        this.router.navigate(["/syndicat/update-echantillon"], {
+            queryParams: { id: id },
+        });
     }
 }
