@@ -27,55 +27,76 @@ export class NavmenuService {
     constructor() {}
 
     MENUITEMS: Menu[] = [
-        {
-            id: 1,
-            headTitle1: "admin",
-            active: true,
-        },
-        {
-            title: "admin",
-            icon: "home",
-            type: "sub",
-            level: 1,
-            active: false,
-            children: [
-                { path: "/admin/dashboard", title: "Dashboard", type: "link" },
-                {
-                    path: "/admin/register",
-                    title: "Créer Utilisateur",
-                    type: "link",
-                },
-                {
-                    path: "/admin/utilisateur",
-                    title: "Liste Utilisateurs",
-                    type: "link",
-                },
-            ],
-        },
-        {
-            id: 1,
-            headTitle1: "syndicat-AOP",
-            active: true,
-        },
-        {
-            title: "syndicat-AOP",
-            icon: "table",
-            type: "sub",
-            level: 1,
-            active: false,
-            children: [
-                {
-                    path: "/syndicat/formulaire-identite",
-                    title: "Créer Echantillon",
-                    type: "link",
-                },
-                {
-                    path: "/syndicat/liste-echantillons",
-                    title: "Liste Echantillons",
-                    type: "link",
-                },
-            ],
-        },
-    ];
-    item = new BehaviorSubject<Menu[]>(this.MENUITEMS);
+      {
+          id: 1,
+          headTitle1: "admin",
+          active: true,
+      },
+      {
+          title: "Dashboard",
+          icon: "home",
+          path: "/admin/dashboard",
+          type: "link",
+          level: 1,
+          active: false,
+          id: 2,
+      },
+      {
+          title: "Créer Utilisateur",
+          icon: "to-do",
+          path: "/admin/register",
+          type: "link",
+          level: 1,
+          active: false,
+          id: 3,
+      },
+      {
+          title: "Liste Utilisateurs",
+          icon: "file",
+          path: "/admin/utilisateur",
+          type: "link",
+          level: 1,
+          active: false,
+          id: 4,
+      },
+      {
+          id: 5,
+          headTitle1: "syndicat-AOP",
+          active: true,
+      },
+      {
+          title: "Créer Echantillon",
+          icon: "to-do",
+          path: "/syndicat/formulaire-identite",
+          type: "link",
+          level: 1,
+          active: false,
+          id: 6,
+      },
+      {
+          title: "Liste Echantillons",
+          icon: "file",
+          path: "/syndicat/liste-echantillons",
+          type: "link",
+          level: 1,
+          active: false,
+          id: 7,
+      },
+      {
+        id: 8,
+        headTitle1: "IPREM",
+        active: true,
+    },
+    {
+      title: "ajout SIFT-MS",
+      icon: "to-do",
+      path: "/iprem/ajout-sift-ms",
+      type: "link",
+      level: 1,
+      active: false,
+      id: 9,
+  },
+  ];
+
+  item = new BehaviorSubject<Menu[]>(this.MENUITEMS);
 }

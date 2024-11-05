@@ -35,4 +35,15 @@ export const dashData: Routes = [
                 "../../../app/component/syndicat-AOP/syndicat-AOP.routes"
             ).then((r) => r.syndicat),
     },
+    {
+        path:"iprem",
+        data: {
+            title :"iprem",
+            breadcrumb : "iprem",
+        },
+        loadChildren: () =>
+            import(
+                "../../../app/component/iprem/iprem.routes"
+            ).then((r) => r.iprem),
+    }
 ];

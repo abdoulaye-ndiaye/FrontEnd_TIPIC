@@ -8,10 +8,180 @@
                         <div class="flex-grow-1">
                             <h1>Bonjour, {{prenom}} {{nom}}.</h1>
                             <p>Bienvenue dans votre tableau de bord.</p>
-                            <a class="btn btn-primary" [routerLink]="['/admin/dashboard']" routerLinkActive="router-link-active">Mon profil</a>
+                            <a class="btn btn-primary" [routerLink]="['/admin/dashboard']"
+                                routerLinkActive="router-link-active">Mon profil</a>
                         </div>
                         <div class="flex-shrink-0 ms-4">
                             <img src="assets/images/dashboard/welcome.png" alt="Bienvenue" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Card information-->
+        <div class="col-xxl-6 col-xl-7 col-lg-7 box-col-7 ecommerce-dashboard">
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                    <div class="card total-sales">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-8 xl-12 col-md-8 col-sm-12 col box-col-12">
+                                    <div class="d-flex" [ngClass]="data.class">
+                                        <span>
+                                            <svg>
+                                                <use [attr.xlink:href]="'assets/svg/icon-sprite.svg#' + data.icon">
+                                                </use>
+                                            </svg>
+                                        </span>
+                                        <div class="flex-shrink-0">
+                                            <h4>{{ data.price }}</h4>
+                                            <h6>{{ data.title }}</h6>
+                                            <div class="arrow-chart">
+                                                <svg>
+                                                    <use
+                                                        [attr.xlink:href]="'assets/svg/icon-sprite.svg#' + data.arrowicon">
+                                                    </use>
+                                                </svg>
+                                                <h5 [ngClass]="'font-' + data.color">{{ data.percentage }}</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-4 col-4 p-0 ecommerce-chart">
+                                    <div [ngClass]="data.chartclass">
+                                        <apx-chart [series]="data.series" [chart]="data.chart" [stroke]="data.stroke"
+                                            [colors]="data.colors" [states]="data.states"
+                                            [plotOptions]="data.plotOptions" [dataLabels]="data.dataLabels"
+                                            [grid]="data.grid" [yaxis]="data.yaxis" [xaxis]="data.xaxis"
+                                            [legend]="data.legend" [fill]="data.fill" [tooltip]="data.tooltip"
+                                            [markers]="data.markers">
+                                        </apx-chart>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                    <div class="card total-sales">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-8 xl-12 col-md-8 col-sm-12 col box-col-12">
+                                    <div class="d-flex" [ngClass]="data.class">
+                                        <span>
+                                            <svg>
+                                                <use [attr.xlink:href]="'assets/svg/icon-sprite.svg#' + data.icon">
+                                                </use>
+                                            </svg>
+                                        </span>
+                                        <div class="flex-shrink-0">
+                                            <h4>{{ data.price }}</h4>
+                                            <h6>{{ data.title }}</h6>
+                                            <div class="arrow-chart">
+                                                <svg>
+                                                    <use
+                                                        [attr.xlink:href]="'assets/svg/icon-sprite.svg#' + data.arrowicon">
+                                                    </use>
+                                                </svg>
+                                                <h5 [ngClass]="'font-' + data.color">{{ data.percentage }}</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-4 col-4 p-0 ecommerce-chart">
+                                    <div [ngClass]="data.chartclass">
+                                        <apx-chart [series]="data.series" [chart]="data.chart" [stroke]="data.stroke"
+                                            [colors]="data.colors" [states]="data.states"
+                                            [plotOptions]="data.plotOptions" [dataLabels]="data.dataLabels"
+                                            [grid]="data.grid" [yaxis]="data.yaxis" [xaxis]="data.xaxis"
+                                            [legend]="data.legend" [fill]="data.fill" [tooltip]="data.tooltip"
+                                            [markers]="data.markers">
+                                        </apx-chart>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                    <div class="card total-sales">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-8 xl-12 col-md-8 col-sm-12 col box-col-12">
+                                    <div class="d-flex" [ngClass]="data.class">
+                                        <span>
+                                            <svg>
+                                                <use [attr.xlink:href]="'assets/svg/icon-sprite.svg#' + data.icon">
+                                                </use>
+                                            </svg>
+                                        </span>
+                                        <div class="flex-shrink-0">
+                                            <h4>{{ data.price }}</h4>
+                                            <h6>{{ data.title }}</h6>
+                                            <div class="arrow-chart">
+                                                <svg>
+                                                    <use
+                                                        [attr.xlink:href]="'assets/svg/icon-sprite.svg#' + data.arrowicon">
+                                                    </use>
+                                                </svg>
+                                                <h5 [ngClass]="'font-' + data.color">{{ data.percentage }}</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-4 col-4 p-0 ecommerce-chart">
+                                    <div [ngClass]="data.chartclass">
+                                        <apx-chart [series]="data.series" [chart]="data.chart" [stroke]="data.stroke"
+                                            [colors]="data.colors" [states]="data.states"
+                                            [plotOptions]="data.plotOptions" [dataLabels]="data.dataLabels"
+                                            [grid]="data.grid" [yaxis]="data.yaxis" [xaxis]="data.xaxis"
+                                            [legend]="data.legend" [fill]="data.fill" [tooltip]="data.tooltip"
+                                            [markers]="data.markers">
+                                        </apx-chart>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                    <div class="card total-sales">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-8 xl-12 col-md-8 col-sm-12 col box-col-12">
+                                    <div class="d-flex" [ngClass]="data.class">
+                                        <span>
+                                            <svg>
+                                                <use [attr.xlink:href]="'assets/svg/icon-sprite.svg#' + data.icon">
+                                                </use>
+                                            </svg>
+                                        </span>
+                                        <div class="flex-shrink-0">
+                                            <h4>{{ data.price }}</h4>
+                                            <h6>{{ data.title }}</h6>
+                                            <div class="arrow-chart">
+                                                <svg>
+                                                    <use
+                                                        [attr.xlink:href]="'assets/svg/icon-sprite.svg#' + data.arrowicon">
+                                                    </use>
+                                                </svg>
+                                                <h5 [ngClass]="'font-' + data.color">{{ data.percentage }}</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-4 col-4 p-0 ecommerce-chart">
+                                    <div [ngClass]="data.chartclass">
+                                        <apx-chart [series]="data.series" [chart]="data.chart" [stroke]="data.stroke"
+                                            [colors]="data.colors" [states]="data.states"
+                                            [plotOptions]="data.plotOptions" [dataLabels]="data.dataLabels"
+                                            [grid]="data.grid" [yaxis]="data.yaxis" [xaxis]="data.xaxis"
+                                            [legend]="data.legend" [fill]="data.fill" [tooltip]="data.tooltip"
+                                            [markers]="data.markers">
+                                        </apx-chart>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
