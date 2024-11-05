@@ -1,0 +1,25 @@
+.marquee {
+    overflow: hidden; /* Cache le débordement */
+    white-space: nowrap; /* Empêche le texte de passer à la ligne */
+    position: relative; /* Nécessaire pour le positionnement de l'animation */
+}
+
+.marquee p {
+    display: inline-block; /* Permet à l'animation de fonctionner */
+    animation: marquee 15s linear infinite; /* Durée, type d'animation et répétition */
+    margin: 0; /* Supprime la marge par défaut */
+}
+
+/* Aucun espace entre les répétitions */
+.marquee p:last-child {
+    margin-left: 0; /* Supprime l'espace entre les répétitions */
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0); /* Commence à la position initiale */
+    }
+    100% {
+        transform: translateX(-50%); /* Fin à la position finale, aligné avec la seconde occurrence */
+    }
+}

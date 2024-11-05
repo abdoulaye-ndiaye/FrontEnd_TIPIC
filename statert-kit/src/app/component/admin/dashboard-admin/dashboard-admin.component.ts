@@ -60,50 +60,46 @@ let secondary_color = localStorage.getItem('secondary_color') || '#FF9766';
     styleUrl: "./dashboard-admin.component.scss",
 })
 export class DashboardAdminComponent implements OnInit {
-    @Input() data: ChartOptions | any = {
+    @Input() TotalUtilisateur: ChartOptions | any = {
         series: [{
-            name: 'Revenue',
-            data: [92, 64, 43, 80, 58, 92, 46, 76, 80]
-        }, {
-            name: 'Revenue',
-            data: [20, 48, 69, 32, 54, 20, 66, 36, 32],
-        },
-        ],
+            name: "Desktops",
+            data: [10, 35, 15, 78, 40, 60, 12, 60],
+        }],
         chart: {
-            type: 'bar',
-            offsetY: 30,
-            toolbar: {
-                show: false
+            type: 'area',
+            height: 120,
+            offsetY: 50,
+            zoom: {
+                enabled: false
             },
-            height: 100,
-            stacked: true,
+            toolbar: {
+                show: false,
+            },
+            dropShadow: {
+                enabled: true,
+                top: 5,
+                left: 0,
+                bottom: 3,
+                blur: 2,
+                color: '#61AE41',
+                opacity: 0.2,
+            },
         },
-        states: {
-            hover: {
-                filter: {
-                    type: 'darken',
-                    value: 1,
-                }
-            }
-        },
-        plotOptions: {
-            bar: {
-                horizontal: false,
-                s̶t̶a̶r̶t̶i̶n̶g̶S̶h̶a̶p̶e̶: 'flat',
-                e̶n̶d̶i̶n̶g̶S̶h̶a̶p̶e̶: 'flat',
-                borderRadius: 3,
-                columnWidth: '55%',
+        colors: ['#61AE41'],
+        fill: {
+            type: "gradient",
+            gradient: {
+                shadeIntensity: 1,
+                opacityFrom: 0.6,
+                opacityTo: 0.2,
+                stops: [0, 100, 100]
             }
         },
         dataLabels: {
             enabled: false
         },
         grid: {
-            yaxis: {
-                lines: {
-                    show: false
-                }
-            },
+            show: false,
         },
         xaxis: {
             labels: {
@@ -118,31 +114,263 @@ export class DashboardAdminComponent implements OnInit {
         },
         yaxis: {
             show: false,
-            dataLabels: {
-                enabled: true
-            },
         },
-        fill: {
-            opacity: 1,
-            colors: ['#dedffc',primary_color, ]
-        },
-        legend: {
-            show: false
+        stroke: {
+            curve: 'straight',
+            width: 2,
         },
         tooltip: {
             custom: function ({ series, seriesIndex, dataPointIndex, }: any) {
-                return '<div class="apex-tooltip p-2">' + '<span>' + '<span class="bg-primary">' + '</span>' + 'Revenue' + '<h3>' + '$' + series[seriesIndex][dataPointIndex] + '<h3/>' + '</span>' + '</div>';
+                return '<div class="apex-tooltip p-2">' + '<span>' + '<span class="bg-primary">' + '</span>' + 'customer' + '<h3>' + '$' + series[seriesIndex][dataPointIndex] + '<h3/>' + '</span>' + '</div>';
             },
         },
-        title: 'Total Revenue',
-        price: '$73,927',
+    
+        title: 'Total Utilisateur',
+        class: 'total-customer',
+        chartclass: 'customer-chart',
+        price: '4',
         arrowicon: 'arrow-chart-up',
-        chartclass: 'earning-chart',
-        icon: 'Revenue',
-        percentage: '+34%',
+        icon: 'Customer',
+        percentage: '+24%',
         color: 'success'
-    };
+    }
+
+    @Input() TotalProducteur: ChartOptions | any = {
+        series: [{
+            name: "Desktops",
+            data: [10, 35, 15, 78, 40, 60, 12, 60],
+        }],
+        chart: {
+            type: 'area',
+            height: 120,
+            offsetY: 50,
+            zoom: {
+                enabled: false
+            },
+            toolbar: {
+                show: false,
+            },
+            dropShadow: {
+                enabled: true,
+                top: 5,
+                left: 0,
+                bottom: 3,
+                blur: 2,
+                color: '#61AE41',
+                opacity: 0.2,
+            },
+        },
+        colors: ['#61AE41'],
+        fill: {
+            type: "gradient",
+            gradient: {
+                shadeIntensity: 1,
+                opacityFrom: 0.6,
+                opacityTo: 0.2,
+                stops: [0, 100, 100]
+            }
+        },
+        dataLabels: {
+            enabled: false
+        },
+        grid: {
+            show: false,
+        },
+        xaxis: {
+            labels: {
+                show: false,
+            },
+            axisBorder: {
+                show: false,
+            },
+            axisTicks: {
+                show: false,
+            },
+        },
+        yaxis: {
+            show: false,
+        },
+        stroke: {
+            curve: 'straight',
+            width: 2,
+        },
+        tooltip: {
+            custom: function ({ series, seriesIndex, dataPointIndex, }: any) {
+                return '<div class="apex-tooltip p-2">' + '<span>' + '<span class="bg-primary">' + '</span>' + 'customer' + '<h3>' + '$' + series[seriesIndex][dataPointIndex] + '<h3/>' + '</span>' + '</div>';
+            },
+        },
+    
+        title: 'Total Producteur',
+        class: 'total-customer',
+        chartclass: 'customer-chart',
+        price: '2',
+        arrowicon: 'arrow-chart-up',
+        icon: 'Customer',
+        percentage: '+12%',
+        color: 'success'
+    }
+
+    @Input() TotalEchantillon: ChartOptions | any = {
+        series: [{
+          name: "Desktops",
+          data: [50, 50, 50, 25, 25, 25, 2, 2, 2, 25, 25, 25, 62, 62, 62, 35, 35, 35, 66, 66],
+      }],
+      chart: {
+          height: 100,
+          type: 'area',
+          zoom: {
+              enabled: false
+          },
+          toolbar: {
+              show: false,
+          },
+          dropShadow: {
+              enabled: true,
+              top: 5,
+              left: 0,
+              bottom: 3,
+              blur: 2,
+              color: '#44A8D7',
+              opacity: 0.2,
+          },
+      },
+      fill: {
+          type: "gradient",
+          gradient: {
+              shadeIntensity: 1,
+              opacityFrom: 0.5,
+              opacityTo: 0.1,
+              stops: [0, 90, 100]
+          }
+      },
+      tooltip: {
+          enabled: false
+      },
+      dataLabels: {
+          enabled: false
+      },
+      grid: {
+          show: false,
+      },
+      xaxis: {
+          labels: {
+              show: false,
+          },
+          axisBorder: {
+              show: false,
+          },
+          axisTicks: {
+              show: false,
+          },
+      },
+      yaxis: {
+          show: false,
+      },
+      stroke: {
+          curve: 'straight',
+          width: 2,
+      },
+      markers: {
+          discrete: [{
+              seriesIndex: 0,
+              dataPointIndex: 12,
+              fillColor: '#44A8D7',
+              strokeColor: '#44A8D7',
+              size: 5,
+              shape: "circle"
+          }],
+      },
       
+          title: 'Total Echantillon',
+          class: 'total-product',
+          chartclass: 'total-product-chart',
+          price: '7',
+          arrowicon: 'arrow-chart-up',
+          icon: 'Product',
+          percentage: '+42%',
+          color: 'success'
+      }
+    @Input() TotalSensoriel: ChartOptions | any = {
+        series: [{
+          name: "Desktops",
+          data: [50, 50, 50, 25, 25, 25, 2, 2, 2, 25, 25, 25, 62, 62, 62, 35, 35, 35, 66, 66],
+      }],
+      chart: {
+          height: 100,
+          type: 'area',
+          zoom: {
+              enabled: false
+          },
+          toolbar: {
+              show: false,
+          },
+          dropShadow: {
+              enabled: true,
+              top: 5,
+              left: 0,
+              bottom: 3,
+              blur: 2,
+              color: '#44A8D7',
+              opacity: 0.2,
+          },
+      },
+      fill: {
+          type: "gradient",
+          gradient: {
+              shadeIntensity: 1,
+              opacityFrom: 0.5,
+              opacityTo: 0.1,
+              stops: [0, 90, 100]
+          }
+      },
+      tooltip: {
+          enabled: false
+      },
+      dataLabels: {
+          enabled: false
+      },
+      grid: {
+          show: false,
+      },
+      xaxis: {
+          labels: {
+              show: false,
+          },
+          axisBorder: {
+              show: false,
+          },
+          axisTicks: {
+              show: false,
+          },
+      },
+      yaxis: {
+          show: false,
+      },
+      stroke: {
+          curve: 'straight',
+          width: 2,
+      },
+      markers: {
+          discrete: [{
+              seriesIndex: 0,
+              dataPointIndex: 12,
+              fillColor: '#44A8D7',
+              strokeColor: '#44A8D7',
+              size: 5,
+              shape: "circle"
+          }],
+      },
+      
+          title: 'Total Sensoriel',
+          class: 'total-product',
+          chartclass: 'total-product-chart',
+          price: '7',
+          arrowicon: 'arrow-chart-up',
+          icon: 'Product',
+          percentage: '+42%',
+          color: 'success'
+      }
+    
     constructor(private authService: AuthService) {}
     nom: string;
     prenom: string;
