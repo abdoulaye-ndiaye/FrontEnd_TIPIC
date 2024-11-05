@@ -1,3 +1,6 @@
+<div class="actions-2">
+  <button (click)="downloadPDF()" class="btn btn-success"><i class="fa-solid fa-file-pdf"></i> Télecharger PDF</button>
+</div>
 <div class="echantillon-details">
   <h2 class="page-title">FORMULAIRE IDENTITE</h2>
   <br>
@@ -59,7 +62,9 @@
     <p><strong>Système d'humidification de la cave :</strong> {{ affinage?.sysHumidCave }}</p>
   </div>
 
-  <div class="actions">
-    <button (click)="update(echantillon._id)" class="btn btn-primary">Modifier</button>
-  </div>
+</div>
+
+<div class="actions">
+  <button (click)="update(echantillon._id)" class="btn btn-primary">Modifier</button> &nbsp; &nbsp;
+  <button (click)="deleteEchantillon(echantillon._id)" class="btn btn-danger">Supprimer</button>
 </div>

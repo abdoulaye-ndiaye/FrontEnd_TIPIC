@@ -46,7 +46,20 @@
     justify-content: right;
     display: flex;
     text-align: right;
-    margin-top: 20px;
+
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+}
+.actions-2 {
+    justify-content: right;
+    display: flex;
+    text-align: right;
+
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 1px auto;
 }
 
 .section-title {
