@@ -106,4 +106,25 @@ export class FromageService {
             `${environment.apiUrl}/producteur/${codeProducteur}/echantillon`
         );
     }
+
+    getEchantillonById(id: string) {
+        return this.httpClient.get<any>(
+            `${environment.apiUrl}/echantillon/${id}`
+        );
+    }
+    getProductionByIdEchantilon(id: string) {
+        return this.httpClient.get<any>(
+            `${environment.apiUrl}/echantillon/${id}/production`
+        );
+    }
+    getAffinageByIdEchantilon(id: string) {
+        return this.httpClient.get<any>(
+            `${environment.apiUrl}/echantillon/${id}/affinage`
+        );
+    }
+    getFabricationByIdEchantilon(id: string) {
+        return this.httpClient.get<any>(
+            `${environment.apiUrl}/echantillon/${id}/fabrication`
+        );
+    }
 }

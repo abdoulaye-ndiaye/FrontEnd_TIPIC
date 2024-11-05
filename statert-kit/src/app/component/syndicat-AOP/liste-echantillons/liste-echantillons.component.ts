@@ -3,6 +3,7 @@ import { ApplicationModule, Component, OnDestroy, OnInit } from "@angular/core";
 import { FromageService } from "../../../services/fromage.service";
 import $ from "jquery";
 import "datatables.net";
+import { Router } from "@angular/router";
 
 @Component({
     selector: "app-liste-echantillons",
@@ -14,12 +15,14 @@ import "datatables.net";
 export class ListeEchantillonsComponent implements OnInit, OnDestroy {
     echantillons: any;
 
-    constructor(private fromageService: FromageService) {}
+    constructor(
+        private fromageService: FromageService,
+        private router: Router
+    ) {}
 
     ngOnInit(): void {
         this.fromageService.getAll().subscribe((data) => {
             this.echantillons = data;
-            console.log(data);
         });
 
         // Initialisation de DataTables avec setTimeout
@@ -49,5 +52,11 @@ export class ListeEchantillonsComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         $("#userTable").DataTable().destroy(); // Détruire le DataTable pour éviter les fuites de mémoire
+    }
+
+    voir(id: string) {
+        this.router.navigate(["/syndicat/details-echantillon"], {
+            queryParams: { id: id },
+        });
     }
 }

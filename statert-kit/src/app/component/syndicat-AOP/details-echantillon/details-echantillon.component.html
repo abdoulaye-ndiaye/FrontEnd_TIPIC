@@ -1,0 +1,65 @@
+<div class="echantillon-details">
+  <h2 class="page-title">FORMULAIRE IDENTITE</h2>
+  <br>
+
+  <!-- Section Echantillon -->
+  <h2 class="section-title">IDENTIFIANTS</h2>
+  <div class="echantillon-section">
+    <p><strong>Date de Prélèvement :</strong> {{ echantillon?.datePrelevement | date: "dd-MM-YYYY" }}</p>
+    <p><strong>Numéro d'Échantillon :</strong> {{ echantillon?.numeroEchan }}</p>
+    <p><strong>Identifiant du Producteur :</strong> {{ echantillon?.codeProducteur }}</p>
+    <p><strong>Typicité :</strong> {{ echantillon?.typicite }}</p>
+  </div>
+
+  <!-- Section Production -->
+  <h2 class="section-title">PRODUCTION</h2>
+  <div class="production-section">
+    <p><strong>Catégorie :</strong> {{ production?.categorie }}</p>
+    <p><strong>Race Dominante (à partire de 80%) :</strong> {{ production?.raceDominante }}</p>
+    <p><strong>Nombre de Brebis de plus de 6 mois au 1er janvier n-1 :</strong> {{ production?.nbreBrebis }}</p>
+    <p><strong>Productivité sur la campagne précédente (en litres) :</strong> {{ production?.productivite }}</p>
+    <p><strong>Période d'Agnelage :</strong> {{ production?.periodeAgnelage }}</p>
+    <p><strong>Ce fromage a-t-il été fabriqué en estive ? :</strong> {{ production?.fabriqueEstive ? 'Oui' : 'Non' }}
+    </p>
+    <p><strong>Ce fromage a-t-il été fait en période de pâturage :</strong> {{ production?.fabriquePaturage ? 'Oui' :
+      'Non' }}</p>
+    <p><strong>Ce fromage est-il fabriqué au lait cru :</strong> {{ production?.fabriqueLaitCru ? 'Oui' : 'Non' }}</p>
+  </div>
+
+  <!-- Section Fabrication -->
+  <h2 class="section-title">FABRICATION</h2>
+  <div class="fabrication-section">
+    <p><strong>Date de Fabrication :</strong> {{ fabrication?.dateFabri | date: "dd-MM-YYYY" }}</p>
+    <p><strong>Nombre de traites mises en fabrication :</strong> {{ fabrication?.nbreTraitesFabri }}</p>
+    <p><strong>Température d'emprésurage (°C) :</strong> {{ fabrication?.tempEmpresurage }}°C</p>
+    <p><strong>Quantité de présure pour 100L de lait (en ml) :</strong> {{ fabrication?.quantEmpresurage }} litres</p>
+    <p><strong>Type de ferments lactiques :</strong> {{ fabrication?.typeFerment }}</p>
+    <p><strong>Durée de coagulation (minutes) :</strong> {{ fabrication?.dureeCoagulation }} minutes</p>
+    <p><strong>Température de chauffage du caillé (°C) :</strong> {{ fabrication?.tempChauffage }}°C</p>
+    <p><strong>Type de Salage :</strong> {{ fabrication?.typeSalage }}</p>
+    <p><strong>Report sous vide avant affinage :</strong> {{ fabrication?.reportSvaAvAffinage ? 'Oui' : 'Non' }}</p>
+    <p><strong>Date de Mise Sous Vide :</strong> {{ fabrication?.dateMiseSousVide | date: "dd-MM-YYYY" }} &nbsp; &nbsp;
+      <strong>Date de Sortie Sous Vide :</strong> {{ fabrication?.dateSortieSousVide | date: "dd-MM-YYYY" }}
+    </p>
+  </div>
+
+  <!-- Section Affinage -->
+  <h2 class="section-title">AFFINAGE</h2>
+  <div class="affinage-section">
+    <p><strong>Affineur :</strong> {{ affinage?.affineur }}</p>
+    <p><strong>Pré-Affinage :</strong> {{ affinage?.preAffinage ? 'Oui' : 'Non' }}</p>
+    @if (affinage?.preAffinage == true) {
+    <p>&nbsp; &nbsp; &nbsp;
+      <strong>Durée (jours) :</strong> {{ affinage?.dureePreAffinage }} &nbsp; &nbsp; <strong>T°C :</strong> {{
+      affinage?.tempPreAffinage }}
+    </p>
+    }
+    <p><strong>Brossage Manuel :</strong> {{ affinage?.brossManuel ? 'Oui' : 'Non' }}</p>
+    <p><strong>Température d'affinage :</strong> {{ affinage?.tempAffinage }}°C</p>
+    <p><strong>Système d'humidification de la cave :</strong> {{ affinage?.sysHumidCave }}</p>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-primary">Modifier</button>
+  </div>
+</div>
