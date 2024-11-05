@@ -3,9 +3,8 @@ import { ApplicationModule, Component, OnDestroy, OnInit } from "@angular/core";
 import $ from "jquery";
 import "datatables.net"; // Importation des types DataTables
 import { UtilisateurService } from "../../../services/utilisateur.service";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import { Route, Router } from "@angular/router";
-
 
 @Component({
     selector: "app-utilisateur",
@@ -16,7 +15,10 @@ import { Route, Router } from "@angular/router";
 })
 export class UtilisateurComponent implements OnInit, OnDestroy {
     users: any[] = [];
-    constructor(private utilisateurService: UtilisateurService, private router:Router) {}
+    constructor(
+        private utilisateurService: UtilisateurService,
+        private router: Router
+    ) {}
 
     ngOnInit(): void {
         // Récupération des utilisateurs
@@ -54,55 +56,55 @@ export class UtilisateurComponent implements OnInit, OnDestroy {
     }
     bloquer(id: string) {
         Swal.fire({
-          title: 'Voulez-vous vraiment bloquer cet utilisateur ?',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#d33',
-          cancelButtonColor: '#3085d6',
-          confirmButtonText: 'Oui, bloquer'
+            title: "Voulez-vous vraiment bloquer cet utilisateur ?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Oui, bloquer",
         }).then((result) => {
-          if (result.isConfirmed) {
-            this.utilisateurService.bloquer(id).subscribe((data) => {
-              this.users = data;
-              Swal.fire(
-                'Bloqué !',
-                'L\'utilisateur a été bloqué avec succès.',
-                'success'
-              );
-            });
-          }
-          this.refresh();
+            if (result.isConfirmed) {
+                this.utilisateurService.bloquer(id).subscribe((data) => {
+                    this.users = data;
+                    Swal.fire(
+                        "Bloqué !",
+                        "L'utilisateur a été bloqué avec succès.",
+                        "success"
+                    );
+                });
+            }
+            this.refresh();
         });
-      }
-      
-      debloquer(id: string) {
+    }
+
+    debloquer(id: string) {
         Swal.fire({
-          title: 'Voulez-vous vraiment débloquer cet utilisateur ?',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#28a745',
-          cancelButtonColor: '#3085d6',
-          confirmButtonText: 'Oui, débloquer'
+            title: "Voulez-vous vraiment débloquer cet utilisateur ?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#28a745",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Oui, débloquer",
         }).then((result) => {
-          if (result.isConfirmed) {
-            this.utilisateurService.debloquer(id).subscribe((data) => {
-              this.users = data;
-              Swal.fire(
-                'Débloqué !',
-                'L\'utilisateur a été débloqué avec succès.',
-                'success'
-              );    
-            });
-          }
-          this.refresh();
+            if (result.isConfirmed) {
+                this.utilisateurService.debloquer(id).subscribe((data) => {
+                    this.users = data;
+                    Swal.fire(
+                        "Débloqué !",
+                        "L'utilisateur a été débloqué avec succès.",
+                        "success"
+                    );
+                });
+            }
+            this.refresh();
         });
-      }
-      refresh() {
-       window.location.reload();
-      }
-      update(id:any){
-        localStorage.removeItem('id_utilisateur')
-        localStorage.setItem('id_utilisateur', id);
-        this.router.navigate(['/admin/update-utilisateur']);
-      }
+    }
+    refresh() {
+        window.location.reload();
+    }
+    update(id: string) {
+        this.router.navigate(["/admin/update-utilisateur"], {
+            queryParams: { id: id },
+        });
+    }
 }
