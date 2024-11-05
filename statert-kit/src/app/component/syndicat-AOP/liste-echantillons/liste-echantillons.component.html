@@ -1,0 +1,44 @@
+<div class="card">
+  <div class="card-header">
+    <h3>Liste des Utilisateurs</h3>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="display dataTable" id="userTable" style="text-align: center;">
+              <thead>
+                <tr>
+                  <th>Numéro Echantillon</th>
+                  <th>Code Producteur</th>
+                  <th>Typicité</th>
+                  <th>Date Prélèvement</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let echantillon of echantillons">
+                  <td>{{ echantillon.numeroEchan }}</td>
+                  <td>{{ echantillon.codeProducteur }}</td>
+                  <td>{{ echantillon.typicite }}</td>
+                  <td>{{ echantillon.datePrelevement | date:'dd-MM-YYYY' }}</td>
+
+                  <td>
+
+                    <button class="btn btn-success" style=" color: white">
+                      <i class="fa-solid fa-eye"></i>&nbsp;
+                      <span>Voir</span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
