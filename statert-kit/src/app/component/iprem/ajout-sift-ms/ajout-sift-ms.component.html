@@ -2,9 +2,13 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
+                @if (!siftMs) {
                 <div class="card-body">
                     <form [formGroup]="siftMsForm" (ngSubmit)="onSubmit()">
                         <div class="form theme-form">
+                            <h4 class="page-title">Ajout du fichier SIFT-MS pour l'echantillon {{fromage?.numeroEchan}}
+                            </h4>
+                            <br>
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="mb-3">
@@ -59,27 +63,63 @@
                                 <div class="col">
                                     <div class="mb-3">
                                         <label>Ajoutez le fichier SIFT-MS</label>
-                                        <form class="dropzone dz-clickable customize-dropzone">
-                                            <dropzone [config]="Config" (error)="onUploadError($event)"
-                                                (success)="onUploadSuccess($event)" [message]="text">
-                                            </dropzone>
-                                        </form>
+                                        <label for="file" class="drop-container" id="dropcontainer">
+                                            <span class="drop-title">Déposer le fichier ici</span>
+                                            ou
+                                            <input type="file" formControlName="file" id="file"
+                                                accept="application/pdf,application/xml" required
+                                                (change)="onFileChange($event)"
+                                                [ngClass]="{ 'is-invalid' : (file?.touched || validate) && file?.errors , 'is-valid' : !file?.errors}" />
+                                        </label>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
                                     <div class="text-end">
-                                        <button class="btn btn-success me-3" href="javascript:void(0)"
+                                        <button type="submit" class="btn btn-success me-3"
                                             [disabled]="!siftMsForm.valid">Ajouter
                                         </button>
-                                        <a class="btn btn-danger" href="javascript:void(0)">Annuler</a>
+                                        <button type="reset" class="btn btn-danger" (click)="reset()">Annuler</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </form>
                 </div>
+                }
+                @else {
+                <div class="row mr-5 ml-5">
+                    <div class="card m-5 p-3">
+                        <div class="card-body">
+                            <div align="center">Fichier SIFT-MS</div>
+                            <table class="table table-bordered table-striped table-hover" id="memoire">
+                                <thead>
+                                    <tr>
+                                        <th>Blanc Positif</th>
+                                        <th>Blanc Négatif</th>
+                                        <th>Fromage Positif</th>
+                                        <th>Fromage Négatif</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{ siftMs.blanc_positif }}</td>
+                                        <td>{{ siftMs.blanc_negatif }}</td>
+                                        <td>{{ siftMs.fromage_positif }}</td>
+                                        <td>{{ siftMs.fromage_negatif }}</td>
+                                        <td><a (click)="telecharger(siftMs._id);" class="btn btn-pill btn-info"><i
+                                                    class="fas fa-file-download"></i>Télécharger</a></td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+                }
             </div>
         </div>
     </div>
