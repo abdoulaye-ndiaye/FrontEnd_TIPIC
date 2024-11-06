@@ -1,79 +1,98 @@
 <div class="card">
+    <button (click)="goBack()" class="btn btn-light">
+        <i class="fa fa-arrow-left"></i> Retour
+    </button>
     <div class="card-header pb-0">
         <h4>Mise à jour d'un utilisateur</h4>
         <p class="f-m-light mt-1">
-            Veuillez compléter le formulaire ci-dessous. Le champ <code>codeProducteur</code> apparaîtra si le rôle sélectionné est "PRODUCTEUR".
+            Veuillez compléter le formulaire ci-dessous. Le champ <code>codeProducteur</code> apparaîtra si le rôle
+            sélectionné est "PRODUCTEUR".
         </p>
     </div>
     <div class="card-body">
-                    <form class="row g-3 needs-validation custom-input" novalidate [formGroup]="updateUserForm" (ngSubmit)="onSubmit()" >
-                        <div class="col-md-6 position-relative">
-                            <label class="form-label" for="email">Email</label>
-                            <input type="email" class="form-control" id="email" formControlName="email" placeholder="email@example.com" 
-                                   [ngClass]="{ 'is-invalid': (updateUserForm.get('email')?.touched || updateUserForm.get('email')?.dirty) && updateUserForm.get('email')?.invalid, 'is-valid': updateUserForm.get('email')?.valid }">
-                            <div *ngIf="updateUserForm.get('email')?.invalid && (updateUserForm.get('email')?.touched || updateUserForm.get('email')?.dirty)">
-                                <small class="text-danger" *ngIf="updateUserForm.get('email')?.hasError('required')">L'email est obligatoire.</small>
-                                <small class="text-danger" *ngIf="updateUserForm.get('email')?.hasError('email')">L'email n'est pas valide.</small>
-                            </div>
-                        </div>
-                        <div class="col-md-6 position-relative">
-                            <label class="form-label" for="password">Mot de passe</label>
-                            <input type="password" class="form-control" id="password" formControlName="password" placeholder="Mot de passe" 
-                                   [ngClass]="{ 'is-invalid': (updateUserForm.get('password')?.touched || updateUserForm.get('password')?.dirty) && updateUserForm.get('password')?.invalid, 'is-valid': updateUserForm.get('password')?.valid }">
-                            <div *ngIf="updateUserForm.get('password')?.invalid && (updateUserForm.get('password')?.touched || updateUserForm.get('password')?.dirty)">
-                                <small class="text-danger" *ngIf="updateUserForm.get('password')?.hasError('required')">Le mot de passe est obligatoire.</small>
-                                <small class="text-danger" *ngIf="updateUserForm.get('password')?.hasError('minlength')">Le mot de passe doit contenir au moins 6 caractères.</small>
-                            </div>
-                        </div>                        
-                        <div class="col-md-6 position-relative">
-                            <label class="form-label" for="nom">Nom</label>
-                            <input type="text" class="form-control" id="nom" formControlName="nom" placeholder="Dupont" 
-                                   [ngClass]="{ 'is-invalid': (updateUserForm.get('nom')?.touched || updateUserForm.get('nom')?.dirty) && updateUserForm.get('nom')?.invalid, 'is-valid': updateUserForm.get('nom')?.valid }">
-                            <div *ngIf="updateUserForm.get('nom')?.invalid && (updateUserForm.get('nom')?.touched || updateUserForm.get('nom')?.dirty)">
-                                <small class="text-danger" *ngIf="updateUserForm.get('nom')?.hasError('required')">Le nom est obligatoire.</small>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 position-relative">
-                            <label class="form-label" for="prenom">Prénom</label>
-                            <input type="text" class="form-control" id="prenom" formControlName="prenom" placeholder="Jean" 
-                                   [ngClass]="{ 'is-invalid': (updateUserForm.get('prenom')?.touched || updateUserForm.get('prenom')?.dirty) && updateUserForm.get('prenom')?.invalid, 'is-valid': updateUserForm.get('prenom')?.valid }">
-                            <div *ngIf="updateUserForm.get('prenom')?.invalid && (updateUserForm.get('prenom')?.touched || updateUserForm.get('prenom')?.dirty)">
-                                <small class="text-danger" *ngIf="updateUserForm.get('prenom')?.hasError('required')">Le prénom est obligatoire.</small>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 position-relative">
-                            <label class="form-label" for="role">Rôle</label>
-                            <select class="form-select" id="role" formControlName="role" 
-                                    [ngClass]="{ 'is-invalid': (updateUserForm.get('role')?.touched || updateUserForm.get('role')?.dirty) && updateUserForm.get('role')?.invalid, 'is-valid': updateUserForm.get('role')?.valid }">
-                                <option selected disabled value="">Choisissez...</option>
-                                <option value="ADMIN">ADMIN</option>
-                                <option value="PRODUCTEUR">PRODUCTEUR</option>
-                                <option value="SYNDICAT_AOP">SYNDICAT_AOP</option>
-                                <option value="PARTENAIRE_PTF2A">PARTENAIRE_PTF2A</option>
-                                <option value="TECHNICIEN_IPREM">TECHNICIEN_IPREM</option>
-                                <option value="INGENIEUR_PREM">INGENIEUR_PREM</option>
-                                <option value="CHEF_PROJET_IPREM">CHEF_PROJET_IPREM</option>
-                            </select>
-                            <div *ngIf="updateUserForm.get('role')?.invalid && (updateUserForm.get('role')?.touched || updateUserForm.get('role')?.dirty)">
-                                <small class="text-danger">Veuillez sélectionner un rôle.</small>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 position-relative" *ngIf="isProducer">
-                            <label class="form-label" for="codeProducteur">Code Producteur</label>
-                            <input type="text" class="form-control" id="codeProducteur" formControlName="codeProducteur" 
-                                   [ngClass]="{ 'is-invalid': (updateUserForm.get('codeProducteur')?.touched || updateUserForm.get('codeProducteur')?.dirty) && updateUserForm.get('codeProducteur')?.invalid, 'is-valid': updateUserForm.get('codeProducteur')?.valid }">
-                            <div *ngIf="updateUserForm.get('codeProducteur')?.invalid && (updateUserForm.get('codeProducteur')?.touched || updateUserForm.get('codeProducteur')?.dirty)">
-                                <small class="text-danger">Veuillez fournir un code valide.</small>
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary" [disabled]="!updateUserForm.valid">Valider</button>
-                        </div>
-                    </form>
+        <form class="row g-3 needs-validation custom-input" novalidate [formGroup]="updateUserForm"
+            (ngSubmit)="onSubmit()">
+            <div class="col-md-6 position-relative">
+                <label class="form-label" for="email">Email</label>
+                <input type="email" class="form-control" id="email" formControlName="email"
+                    placeholder="email@example.com"
+                    [ngClass]="{ 'is-invalid': (updateUserForm.get('email')?.touched || updateUserForm.get('email')?.dirty) && updateUserForm.get('email')?.invalid, 'is-valid': updateUserForm.get('email')?.valid }">
+                <div
+                    *ngIf="updateUserForm.get('email')?.invalid && (updateUserForm.get('email')?.touched || updateUserForm.get('email')?.dirty)">
+                    <small class="text-danger" *ngIf="updateUserForm.get('email')?.hasError('required')">L'email est
+                        obligatoire.</small>
+                    <small class="text-danger" *ngIf="updateUserForm.get('email')?.hasError('email')">L'email n'est pas
+                        valide.</small>
                 </div>
-           
+            </div>
+            <div class="col-md-6 position-relative">
+                <label class="form-label" for="password">Mot de passe</label>
+                <input type="password" class="form-control" id="password" formControlName="password"
+                    placeholder="Mot de passe"
+                    [ngClass]="{ 'is-invalid': (updateUserForm.get('password')?.touched || updateUserForm.get('password')?.dirty) && updateUserForm.get('password')?.invalid, 'is-valid': updateUserForm.get('password')?.valid }">
+                <div
+                    *ngIf="updateUserForm.get('password')?.invalid && (updateUserForm.get('password')?.touched || updateUserForm.get('password')?.dirty)">
+                    <small class="text-danger" *ngIf="updateUserForm.get('password')?.hasError('required')">Le mot de
+                        passe est obligatoire.</small>
+                    <small class="text-danger" *ngIf="updateUserForm.get('password')?.hasError('minlength')">Le mot de
+                        passe doit contenir au moins 6 caractères.</small>
+                </div>
+            </div>
+            <div class="col-md-6 position-relative">
+                <label class="form-label" for="nom">Nom</label>
+                <input type="text" class="form-control" id="nom" formControlName="nom" placeholder="Dupont"
+                    [ngClass]="{ 'is-invalid': (updateUserForm.get('nom')?.touched || updateUserForm.get('nom')?.dirty) && updateUserForm.get('nom')?.invalid, 'is-valid': updateUserForm.get('nom')?.valid }">
+                <div
+                    *ngIf="updateUserForm.get('nom')?.invalid && (updateUserForm.get('nom')?.touched || updateUserForm.get('nom')?.dirty)">
+                    <small class="text-danger" *ngIf="updateUserForm.get('nom')?.hasError('required')">Le nom est
+                        obligatoire.</small>
+                </div>
+            </div>
+
+            <div class="col-md-6 position-relative">
+                <label class="form-label" for="prenom">Prénom</label>
+                <input type="text" class="form-control" id="prenom" formControlName="prenom" placeholder="Jean"
+                    [ngClass]="{ 'is-invalid': (updateUserForm.get('prenom')?.touched || updateUserForm.get('prenom')?.dirty) && updateUserForm.get('prenom')?.invalid, 'is-valid': updateUserForm.get('prenom')?.valid }">
+                <div
+                    *ngIf="updateUserForm.get('prenom')?.invalid && (updateUserForm.get('prenom')?.touched || updateUserForm.get('prenom')?.dirty)">
+                    <small class="text-danger" *ngIf="updateUserForm.get('prenom')?.hasError('required')">Le prénom est
+                        obligatoire.</small>
+                </div>
+            </div>
+
+            <div class="col-md-6 position-relative">
+                <label class="form-label" for="role">Rôle</label>
+                <select class="form-select" id="role" formControlName="role"
+                    [ngClass]="{ 'is-invalid': (updateUserForm.get('role')?.touched || updateUserForm.get('role')?.dirty) && updateUserForm.get('role')?.invalid, 'is-valid': updateUserForm.get('role')?.valid }">
+                    <option selected disabled value="">Choisissez...</option>
+                    <option value="ADMIN">ADMIN</option>
+                    <option value="PRODUCTEUR">PRODUCTEUR</option>
+                    <option value="SYNDICAT_AOP">SYNDICAT_AOP</option>
+                    <option value="PARTENAIRE_PTF2A">PARTENAIRE_PTF2A</option>
+                    <option value="TECHNICIEN_IPREM">TECHNICIEN_IPREM</option>
+                    <option value="INGENIEUR_PREM">INGENIEUR_PREM</option>
+                    <option value="CHEF_PROJET_IPREM">CHEF_PROJET_IPREM</option>
+                </select>
+                <div
+                    *ngIf="updateUserForm.get('role')?.invalid && (updateUserForm.get('role')?.touched || updateUserForm.get('role')?.dirty)">
+                    <small class="text-danger">Veuillez sélectionner un rôle.</small>
+                </div>
+            </div>
+
+            <div class="col-md-6 position-relative" *ngIf="isProducer">
+                <label class="form-label" for="codeProducteur">Code Producteur</label>
+                <input type="text" class="form-control" id="codeProducteur" formControlName="codeProducteur"
+                    [ngClass]="{ 'is-invalid': (updateUserForm.get('codeProducteur')?.touched || updateUserForm.get('codeProducteur')?.dirty) && updateUserForm.get('codeProducteur')?.invalid, 'is-valid': updateUserForm.get('codeProducteur')?.valid }">
+                <div
+                    *ngIf="updateUserForm.get('codeProducteur')?.invalid && (updateUserForm.get('codeProducteur')?.touched || updateUserForm.get('codeProducteur')?.dirty)">
+                    <small class="text-danger">Veuillez fournir un code valide.</small>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary" [disabled]="!updateUserForm.valid">Valider</button>
+            </div>
+        </form>
+    </div>
+
 </div>

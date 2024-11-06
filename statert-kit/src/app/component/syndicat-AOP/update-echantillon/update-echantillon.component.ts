@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { firstValueFrom } from "rxjs";
 import Swal from "sweetalert2";
 import { FromageService } from "../../../services/fromage.service";
-import { CommonModule, DatePipe } from "@angular/common";
+import { CommonModule, DatePipe, Location } from "@angular/common";
 
 @Component({
     selector: "app-update-echantillon",
@@ -34,7 +34,8 @@ export class UpdateEchantillonComponent implements OnInit {
         private fromageService: FromageService,
         private route: ActivatedRoute,
         private datePipe: DatePipe,
-        private router: Router
+        private router: Router,
+        private location: Location
     ) {
         this.cheeseForm = this.fb.group({
             // Identifiants
@@ -470,5 +471,8 @@ export class UpdateEchantillonComponent implements OnInit {
                 text: "Veuillez remplir tous les champs obligatoires.",
             });
         }
+    }
+    goBack(): void {
+        this.location.back(); // Retour à la page précédente
     }
 }

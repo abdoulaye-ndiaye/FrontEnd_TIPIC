@@ -1,7 +1,7 @@
 import { ApplicationModule, Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FromageService } from "../../../services/fromage.service";
-import { CommonModule } from "@angular/common";
+import { CommonModule, Location } from "@angular/common";
 import Swal from "sweetalert2";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
@@ -23,7 +23,8 @@ export class DetailsEchantillonComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private fromageService: FromageService,
-        private router: Router
+        private router: Router,
+        private location: Location
     ) {}
 
     ngOnInit(): void {
@@ -99,6 +100,9 @@ export class DetailsEchantillonComponent implements OnInit {
     }
     refresh() {
         window.location.reload();
+    }
+    goBack(): void {
+        this.location.back(); // Retour à la page précédente
     }
 
     downloadPDF() {

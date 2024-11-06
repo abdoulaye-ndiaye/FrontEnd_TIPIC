@@ -1,5 +1,5 @@
 import { UtilisateurService } from "./../../../services/utilisateur.service";
-import { CommonModule } from "@angular/common";
+import { CommonModule, Location } from "@angular/common";
 import { ApplicationModule, Component, OnInit } from "@angular/core";
 import {
     FormBuilder,
@@ -34,7 +34,8 @@ export class UpdateUtilisateurComponent implements OnInit {
         private formBuilder: FormBuilder,
         private utilisateurService: UtilisateurService,
         private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private location: Location
     ) {
         this.updateUserForm = this.formBuilder.group({
             email: ["", [Validators.required, Validators.email]],
@@ -156,6 +157,9 @@ export class UpdateUtilisateurComponent implements OnInit {
             });
             console.log("Form is invalid");
         }
+    }
+    goBack(): void {
+        this.location.back(); // Retour à la page précédente
     }
 
     // Getter pour faciliter l'accès aux contrôles dans le template

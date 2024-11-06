@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+import { CommonModule, Location } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import {
     FormBuilder,
@@ -32,7 +32,8 @@ export class AjoutSiftMsComponent implements OnInit {
         private siftMsService: SiftMsService,
         private route: ActivatedRoute,
         private router: Router,
-        private fromageService: FromageService
+        private fromageService: FromageService,
+        private location: Location
     ) {}
 
     ngOnInit(): void {
@@ -142,6 +143,10 @@ export class AjoutSiftMsComponent implements OnInit {
                 });
             }
         });
+    }
+
+    goBack(): void {
+        this.location.back(); // Retour à la page précédente
     }
 
     get blanc_positif() {

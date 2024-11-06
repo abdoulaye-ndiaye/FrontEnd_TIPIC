@@ -2,6 +2,9 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
+                <button (click)="goBack()" class="btn btn-light">
+                    <i class="fa fa-arrow-left"></i> Retour
+                </button>
                 @if (!siftMs) {
                 <div class="card-body">
                     <form [formGroup]="siftMsForm" (ngSubmit)="onSubmit()">

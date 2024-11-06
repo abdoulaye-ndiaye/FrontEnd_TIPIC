@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+import { CommonModule, Location } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import {
     FormBuilder,
@@ -30,7 +30,8 @@ export class AjoutAnalyseSensorielleComponent implements OnInit {
         private fromageService: FromageService,
         private route: ActivatedRoute,
         private router: Router,
-        private analyseSensorielleService: AnalyseSensorielleService
+        private analyseSensorielleService: AnalyseSensorielleService,
+        private location: Location
     ) {}
 
     ngOnInit(): void {
@@ -121,6 +122,9 @@ export class AjoutAnalyseSensorielleComponent implements OnInit {
                 });
             }
         });
+    }
+    goBack(): void {
+        this.location.back(); // Retour à la page précédente
     }
 
     get numero_anonyme() {
