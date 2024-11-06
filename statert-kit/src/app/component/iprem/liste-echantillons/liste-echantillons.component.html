@@ -25,10 +25,13 @@
                   <td>{{ echantillon.datePrelevement | date:'dd-MM-YYYY' }}</td>
 
                   <td>
-
                     <button (click)="voir(echantillon._id)" class="btn btn-success" style=" color: white">
                       <i class="fa-solid fa-eye"></i>&nbsp;
                       <span>Voir</span>
+                    </button> &nbsp; &nbsp;
+                    <button (click)="ajouter(echantillon._id)" class="btn btn-warning">
+                      <i class="fa-solid fa-plus"></i>&nbsp;
+                      <span>Ajouter Fichier</span>
                     </button>
                   </td>
                 </tr>
