@@ -88,13 +88,27 @@ export class NavmenuService {
             active: true,
         },
         {
-            title: "Echantillons",
+            title: "SIFT-MS",
             icon: "to-do",
             path: "/iprem/liste-echantillons",
             type: "link",
             level: 1,
             active: false,
             id: 9,
+        },
+        {
+            id: 10,
+            headTitle1: "PTF2A",
+            active: true,
+        },
+        {
+            title: "Analyse Sensorielle",
+            icon: "to-do",
+            path: "/PTF2A/liste-echantillons",
+            type: "link",
+            level: 1,
+            active: false,
+            id: 11,
         },
     ];
 

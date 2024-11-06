@@ -1,0 +1,89 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        @if (!analyseSensorielle) {
+        <div class="card-body">
+          <form [formGroup]="analyseForm" (ngSubmit)="onSubmit()">
+            <div class="form theme-form">
+              <h4 class="page-title">Ajout du fichier de l'analyse sensorielle pour l'echantillon
+                {{fromage?.numeroEchan}}
+              </h4>
+              <br>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="mb-3">
+                    <label>Numéro Anonyme</label>
+                    <input class="form-control" type="text" formControlName="numero_anonyme"
+                      [ngClass]="{ 'is-invalid' : (numero_anonyme?.touched || validate) && numero_anonyme?.errors , 'is-valid' : !numero_anonyme?.errors}">
+                    <div class="invalid-feedback"
+                      *ngIf="(numero_anonyme?.touched || validate) && numero_anonyme?.errors">
+                      Le numéro anonyme est requis.
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="col">
+                  <div class="mb-3">
+                    <label>Ajoutez le fichier d'Analyse Sensorielle</label>
+                    <label for="file" class="drop-container" id="dropcontainer">
+                      <span class="drop-title">Déposer le fichier ici</span>
+                      ou
+                      <input type="file" formControlName="file" id="file" accept="application/pdf,application/xml"
+                        required (change)="onFileChange($event)"
+                        [ngClass]="{ 'is-invalid' : (file?.touched || validate) && file?.errors , 'is-valid' : !file?.errors}" />
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <div class="text-end">
+                    <button type="submit" class="btn btn-success me-3" [disabled]="!analyseForm.valid">Ajouter
+                    </button>
+                    <button type="reset" class="btn btn-danger" (click)="reset()">Annuler</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        }
+        @else {
+        <div class="row mr-5 ml-5">
+          <div class="card m-5 p-3">
+            <div class="card-body">
+              <div align="center">Un Fichier Analyse Sensorielle existe déjà pour l'échantillon
+                {{fromage.numeroEchan}} !</div>
+              <br>
+              <table class="table table-bordered table-striped table-hover" id="memoire">
+                <thead>
+                  <tr>
+                    <th>Numéro Anonyme</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ analyseSensorielle.numeroAnonyme }}</td>
+                    <td>
+                      <a (click)="telecharger(analyseSensorielle._id);" class="btn btn-info">
+                        <i class="fas fa-file-download"></i>&nbsp; Télécharger
+                      </a>&nbsp; &nbsp;
+                      <button (click)="delete(analyseSensorielle._id)" class="btn btn-danger">Supprimer</button>
+                    </td>
+
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

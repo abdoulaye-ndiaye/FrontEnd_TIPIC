@@ -6,22 +6,25 @@ import Swal from "sweetalert2";
 @Injectable({
     providedIn: "root",
 })
-export class SiftMsService {
+export class AnalyseSensorielleService {
     constructor(private httpClient: HttpClient) {}
 
     upload(data: any) {
-        return this.httpClient.post<any>(`${environment.apiUrl}/siftMs`, data);
+        return this.httpClient.post<any>(
+            `${environment.apiUrl}/analyseSensorielle`,
+            data
+        );
     }
 
     getByIdEchantilon(id: string) {
         return this.httpClient.get<any>(
-            `${environment.apiUrl}/echantillon/${id}/siftMs`
+            `${environment.apiUrl}/echantillon/${id}/analyseSensorielle`
         );
     }
 
     dowloadSiftMs(id: string) {
         this.httpClient
-            .get(`${environment.apiUrl}/download-siftMs/${id}`, {
+            .get(`${environment.apiUrl}/download-analyseSensorielle/${id}`, {
                 responseType: "blob",
             })
             .subscribe((res) => {
@@ -31,7 +34,7 @@ export class SiftMsService {
     }
     delete(id: string) {
         return this.httpClient.delete<any>(
-            `${environment.apiUrl}/siftMs/${id}`
+            `${environment.apiUrl}/analyseSensorielle/${id}`
         );
     }
 }

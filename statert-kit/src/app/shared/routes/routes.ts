@@ -36,14 +36,25 @@ export const dashData: Routes = [
             ).then((r) => r.syndicat),
     },
     {
-        path:"iprem",
+        path: "iprem",
         data: {
-            title :"iprem",
-            breadcrumb : "iprem",
+            title: "iprem",
+            breadcrumb: "iprem",
         },
         loadChildren: () =>
-            import(
-                "../../../app/component/iprem/iprem.routes"
-            ).then((r) => r.iprem),
-    }
+            import("../../../app/component/iprem/iprem.routes").then(
+                (r) => r.iprem
+            ),
+    },
+    {
+        path: "PTF2A",
+        data: {
+            title: "PTF2A",
+            breadcrumb: "PTF2A",
+        },
+        loadChildren: () =>
+            import("../../../app/component/PTF2A/PTF2A.routes").then(
+                (r) => r.PTF2A
+            ),
+    },
 ];
