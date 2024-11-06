@@ -92,7 +92,9 @@
                 <div class="row mr-5 ml-5">
                     <div class="card m-5 p-3">
                         <div class="card-body">
-                            <div align="center">Fichier SIFT-MS</div>
+                            <div align="center">Un Fichier SIFT-MS existe déjà pour l'échantillon
+                                {{fromage.numeroEchan}} !</div>
+                            <br>
                             <table class="table table-bordered table-striped table-hover" id="memoire">
                                 <thead>
                                     <tr>
@@ -109,8 +111,14 @@
                                         <td>{{ siftMs.blanc_negatif }}</td>
                                         <td>{{ siftMs.fromage_positif }}</td>
                                         <td>{{ siftMs.fromage_negatif }}</td>
-                                        <td><a (click)="telecharger(siftMs._id);" class="btn btn-pill btn-info"><i
-                                                    class="fas fa-file-download"></i>Télécharger</a></td>
+                                        <td>
+                                            <a (click)="telecharger(siftMs._id)" class="btn btn-info">
+                                                <i class="fas fa-file-download"></i>&nbsp; Télécharger
+                                            </a> &nbsp; &nbsp;
+                                            <button (click)="delete(siftMs._id)"
+                                                class="btn btn-danger">Supprimer</button>
+
+                                        </td>
 
                                     </tr>
                                 </tbody>

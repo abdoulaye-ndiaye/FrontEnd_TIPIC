@@ -8,7 +8,7 @@ import {
 } from "@angular/forms";
 import Swal from "sweetalert2";
 import { SiftMsService } from "../../../services/sift-ms.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { FromageService } from "../../../services/fromage.service";
 
 @Component({
@@ -31,6 +31,7 @@ export class AjoutSiftMsComponent implements OnInit {
         private formBuilder: FormBuilder,
         private siftMsService: SiftMsService,
         private route: ActivatedRoute,
+        private router: Router,
         private fromageService: FromageService
     ) {}
 
@@ -47,8 +48,6 @@ export class AjoutSiftMsComponent implements OnInit {
         this.siftMsService
             .getByIdEchantilon(this.id_echantillon)
             .subscribe((data) => {
-                console.log(data);
-
                 this.siftMs = data[0];
             });
 
@@ -92,8 +91,9 @@ export class AjoutSiftMsComponent implements OnInit {
                         icon: "success",
                         title: "Succès",
                         text: "SIFT-MS ajouté avec succès.",
+                    }).then(() => {
+                        window.location.reload();
                     });
-                    this.reset();
                     //console.log(response);
                 },
                 (error) => {
@@ -119,6 +119,29 @@ export class AjoutSiftMsComponent implements OnInit {
     reset() {
         this.siftMsForm.reset();
         this.siftMsForm.setErrors(null);
+    }
+
+    delete(id: string) {
+        Swal.fire({
+            title: "Voulez-vous vraiment supprimer ce fichier ?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Oui, supprimer",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.siftMsService.delete(id).subscribe((data) => {
+                    Swal.fire(
+                        "Supprimé !",
+                        "Le fichier a été supprimé avec succès.",
+                        "success"
+                    ).then(() => {
+                        window.location.reload();
+                    });
+                });
+            }
+        });
     }
 
     get blanc_positif() {
