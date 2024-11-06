@@ -1,20 +1,18 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'app-loader',
-  standalone: true,
-  imports: [],
-  templateUrl: './loader.component.html',
-  styleUrl: './loader.component.scss'
+    selector: "app-loader",
+    standalone: true,
+    imports: [],
+    templateUrl: "./loader.component.html",
+    styleUrl: "./loader.component.scss",
 })
 export class LoaderComponent {
+    public show: boolean = true;
 
-  public show: boolean = true;
-
-  constructor() {
-    setTimeout(() => {
-      this.show = false;
-    }, 3000);
-  }
-
+    constructor() {
+        setTimeout(() => {
+            this.show = false;
+        }, 500);
+    }
 }
