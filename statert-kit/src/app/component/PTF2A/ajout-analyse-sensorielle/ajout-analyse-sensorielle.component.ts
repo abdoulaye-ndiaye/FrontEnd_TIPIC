@@ -121,8 +121,6 @@ export class AjoutAnalyseSensorielleComponent implements OnInit {
     }
     
     
-    
-    
     reset() {
         this.analyseForm.reset();
         this.analyseForm.setErrors(null);

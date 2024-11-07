@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 
 import { FeathericonComponent } from '../../feathericon/feathericon.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-profile',
@@ -36,8 +37,20 @@ export class ProfileComponent implements OnInit {
   }
 
   logout() {
-    localStorage.removeItem("token");
-    this.router.navigate(["/auth/login"]);
+    Swal.fire({
+      title: "Voulez-vous vraiment déconnecter ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3b8748",
+      confirmButtonText: "Oui",
+      cancelButtonText: "Non"
+  }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("token");
+        this.router.navigate(["/auth/login"]);
+      }
+  });
   }
 
 }

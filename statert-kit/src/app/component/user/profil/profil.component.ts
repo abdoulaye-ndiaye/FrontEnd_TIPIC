@@ -108,7 +108,7 @@ export class ProfilComponent implements OnInit{
                               text: "L'utilisateur producteur a été mis à jour avec succès!",
                               confirmButtonColor: "var(--theme-default)",
                           }).then(() => {
-                              this.router.navigate(["/admin/utilisateur"]);
+                            this.router.navigate(["/admin/dashboard"]);
                           });
                           console.log(data);
                       },
@@ -140,7 +140,7 @@ export class ProfilComponent implements OnInit{
                               text: "L'utilisateur a été mis à jour avec succès!",
                               confirmButtonColor: "var(--theme-default)",
                           }).then(() => {
-                              this.router.navigate(["/admin/utilisateur"]);
+                              this.router.navigate(["/admin/dashboard"]);
                           });
                           console.log(data);
                       },

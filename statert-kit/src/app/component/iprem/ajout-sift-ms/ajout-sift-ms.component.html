@@ -70,8 +70,7 @@
                                             <span class="drop-title">Déposer le fichier ici</span>
                                             ou
                                             <input type="file" formControlName="file" id="file"
-                                                accept="application/pdf,application/xml" required
-                                                (change)="onFileChange($event)"
+                                                accept=".csv, .xls, .xlsx" required (change)="onFileChange($event)"
                                                 [ngClass]="{ 'is-invalid' : (file?.touched || validate) && file?.errors , 'is-valid' : !file?.errors}" />
                                         </label>
                                     </div>

@@ -44,7 +44,7 @@ export class UtilisateurComponent implements OnInit, OnDestroy {
                     emptyTable: "Aucune donnée disponible dans le tableau",
                 },
                 pagingType: "full_numbers",
-                pageLength: 10,
+                pageLength: 5,
                 processing: true,
                 lengthMenu: [5, 10, 25],
             });
