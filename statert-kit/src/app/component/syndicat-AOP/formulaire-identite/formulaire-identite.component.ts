@@ -22,7 +22,7 @@ export class FormulaireIdentiteComponent implements OnInit {
     cheeseForm: FormGroup;
     validate: boolean = false; // Initialiser à false
 
-    constructor(private fb: FormBuilder, private fromage: FromageService) {}
+    constructor(private fb: FormBuilder, private fromage: FromageService) { }
 
     ngOnInit(): void {
         this.cheeseForm = this.fb.group({
@@ -63,20 +63,30 @@ export class FormulaireIdentiteComponent implements OnInit {
 
             // Affinage
             nomAffineur: ["", Validators.required],
-            preAffinage: [false, Validators.required],
+            preAffinage: [null, Validators.required],
             dureeAffinage: [null, Validators.required],
-            brossageManuel: [false, Validators.required],
+            brossageManuel: [null, Validators.required],
             tempPreAffinage: [null, Validators.required],
             tempAffinage: [null, Validators.required],
             humidificationCave: ["", Validators.required],
         });
 
-        // Surveiller les changements du champ "preAffinage"
-        this.cheeseForm.get("preAffinage")?.valueChanges.subscribe((value) => {
-            if (!value) {
-                this.cheeseForm.get("dureeAffinage")?.setValue(null);
-                this.cheeseForm.get("tempAffinage")?.setValue(null);
+
+
+        // Surveillez la valeur de preAffinage pour mettre à jour les validations de dureeAffinage et tempPreAffinage
+        this.cheeseForm.get('preAffinage')?.valueChanges.subscribe(value => {
+            if (value === true) {
+                // Si "Oui", on active la validation de dureeAffinage et tempPreAffinage
+                this.cheeseForm.get('dureeAffinage')?.setValidators([Validators.required, Validators.min(1)]);
+                this.cheeseForm.get('tempPreAffinage')?.setValidators([Validators.required, Validators.min(1)]);
+            } else {
+                // Si "Non", on supprime les validateurs des champs dureeAffinage et tempPreAffinage
+                this.cheeseForm.get('dureeAffinage')?.clearValidators();
+                this.cheeseForm.get('tempPreAffinage')?.clearValidators();
             }
+            // Mettre à jour la validation des champs concernés
+            this.cheeseForm.get('dureeAffinage')?.updateValueAndValidity();
+            this.cheeseForm.get('tempPreAffinage')?.updateValueAndValidity();
         });
     }
 
@@ -100,7 +110,7 @@ export class FormulaireIdentiteComponent implements OnInit {
         input.value = input.value.replace(/[^0-9]/g, "");
     }
 
-    replaceCommaWithDot(event: Event) {}
+    replaceCommaWithDot(event: Event) { }
 
     isNextDisabled(): boolean {
         switch (this.currentStep) {
@@ -137,12 +147,15 @@ export class FormulaireIdentiteComponent implements OnInit {
                     !this.dateSortieVide?.valid
                 );
             case 3:
+                // Vérifier si le pré-affinage est activé et si les champs associés sont valides
+                const isPreAffinageValid = this.cheeseForm.get('preAffinage')?.value
+                    ? this.dureeAffinage?.valid && this.tempPreAffinage?.valid
+                    : true; // Si "Non" est sélectionné, on n'exige pas les champs
+
                 return (
                     !this.nomAffineur?.valid ||
                     !this.preAffinage?.valid ||
-                    (!this.preAffinage?.value &&
-                        (!this.dureeAffinage?.valid ||
-                            !this.tempAffinage?.valid)) ||
+                    !isPreAffinageValid || // Ajoutez cette condition
                     !this.brossageManuel?.valid ||
                     !this.humidificationCave?.valid
                 );
@@ -150,6 +163,7 @@ export class FormulaireIdentiteComponent implements OnInit {
                 return true; // Par défaut, le bouton est activé
         }
     }
+
 
     // Getter pour faciliter l'accès aux contrôles dans le template
     get datePrelevement() {
@@ -329,7 +343,7 @@ export class FormulaireIdentiteComponent implements OnInit {
                         formValue.nomAffineur,
                         formValue.preAffinage,
                         formValue.dureeAffinage,
-                        formValue.tempAffinage,
+                        formValue.tempPreAffinage,
                         formValue.brossageManuel,
                         formValue.tempAffinage,
                         formValue.humidificationCave,
@@ -343,18 +357,30 @@ export class FormulaireIdentiteComponent implements OnInit {
                     title: "Succès",
                     text: "Formulaire soumis avec succès !",
                 });
-            } catch (error) {
+            } catch (error: any) {
                 console.error(
                     "Erreur lors de la soumission du formulaire:",
                     error
                 );
+                // Vérification si l'erreur vient de la réponse du serveur
+                if (error?.error === "echantillon existe déja") {
+                    // Utilisation de Swal pour une alerte d'erreur
+                    Swal.fire({
+                        icon: "error",
+                        title: "Erreur",
+                        text: "Le numéro de l'échantillon existe déjà. Veuillez modifier et réessayer."
+                    });
+                } else {
+                    // Utilisation de Swal pour une alerte d'erreur générique
+                    Swal.fire({
+                        icon: "error",
+                        title: "Erreur",
+                        text: "Erreur lors de la soumission du formulaire."
+                    });
+                }
 
-                // Utilisation de Swal pour une alerte d'erreur
-                Swal.fire({
-                    icon: "error",
-                    title: "Erreur",
-                    text: "Erreur lors de la soumission du formulaire.",
-                });
+
+
             }
         } else {
             Swal.fire({

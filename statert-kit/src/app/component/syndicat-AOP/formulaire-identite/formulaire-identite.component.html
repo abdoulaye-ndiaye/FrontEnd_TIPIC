@@ -497,7 +497,7 @@
                                     <button type="button" class="action-button" (click)="nextStep()"
                                         [disabled]="isNextDisabled()" *ngIf="currentStep < 3">Suivant</button>
                                     <button type="submit" class="action-button"
-                                        *ngIf="currentStep === 3">Terminer</button>
+                                        *ngIf="currentStep === 3" [disabled]="isNextDisabled()" >Terminer</button>
                                 </div>
 
                             </form>

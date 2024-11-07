@@ -10,25 +10,45 @@
             <div class="col-md-6 position-relative">
                 <label class="form-label" for="email">Email</label>
                 <input class="form-control" id="email" type="email" placeholder="email@example.com" formControlName="email" [ngClass]="{ 'is-invalid' : (email?.touched || validate) && email?.errors , 'is-valid' : !email?.errors}">
-                <div class="invalid-tooltip">Veuillez entrer un email valide.</div>
+                <div
+                    *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.touched || registerForm.get('email')?.dirty)">
+                    <small class="text-danger" *ngIf="registerForm.get('email')?.hasError('required')">L'email est
+                        obligatoire.</small>
+                    <small class="text-danger" *ngIf="registerForm.get('email')?.hasError('email')">L'email n'est pas
+                        valide.</small>
+                </div>
             </div>
 
             <div class="col-md-6 position-relative">
                 <label class="form-label" for="password">Mot de passe</label>
                 <input class="form-control" id="password" type="password" placeholder="Mot de passe" formControlName="password" [ngClass]="{ 'is-invalid' : (password?.touched || validate) && password?.errors , 'is-valid' : !password?.errors}">
-                <div class="invalid-tooltip">Veuillez fournir un mot de passe (min. 6 caractères).</div>
+                <div
+                    *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.touched || registerForm.get('password')?.dirty)">
+                    <small class="text-danger" *ngIf="registerForm.get('password')?.hasError('required')">Le mot de
+                        passe est obligatoire.</small>
+                    <small class="text-danger" *ngIf="registerForm.get('password')?.hasError('minlength')">Le mot de
+                        passe doit contenir au moins 6 caractères.</small>
+                </div>
             </div>
 
             <div class="col-md-6 position-relative">
                 <label class="form-label" for="nom">Nom</label>
                 <input class="form-control" id="nom" type="text" placeholder="Dupont" formControlName="nom" [ngClass]="{ 'is-invalid' : (nom?.touched || validate) && nom?.errors , 'is-valid' : !nom?.errors}">
-                <div class="valid-tooltip">C'est bon !</div>
+                <div
+                    *ngIf="registerForm.get('nom')?.invalid && (registerForm.get('nom')?.touched || registerForm.get('nom')?.dirty)">
+                    <small class="text-danger" *ngIf="registerForm.get('nom')?.hasError('required')">Le nom est
+                        obligatoire.</small>
+                </div>
             </div>
 
             <div class="col-md-6 position-relative">
                 <label class="form-label" for="prenom">Prénom</label>
                 <input class="form-control" id="prenom" type="text" placeholder="Jean" formControlName="prenom" [ngClass]="{ 'is-invalid' : (prenom?.touched || validate) && prenom?.errors , 'is-valid' : !prenom?.errors}">
-                <div class="valid-tooltip">C'est bon !</div>
+                <div
+                    *ngIf="registerForm.get('prenom')?.invalid && (registerForm.get('prenom')?.touched || registerForm.get('prenom')?.dirty)">
+                    <small class="text-danger" *ngIf="registerForm.get('prenom')?.hasError('required')">Le prénom est
+                        obligatoire.</small>
+                </div>
             </div>
 
             <div class="col-md-6 position-relative">
@@ -43,14 +63,20 @@
                     <option value="INGENIEUR_PREM">INGENIEUR_PREM</option>
                     <option value="CHEF_PROJET_IPREM">CHEF_PROJET_IPREM</option>
                 </select>
-                <div class="invalid-tooltip">Veuillez sélectionner un rôle.</div>
+                <div
+                    *ngIf="registerForm.get('role')?.invalid && (registerForm.get('role')?.touched || registerForm.get('role')?.dirty)">
+                    <small class="text-danger">Veuillez sélectionner un rôle.</small>
+                </div>
             </div>
 
             <!-- Afficher codeProducteur uniquement si role = PRODUCTEUR -->
             <div class="col-md-6 position-relative" *ngIf="isProducer">
                 <label class="form-label" for="codeProducteur">Code Producteur</label>
                 <input class="form-control" id="codeProducteur" type="text" formControlName="codeProducteur" [ngClass]="{ 'is-invalid' : (codeProducteur?.touched || validate) && codeProducteur?.errors , 'is-valid' : !codeProducteur?.errors}">
-                <div class="invalid-tooltip">Veuillez fournir un code valide.</div>
+                <div
+                    *ngIf="registerForm.get('codeProducteur')?.invalid && (registerForm.get('codeProducteur')?.touched || registerForm.get('codeProducteur')?.dirty)">
+                    <small class="text-danger">Veuillez fournir un code valide.</small>
+                </div>
             </div>
 
             <div class="col-12">

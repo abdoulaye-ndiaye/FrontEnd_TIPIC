@@ -1,0 +1,136 @@
+<div class="container-fluid">
+    <div class="edit-profile">
+        <div class="row">
+            <div class="col-xl-4">
+                <div class="card ">
+                    <div class="card-header pb-0">
+                        <h4 class="card-title mb-0">Mon Profil</h4>
+                        <div class="card-options"> 
+                            <a class="card-options-collapse" href="javascript:void(0)">
+                                <i class="fe fe-chevron-up"></i></a>
+                            <a class="card-options-remove" href="javascript:void(0)">
+                                <i class="fe fe-x"></i> 
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="row mb-2">
+                                <div class="profile-title">
+                                    <div class="d-flex">
+                                        <img class="img-70 rounded-circle" alt="images" src="assets/images/user/7.jpg">
+                                        <div class="flex-grow-1">
+                                            <h3 class="mb-1">{{prenomUtilisateur}} {{nomUtilisateur}}</h3>
+                                            <p>{{roleUtilisateur}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-8">
+                <form class="card">
+                    <div class="card-header pb-0">
+                        <h4 class="card-title mb-0">Modifier le profil</h4>
+                        <div class="card-options">
+                            <a class="card-options-collapse" href="javascript:void(0)">
+                                <i class="fe fe-chevron-up"></i>
+                            </a>
+                            <a class="card-options-remove" href="javascript:void(0)">
+                                <i class="fe fe-x"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form class="row g-3 needs-validation custom-input" novalidate [formGroup]="profileForm"
+                            (ngSubmit)="onSubmit()">
+                            <div class="col-md-6 position-relative">
+                                <label class="form-label" for="email">Email</label>
+                                <input type="email" class="form-control" id="email" formControlName="email"
+                                    placeholder="email@example.com"
+                                    [ngClass]="{ 'is-invalid': (profileForm.get('email')?.touched || profileForm.get('email')?.dirty) && profileForm.get('email')?.invalid, 'is-valid': profileForm.get('email')?.valid }">
+                                <div
+                                    *ngIf="profileForm.get('email')?.invalid && (profileForm.get('email')?.touched || profileForm.get('email')?.dirty)">
+                                    <small class="text-danger" *ngIf="profileForm.get('email')?.hasError('required')">L'email est
+                                        obligatoire.</small>
+                                    <small class="text-danger" *ngIf="profileForm.get('email')?.hasError('email')">L'email n'est pas
+                                        valide.</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6 position-relative">
+                                <label class="form-label" for="password">Mot de passe</label>
+                                <input type="password" class="form-control" id="password" formControlName="password"
+                                    placeholder="Mot de passe"
+                                    [ngClass]="{ 'is-invalid': (profileForm.get('password')?.touched || profileForm.get('password')?.dirty) && profileForm.get('password')?.invalid, 'is-valid': profileForm.get('password')?.valid }">
+                                <div
+                                    *ngIf="profileForm.get('password')?.invalid && (profileForm.get('password')?.touched || profileForm.get('password')?.dirty)">
+                                    <small class="text-danger" *ngIf="profileForm.get('password')?.hasError('required')">Le mot de
+                                        passe est obligatoire.</small>
+                                    <small class="text-danger" *ngIf="profileForm.get('password')?.hasError('minlength')">Le mot de
+                                        passe doit contenir au moins 6 caractères.</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6 position-relative">
+                                <label class="form-label" for="nom">Nom</label>
+                                <input type="text" class="form-control" id="nom" formControlName="nom" placeholder="Dupont"
+                                    [ngClass]="{ 'is-invalid': (profileForm.get('nom')?.touched || profileForm.get('nom')?.dirty) && profileForm.get('nom')?.invalid, 'is-valid': profileForm.get('nom')?.valid }">
+                                <div
+                                    *ngIf="profileForm.get('nom')?.invalid && (profileForm.get('nom')?.touched || profileForm.get('nom')?.dirty)">
+                                    <small class="text-danger" *ngIf="profileForm.get('nom')?.hasError('required')">Le nom est
+                                        obligatoire.</small>
+                                </div>
+                            </div>
+                
+                            <div class="col-md-6 position-relative">
+                                <label class="form-label" for="prenom">Prénom</label>
+                                <input type="text" class="form-control" id="prenom" formControlName="prenom" placeholder="Jean"
+                                    [ngClass]="{ 'is-invalid': (profileForm.get('prenom')?.touched || profileForm.get('prenom')?.dirty) && profileForm.get('prenom')?.invalid, 'is-valid': profileForm.get('prenom')?.valid }">
+                                <div
+                                    *ngIf="profileForm.get('prenom')?.invalid && (profileForm.get('prenom')?.touched || profileForm.get('prenom')?.dirty)">
+                                    <small class="text-danger" *ngIf="profileForm.get('prenom')?.hasError('required')">Le prénom est
+                                        obligatoire.</small>
+                                </div>
+                            </div>
+                
+                            <div class="col-md-6 position-relative">
+                                <label class="form-label" for="role">Rôle</label>
+                                <select class="form-select" id="role" formControlName="role"
+                                    [ngClass]="{ 'is-invalid': (profileForm.get('role')?.touched || profileForm.get('role')?.dirty) && profileForm.get('role')?.invalid, 'is-valid': profileForm.get('role')?.valid }">
+                                    <option selected disabled value="">Choisissez...</option>
+                                    <option value="ADMIN">ADMIN</option>
+                                    <option value="PRODUCTEUR">PRODUCTEUR</option>
+                                    <option value="SYNDICAT_AOP">SYNDICAT_AOP</option>
+                                    <option value="PARTENAIRE_PTF2A">PARTENAIRE_PTF2A</option>
+                                    <option value="TECHNICIEN_IPREM">TECHNICIEN_IPREM</option>
+                                    <option value="INGENIEUR_PREM">INGENIEUR_PREM</option>
+                                    <option value="CHEF_PROJET_IPREM">CHEF_PROJET_IPREM</option>
+                                </select>
+                                <div
+                                    *ngIf="profileForm.get('role')?.invalid && (profileForm.get('role')?.touched || profileForm.get('role')?.dirty)">
+                                    <small class="text-danger">Veuillez sélectionner un rôle.</small>
+                                </div>
+                            </div>
+                
+                            <div class="col-md-6 position-relative" *ngIf="isProducer">
+                                <label class="form-label" for="codeProducteur">Code Producteur</label>
+                                <input type="text" class="form-control" id="codeProducteur" formControlName="codeProducteur"
+                                    [ngClass]="{ 'is-invalid': (profileForm.get('codeProducteur')?.touched || profileForm.get('codeProducteur')?.dirty) && profileForm.get('codeProducteur')?.invalid, 'is-valid': profileForm.get('codeProducteur')?.valid }">
+                                <div
+                                    *ngIf="profileForm.get('codeProducteur')?.invalid && (profileForm.get('codeProducteur')?.touched || profileForm.get('codeProducteur')?.dirty)">
+                                    <small class="text-danger">Veuillez fournir un code valide.</small>
+                                </div>
+                            </div>
+                
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary" [disabled]="!profileForm.valid">Valider</button>
+                            </div>
+                        </form>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

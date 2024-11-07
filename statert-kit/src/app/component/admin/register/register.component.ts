@@ -87,14 +87,23 @@ export class RegisterComponent {
                             });
                             console.log(data);
                         },
-                        error: (err) => {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Erreur',
-                                text: 'Une erreur s\'est produite lors de l\'enregistrement.',
-                                confirmButtonColor: 'var(--theme-default)',
-                            });
-                            console.error(err);
+                        error: (error: any) => {
+                            console.error(error);
+                            if (error?.error?.message === "Email déjà utilisé"){
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Erreur',
+                                    text: 'Email déjà utilisé !',
+                                    confirmButtonColor: 'var(--theme-default)',
+                                });
+                            }else{
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Erreur',
+                                    text: 'Une erreur s\'est produite lors de l\'enregistrement.',
+                                    confirmButtonColor: 'var(--theme-default)',
+                                });
+                            }
                         }
                     });
             } else {
@@ -115,13 +124,23 @@ export class RegisterComponent {
                             });
                             console.log(data);
                         },
-                        error: (err) => {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Erreur',
-                                text: 'Une erreur s\'est produite lors de l\'enregistrement.',
-                            });
-                            console.error(err);
+                        error: (error: any) => {
+                            console.error(error);
+                            if (error?.error?.message === "Email déjà utilisé"){
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Erreur',
+                                    text: 'Email déjà utilisé !',
+                                    confirmButtonColor: 'var(--theme-default)',
+                                });
+                            }else{
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Erreur',
+                                    text: 'Une erreur s\'est produite lors de l\'enregistrement.',
+                                    confirmButtonColor: 'var(--theme-default)',
+                                });
+                            }
                         }
                     });
             }

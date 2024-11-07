@@ -1,6 +1,7 @@
 import { Routes } from "@angular/router";
 import { LoginComponent } from "../../auth/login/login.component";
 import { authGuard } from "../../guard/auth.guard";
+import { ProfilComponent } from "../../component/user/profil/profil.component";
 
 export const dashData: Routes = [
     {
@@ -57,4 +58,15 @@ export const dashData: Routes = [
                 (r) => r.PTF2A
             ),
     },
+    {
+        path:"user",
+        data : {
+            title: "Utilisateur",
+            breadcrumb: "Utilisateur",
+        },
+        loadChildren: () =>
+            import("../../../app/component/user/user.routes").then(
+                (r) => r.user
+            ),
+    }
 ];

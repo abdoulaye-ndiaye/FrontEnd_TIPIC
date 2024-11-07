@@ -95,8 +95,34 @@ export class AjoutAnalyseSensorielleComponent implements OnInit {
     onFileChange(event: any) {
         if (event.target.files[0]) {
             this.fileSelected = event.target.files[0] as File;
+            
+            // Vérification du type de fichier
+            const allowedTypes = [
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+                'application/vnd.ms-excel', // .xls
+                'text/csv' // .csv
+            ];
+            
+            // Si le fichier n'est pas dans les types autorisés
+            if (!allowedTypes.includes(this.fileSelected.type)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erreur',
+                    text: 'Veuillez télécharger un fichier au format CSV ou Excel.',
+                    confirmButtonColor: 'var(--theme-default)',
+                });
+                  // Réinitialiser la sélection de fichier si non valide
+                this.analyseForm.controls['file'].setErrors({ 'invalidType': true });
+            } else {
+                // Réinitialiser les erreurs de type si le fichier est valide
+                this.analyseForm.controls['file'].setErrors(null);
+            }
         }
     }
+    
+    
+    
+    
     reset() {
         this.analyseForm.reset();
         this.analyseForm.setErrors(null);
