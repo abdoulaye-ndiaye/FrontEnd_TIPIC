@@ -8,10 +8,10 @@
                     <br>
                     <div class="card-body">
                         <ul id="progressbar" class="text-center">
-                            <li [ngClass]="{'active': currentStep === 0}"><strong>Identifiants</strong></li>
-                            <li [ngClass]="{'active': currentStep === 1}"><strong>Production</strong></li>
-                            <li [ngClass]="{'active': currentStep === 2}"><strong>Fabrication</strong></li>
-                            <li [ngClass]="{'active': currentStep === 3}"><strong>Affinage</strong></li>
+                            <li [ngClass]="{'active': currentStep === 0, 'clickable': true}" (click)="goToStep(0)" style="cursor: pointer;"><strong>Identifiants</strong></li>
+                            <li [ngClass]="{'active': currentStep === 1, 'clickable': true}" (click)="goToStep(1)" style="cursor: pointer;"><strong>Production</strong></li>
+                            <li [ngClass]="{'active': currentStep === 2, 'clickable': true}" (click)="goToStep(2)" style="cursor: pointer;"><strong>Fabrication</strong></li>
+                            <li [ngClass]="{'active': currentStep === 3, 'clickable': true}" (click)="goToStep(3)" style="cursor: pointer;"><strong>Affinage</strong></li>
                         </ul>
                         <div class="card-body ">
                             <form [formGroup]="cheeseForm" (ngSubmit)="onSubmit()" id="msform">
@@ -370,6 +370,10 @@
                                                     *ngIf="(dateSortieVide?.touched || validate) && dateSortieVide?.errors">
                                                     La date de sortie sous vide est requise.
                                                 </div>
+                                            </div>
+                                            <!-- Ajoutez ce bloc pour afficher l'erreur de plage de dates au niveau du formulaire -->
+                                            <div class="alert alert-danger" *ngIf="cheeseForm.errors?.['invalidDateRange']">
+                                                La date de sortie sous vide doit être postérieure à la date de mise sous vide.
                                             </div>
                                         </div>
                                     </div>

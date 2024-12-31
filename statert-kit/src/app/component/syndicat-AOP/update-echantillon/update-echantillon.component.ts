@@ -1,8 +1,10 @@
 import { ApplicationModule, Component, OnInit } from "@angular/core";
 import {
+    AbstractControl,
     FormBuilder,
     FormGroup,
     ReactiveFormsModule,
+    ValidationErrors,
     Validators,
 } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -70,18 +72,19 @@ export class UpdateEchantillonComponent implements OnInit {
             temperatureCaillage: [null, Validators.required],
             salage: ["", Validators.required],
             reportVide: ["", Validators.required],
-            dateMiseVide: ["", Validators.required],
-            dateSortieVide: ["", Validators.required],
+            // Adding custom validators for date fields
+            dateMiseVide: ["", [Validators.required, this.dateValidator]],
+            dateSortieVide: ["", [Validators.required, this.dateValidator]],
 
             // Affinage
             nomAffineur: ["", Validators.required],
-            preAffinage: [false, Validators.required],
+            preAffinage: [null, Validators.required],
             dureeAffinage: [null, Validators.required],
-            brossageManuel: [false, Validators.required],
+            brossageManuel: [null, Validators.required],
             tempPreAffinage: [null, Validators.required],
             tempAffinage: [null, Validators.required],
             humidificationCave: ["", Validators.required],
-        });
+        },{ validators: this.dateRangeValidator });
     }
 
     ngOnInit(): void {
@@ -95,6 +98,15 @@ export class UpdateEchantillonComponent implements OnInit {
                 this.cheeseForm.get("dureeAffinage")?.setValue(null);
                 this.cheeseForm.get("tempAffinage")?.setValue(null);
             }
+        });
+
+         // Add a subscriber to validate date relationships
+         this.cheeseForm.get('dateMiseVide')?.valueChanges.subscribe(() => {
+            this.cheeseForm.get('dateSortieVide')?.updateValueAndValidity();
+        });
+
+        this.cheeseForm.get('dateSortieVide')?.valueChanges.subscribe(() => {
+            this.cheeseForm.get('dateMiseVide')?.updateValueAndValidity();
         });
 
         this.fromageService
@@ -179,6 +191,49 @@ export class UpdateEchantillonComponent implements OnInit {
                             });
                     });
             });
+            
+    }
+
+    // Custom date validator to ensure valid date format
+    dateValidator(control: AbstractControl): ValidationErrors | null {
+        const value = control.value;
+        if (!value) return null;
+
+        // Check if date is in correct format (YYYY-MM-DD)
+        const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+        if (!dateRegex.test(value)) {
+            return { invalidDateFormat: true };
+        }
+
+        const date = new Date(value);
+        if (isNaN(date.getTime())) {
+            return { invalidDate: true };
+        }
+
+        return null;
+    }
+
+    // Custom validator to ensure dateSortieVide is after dateMiseVide
+    dateRangeValidator(group: FormGroup): ValidationErrors | null {
+        const dateMiseVide = group.get('dateMiseVide')?.value;
+        const dateSortieVide = group.get('dateSortieVide')?.value;
+
+        if (!dateMiseVide || !dateSortieVide) {
+            return null;
+        }
+
+        const miseVideDate = new Date(dateMiseVide);
+        const sortieVideDate = new Date(dateSortieVide);
+
+        return sortieVideDate <= miseVideDate 
+            ? { invalidDateRange: true } 
+            : null;
+    }
+
+    goToStep(step: number) {
+        if (step >= 0 && step <= 3) {
+            this.currentStep = step;
+        }
     }
 
     // Méthodes pour naviguer entre les étapes
@@ -214,38 +269,52 @@ export class UpdateEchantillonComponent implements OnInit {
                 );
             case 1:
                 return (
-                    !this.categorie?.valid ||
-                    !this.raceDominante?.valid ||
-                    !this.nbBrebis?.valid ||
-                    !this.productivite?.valid ||
-                    !this.periodeAgnelage?.valid ||
-                    !this.estive?.valid ||
-                    !this.paturage?.valid ||
-                    !this.laitCru?.valid
+                    !this.categorie?.valid 
+                    // !this.raceDominante?.valid ||
+                    // !this.nbBrebis?.valid ||
+                    // !this.productivite?.valid ||
+                    // !this.periodeAgnelage?.valid ||
+                    // !this.estive?.valid ||
+                    // !this.paturage?.valid ||
+                    // !this.laitCru?.valid
                 );
             case 2:
                 return (
-                    !this.dateFabrication?.valid ||
-                    !this.nombreTraites?.valid ||
-                    !this.temperatureEmpressurage?.valid ||
-                    !this.quantitePresure?.valid ||
-                    !this.typeFerments?.valid ||
-                    !this.dureeCoagulation?.valid ||
-                    !this.temperatureCaillage?.valid ||
-                    !this.salage?.valid ||
-                    !this.reportVide?.valid ||
-                    !this.dateMiseVide?.valid ||
-                    !this.dateSortieVide?.valid
+                    this.cheeseForm.hasError('invalidDateRange')
                 );
+                // return (
+                //     !this.dateFabrication?.valid ||
+                //     !this.nombreTraites?.valid ||
+                //     !this.temperatureEmpressurage?.valid ||
+                //     !this.quantitePresure?.valid ||
+                //     !this.typeFerments?.valid ||
+                //     !this.dureeCoagulation?.valid ||
+                //     !this.temperatureCaillage?.valid ||
+                //     !this.salage?.valid ||
+                //     !this.reportVide?.valid ||
+                //     !this.dateMiseVide?.valid ||
+                //     !this.dateSortieVide?.valid
+                // );
             case 3:
+                // Vérifier si le pré-affinage est activé et si les champs associés sont valides
+                // const isPreAffinageValid = this.cheeseForm.get('preAffinage')?.value
+                //     ? this.dureeAffinage?.valid && this.tempPreAffinage?.valid
+                //     : true; // Si "Non" est sélectionné, on n'exige pas les champs
+
+                // return (
+                //     !this.nomAffineur?.valid ||
+                //     !this.preAffinage?.valid ||
+                //     !isPreAffinageValid || // Ajoutez cette condition
+                //     !this.brossageManuel?.valid ||
+                //     !this.humidificationCave?.valid
+                // );
                 return (
-                    !this.nomAffineur?.valid ||
-                    !this.preAffinage?.valid ||
-                    (!this.preAffinage?.value &&
-                        (!this.dureeAffinage?.valid ||
-                            !this.tempAffinage?.valid)) ||
-                    !this.brossageManuel?.valid ||
-                    !this.humidificationCave?.valid
+                    !this.datePrelevement?.valid ||
+                    !this.numeroEchantillon?.valid ||
+                    !this.identifiantProducteur?.valid ||
+                    !this.typicite?.valid ||
+                    !this.categorie?.valid ||
+                    this.cheeseForm.hasError('invalidDateRange')
                 );
             default:
                 return true; // Par défaut, le bouton est activé
@@ -375,7 +444,7 @@ export class UpdateEchantillonComponent implements OnInit {
 
     async onSubmit() {
         this.validate = true;
-        if (this.cheeseForm.valid) {
+        if (this.validate) {
             const formValue = this.cheeseForm.value;
 
             try {

@@ -3,6 +3,7 @@ import { ContentComponent } from "./shared/component/layout/content/content.comp
 import { dashData } from "./shared/routes/routes";
 import { LoginComponent } from "./auth/login/login.component";
 import { authGuard } from "./guard/auth.guard";
+import { JuryComponent } from "./component/jury/jury.component";
 
 export const routes: Routes = [
     {
@@ -20,4 +21,8 @@ export const routes: Routes = [
         children: dashData,
         canActivate: [authGuard],
     },
+    {
+        path:"jury",
+        component: JuryComponent,
+    }
 ];

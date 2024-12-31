@@ -110,6 +110,20 @@ export class NavmenuService {
             active: false,
             id: 11,
         },
+        {
+            id: 12,
+            headTitle1: "jury",
+            active: true,
+        },
+        {
+            title: "Jury",
+            icon: "to-do",
+            path: "/jury",
+            type: "link",
+            level: 1,
+            active: false,
+            id: 13,
+        }
     ];
 
     item = new BehaviorSubject<Menu[]>(this.MENUITEMS);

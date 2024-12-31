@@ -2,6 +2,7 @@ import { Routes } from "@angular/router";
 import { LoginComponent } from "../../auth/login/login.component";
 import { authGuard } from "../../guard/auth.guard";
 import { ProfilComponent } from "../../component/user/profil/profil.component";
+import { JuryComponent } from "../../component/jury/jury.component";
 
 export const dashData: Routes = [
     {
@@ -24,6 +25,15 @@ export const dashData: Routes = [
             breadcrumb: "auth",
         },
         component: LoginComponent,
+    },
+    {
+        path:"jury",
+        data: {
+            title: "jury",
+            breadcrumb: "jury",
+        },
+        component: JuryComponent,
+
     },
     {
         path: "syndicat",

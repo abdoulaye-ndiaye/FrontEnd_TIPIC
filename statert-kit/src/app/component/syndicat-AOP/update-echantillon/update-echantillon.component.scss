@@ -223,3 +223,11 @@ select.list-dt:focus {
 .btn-light:hover {
     background-color: #e2e6ea;
 }
+#progressbar li.clickable {
+    transition: all 0.3s ease;
+}
+#progressbar li.clickable:hover {
+    opacity: 0.7;
+    background-color: #ffffff;
+    transform: scale(1.05);
+}
