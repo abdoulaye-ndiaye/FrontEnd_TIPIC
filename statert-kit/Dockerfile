@@ -27,5 +27,6 @@ COPY --from=builder /app/dist/front-end-tipic /usr/share/nginx/html
 # Exposez le port 80 pour le serveur HTTP Nginx
 EXPOSE 80
 
+
 # Commande de démarrage pour Nginx
 CMD ["nginx", "-g", "daemon off;"]
