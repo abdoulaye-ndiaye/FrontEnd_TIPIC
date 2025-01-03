@@ -3,7 +3,7 @@
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "crocs": {
+        "front-end-tipic": {
             "projectType": "application",
             "schematics": {
                 "@schematics/angular:component": {
@@ -18,7 +18,7 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:application",
                     "options": {
-                        "outputPath": "dist/crocs",
+                        "outputPath": "dist/front-end-tipic",
                         "index": "src/index.html",
                         "browser": "src/main.ts",
                         "polyfills": ["zone.js", "@angular/localize/init"],
@@ -67,10 +67,10 @@
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "configurations": {
                         "production": {
-                            "buildTarget": "crocs:build:production"
+                            "buildTarget": "front-end-tipic:build:production"
                         },
                         "development": {
-                            "buildTarget": "crocs:build:development"
+                            "buildTarget": "front-end-tipic:build:development"
                         }
                     },
                     "defaultConfiguration": "development"
@@ -78,7 +78,7 @@
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "buildTarget": "crocs:build"
+                        "buildTarget": "front-end-tipic:build"
                     }
                 },
                 "test": {
