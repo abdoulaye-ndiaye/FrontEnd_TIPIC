@@ -22,7 +22,7 @@ RUN npm run build --prod
 FROM nginx:alpine
 
 # Copiez les fichiers construits à partir du builder vers le répertoire de travail de Nginx
-COPY --from=builder /app/dist/front-end-tipic /usr/share/nginx/html
+COPY --from=builder ../dist/front-end-tipic /usr/share/nginx/html
 
 # Exposez le port 80 pour le serveur HTTP Nginx
 EXPOSE 80
