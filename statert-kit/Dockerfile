@@ -24,6 +24,9 @@ FROM nginx:alpine
 # Copiez les fichiers construits à partir du builder vers le répertoire de travail de Nginx
 COPY --from=builder /app/dist/front-end-tipic/browser /usr/share/nginx/html
 
+# Copiez la configuration nginx spécifique au frontend
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Exposez le port 80 pour le serveur HTTP Nginx
 EXPOSE 80
 
