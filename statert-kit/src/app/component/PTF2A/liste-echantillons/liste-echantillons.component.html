@@ -1,6 +1,13 @@
 <div class="card">
-  <div class="card-header">
+  <div class="card-header d-flex justify-content-between align-items-center">
     <h3>Liste des Echantillons</h3>
+    <button 
+      (click)="ajouterAnalysesSensorielles()" 
+      class="btn btn-primary"
+      [disabled]="selectedEchantillons.length === 0">
+      <i class="fa-solid fa-plus"></i>&nbsp; 
+      Ajouter analyse sensorielle
+    </button>
   </div>
   <div class="row">
     <div class="col-lg-12 stretch-card">
@@ -10,6 +17,7 @@
             <table class="display dataTable" id="userTable" style="text-align: center;">
               <thead>
                 <tr>
+                  <th></th> <!-- Colonne pour les cases à cocher -->
                   <th>Numéro Echantillon</th>
                   <th>Code Producteur</th>
                   <th>Typicité</th>
@@ -19,19 +27,19 @@
               </thead>
               <tbody>
                 <tr *ngFor="let echantillon of echantillons">
+                  <td>
+                    <input 
+                      type="checkbox" 
+                      (change)="toggleSelection(echantillon._id, $event)" />
+                  </td>
                   <td>{{ echantillon.numeroEchan }}</td>
                   <td>{{ echantillon.codeProducteur }}</td>
                   <td>{{ echantillon.typicite }}</td>
                   <td>{{ echantillon.datePrelevement | date:'dd-MM-YYYY' }}</td>
-
                   <td>
-                    <button (click)="voir(echantillon._id)" class="btn btn-success" style=" color: white">
+                    <button (click)="voir(echantillon._id)" class="btn btn-success" style="color: white">
                       <i class="fa-solid fa-eye"></i>&nbsp;
                       <span>Voir</span>
-                    </button> &nbsp; &nbsp;
-                    <button (click)="ajouter(echantillon._id)" class="btn btn-info">
-                      <i class="fa-solid fa-plus"></i>&nbsp;
-                      <span>Ajouter analyse sensorielle</span>
                     </button>
                   </td>
                 </tr>
@@ -42,6 +50,4 @@
       </div>
     </div>
   </div>
-
-
 </div>

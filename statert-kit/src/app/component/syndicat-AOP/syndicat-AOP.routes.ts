@@ -4,6 +4,7 @@ import { ListeEchantillonsComponent } from "./liste-echantillons/liste-echantill
 import { DetailsEchantillonComponent } from "./details-echantillon/details-echantillon.component";
 import { UpdateEchantillonComponent } from "./update-echantillon/update-echantillon.component";
 
+
 export const syndicat: Routes = [
     {
         path: "",

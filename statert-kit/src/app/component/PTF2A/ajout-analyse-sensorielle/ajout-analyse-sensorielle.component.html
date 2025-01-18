@@ -9,9 +9,13 @@
         <div class="card-body">
           <form [formGroup]="analyseForm" (ngSubmit)="onSubmit()">
             <div class="form theme-form">
-              <h4 class="page-title">Ajout du fichier de l'analyse sensorielle pour l'echantillon
-                {{fromage?.numeroEchan}}
+              <h4 class="page-title">
+                Ajout du fichier de l'analyse sensorielle pour les échantillons :
+                <span *ngFor="let echantillon of echantillonsSelected; let last = last">
+                  {{ echantillon.numeroEchan }}<span *ngIf="!last">, </span>
+                </span>
               </h4>
+              
               <br>
               <div class="row">
                 <div class="col-sm-6">

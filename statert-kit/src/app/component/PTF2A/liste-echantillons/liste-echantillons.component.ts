@@ -13,55 +13,67 @@ import { Router } from "@angular/router";
     styleUrl: "./liste-echantillons.component.scss",
 })
 export class ListeEchantillonsComponent implements OnInit, OnDestroy {
-    echantillons: any;
-
+    echantillons: any[] = [];
+    selectedEchantillons: string[] = [];
+  
     constructor(
-        private fromageService: FromageService,
-        private router: Router
+      private fromageService: FromageService,
+      private router: Router
     ) {}
-
+  
     ngOnInit(): void {
-        this.fromageService.getAll().subscribe((data) => {
-            this.echantillons = data;
+      this.fromageService.getAll().subscribe((data) => {
+        this.echantillons = data;
+      });
+  
+      setTimeout(() => {
+        $("#userTable").DataTable({
+          language: {
+            processing: "Traitement en cours...",
+            search: "Rechercher&nbsp;:",
+            lengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+            info: "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+            infoEmpty: "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+            infoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+            loadingRecords: "Chargement en cours...",
+            zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+            emptyTable: "Aucune donnée disponible dans le tableau",
+          },
+          pagingType: "full_numbers",
+          pageLength: 5,
+          processing: true,
+          lengthMenu: [5, 10, 25],
         });
-
-        // Initialisation de DataTables avec setTimeout
-        setTimeout(() => {
-            $("#userTable").DataTable({
-                language: {
-                    processing: "Traitement en cours...",
-                    search: "Rechercher&nbsp;:",
-                    lengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
-                    info: "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
-                    infoEmpty:
-                        "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
-                    infoFiltered:
-                        "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
-                    loadingRecords: "Chargement en cours...",
-                    zeroRecords:
-                        "Aucun &eacute;l&eacute;ment &agrave; afficher",
-                    emptyTable: "Aucune donnée disponible dans le tableau",
-                },
-                pagingType: "full_numbers",
-                pageLength: 5,
-                processing: true,
-                lengthMenu: [5, 10, 25],
-            });
-        }, 1000);
+      }, 1000);
     }
-
+  
     ngOnDestroy(): void {
-        $("#userTable").DataTable().destroy(); // Détruire le DataTable pour éviter les fuites de mémoire
+      $("#userTable").DataTable().destroy();
     }
-
-    ajouter(id: string) {
+  
+    toggleSelection(id: string, event: Event): void {
+      const checkbox = event.target as HTMLInputElement;
+      if (checkbox.checked) {
+        this.selectedEchantillons.push(id);
+      } else {
+        this.selectedEchantillons = this.selectedEchantillons.filter(
+          (selectedId) => selectedId !== id
+        );
+      }
+    }
+  
+    ajouterAnalysesSensorielles(): void {
+      if (this.selectedEchantillons.length > 0) {
         this.router.navigate(["/PTF2A/ajout-analyse-sensorielle"], {
-            queryParams: { id: id },
+          queryParams: { ids: this.selectedEchantillons.join(",") },
         });
+      }
     }
-    voir(id: string) {
-        this.router.navigate(["/syndicat/details-echantillon"], {
-            queryParams: { id: id },
-        });
+  
+    voir(id: string): void {
+      this.router.navigate(["/syndicat/details-echantillon"], {
+        queryParams: { id: id },
+      });
     }
-}
+  }
+  

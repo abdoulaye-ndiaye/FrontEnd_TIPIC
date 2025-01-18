@@ -1,8 +1,8 @@
 import { Routes } from "@angular/router";
 import { LoginComponent } from "../../auth/login/login.component";
 import { authGuard } from "../../guard/auth.guard";
-import { ProfilComponent } from "../../component/user/profil/profil.component";
 import { JuryComponent } from "../../component/jury/jury.component";
+import { Role } from '../services/models/Role'; // Importez l'enum des rôles
 
 export const dashData: Routes = [
     {
@@ -10,7 +10,7 @@ export const dashData: Routes = [
         data: {
             title: "admin",
             breadcrumb: "admin",
-            expectedRole: "ADMIN",
+            expectedRole: Role.ADMIN,  // Seul un ADMIN peut accéder à cette route
         },
         canActivate: [authGuard],
         loadChildren: () =>
