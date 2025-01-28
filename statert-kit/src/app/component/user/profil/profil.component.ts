@@ -1,6 +1,6 @@
 import { CommonModule, Location } from "@angular/common";
-import Swal from 'sweetalert2';
-import { UtilisateurService } from '../../../services/utilisateur.service';
+import Swal from "sweetalert2";
+import { UtilisateurService } from "../../../services/utilisateur.service";
 import {
     FormBuilder,
     FormGroup,
@@ -11,16 +11,14 @@ import {
 import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnInit } from "@angular/core";
 import { jwtDecode } from "jwt-decode";
-
+import { AuthService } from "../../../services/auth.service";
 
 @Component({
-    selector: 'app-profil',
+    selector: "app-profil",
     standalone: true,
-    imports: [CommonModule,
-        FormsModule,
-        ReactiveFormsModule,],
-    templateUrl: './profil.component.html',
-    styleUrl: './profil.component.scss'
+    imports: [CommonModule, FormsModule, ReactiveFormsModule],
+    templateUrl: "./profil.component.html",
+    styleUrl: "./profil.component.scss",
 })
 export class ProfilComponent implements OnInit {
     profileForm: FormGroup;
@@ -36,6 +34,7 @@ export class ProfilComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
         private utilisateurService: UtilisateurService,
+        private authService: AuthService,
         private router: Router,
         private route: ActivatedRoute,
         private location: Location
@@ -108,10 +107,31 @@ export class ProfilComponent implements OnInit {
                                 text: "L'utilisateur producteur a été mis à jour avec succès!",
                                 confirmButtonColor: "var(--theme-default)",
                             }).then(() => {
-                                localStorage.removeItem("token");
-                                this.router.navigate(["/auth/login"]);
+                                this.authService
+                                    .login(
+                                        this.email!.value,
+                                        this.password!.value
+                                    )
+                                    .subscribe({
+                                        next: (data) => {
+                                            localStorage.setItem(
+                                                "token",
+                                                data.token
+                                            );
+                                            this.router
+                                                .navigate([
+                                                    "/producteur/dashboard-producteur",
+                                                ])
+                                                .then(() => {
+                                                    window.location.reload();
+                                                });
+                                        },
+                                        error: (err) => {
+                                            console.error(err);
+                                        },
+                                    });
                             });
-                            console.log(data);
+                            //console.log(data);
                         },
                         error: (err) => {
                             Swal.fire({
@@ -168,7 +188,6 @@ export class ProfilComponent implements OnInit {
         }
     }
 
-
     // Getter pour faciliter l'accès aux contrôles dans le template
     get email() {
         return this.profileForm.get("email");
@@ -189,4 +208,3 @@ export class ProfilComponent implements OnInit {
         return this.profileForm.get("codeProducteur");
     }
 }
-

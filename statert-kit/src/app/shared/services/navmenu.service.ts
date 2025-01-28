@@ -25,7 +25,7 @@ export class NavmenuService {
     public language: boolean = false;
     public isShow: boolean = false;
     public closeSidebar: boolean = false;
-    
+
     // Map qui définit quels IDs de menu sont visibles pour chaque rôle
     private readonly ROLE_MENU_MAP = {
         [Role.ADMIN]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], // Admin voit tout
@@ -34,7 +34,7 @@ export class NavmenuService {
         [Role.INGENIEUR_IPREM]: [8, 9],
         [Role.CHEF_PROJET_IPREM]: [8, 9],
         [Role.PARTENAIRE_PTF2A]: [10, 11], // Section PTF2A
-        [Role.PRODUCTEUR]: [14, 15] // Section producteur
+        [Role.PRODUCTEUR]: [14, 15], // Section producteur
     };
 
     private currentRole: Role;
@@ -46,9 +46,10 @@ export class NavmenuService {
 
     private initializeMenuFromToken() {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem("token");
             if (token) {
-                const decodedToken = this.utilisateurService.getDecodedToken(token);
+                const decodedToken =
+                    this.utilisateurService.getDecodedToken(token);
                 const userToken = decodedToken as { user: { role: Role } };
                 if (userToken && userToken.user && userToken.user.role) {
                     const userToken = decodedToken as { user: { role: Role } };
@@ -59,15 +60,15 @@ export class NavmenuService {
             }
             this.clearMenu();
         } catch (error) {
-            console.error('Erreur lors de l\'initialisation du menu:', error);
+            console.error("Erreur lors de l'initialisation du menu:", error);
             this.clearMenu();
         }
     }
 
     updateMenuItems(role: Role) {
         const allowedIds = this.ROLE_MENU_MAP[role] || [];
-        const filteredItems = this.MENUITEMS.filter(item => 
-            item.id !== undefined && allowedIds.includes(item.id)
+        const filteredItems = this.MENUITEMS.filter(
+            (item) => item.id !== undefined && allowedIds.includes(item.id)
         );
         this.item.next(filteredItems);
     }
@@ -181,15 +182,13 @@ export class NavmenuService {
             active: true,
         },
         {
-            title:"Dashboard Producteur",
-            icon:"to-do",
-            path:"/producteur/dashboard-producteur",
-            type:"link",
-            level:1,
-            active:false,
-            id:15
+            title: "Dashboard Producteur",
+            icon: "to-do",
+            path: "/producteur/dashboard-producteur",
+            type: "link",
+            level: 1,
+            active: false,
+            id: 15,
         },
     ];
 }
-
-
