@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import { SiftMsService } from "../../../services/sift-ms.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FromageService } from "../../../services/fromage.service";
+import { jwtDecode } from "jwt-decode";
 
 @Component({
     selector: "app-ajout-sift-ms",
@@ -26,6 +27,8 @@ export class AjoutSiftMsComponent implements OnInit {
     id_echantillon: string;
     fromage: any;
     siftMs: any;
+    decodedToken: any;
+    roleUtilisateur: any;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -37,6 +40,11 @@ export class AjoutSiftMsComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        const token = localStorage.getItem("token") as string;
+        this.decodedToken = jwtDecode(token);
+        this.roleUtilisateur = this.decodedToken.user.role;
+
+
         this.route.queryParams.subscribe((params) => {
             this.id_echantillon = params["id"];
         });

@@ -54,7 +54,7 @@ export const dashData: Routes = [
         data: {
             title: "iprem",
             breadcrumb: "iprem",
-            expectedRoles: [Role.TECHNICIEN_IPREM,Role.CHEF_PROJET_IPREM,Role.INGENIEUR_PREM,Role.ADMIN],  // Seul un TECHNICIEN_IPREM peut accéder à cette route
+            expectedRoles: [Role.TECHNICIEN_IPREM,Role.CHEF_PROJET_IPREM,Role.INGENIEUR_IPREM,Role.ADMIN],  // Seul un TECHNICIEN_IPREM peut accéder à cette route
         },
         canActivate: [authGuard],
         loadChildren: () =>

@@ -68,6 +68,6 @@
 </div>
 
 <div class="actions">
-  <button (click)="update(echantillon._id)" class="btn btn-primary">Modifier</button> &nbsp; &nbsp;
-  <button (click)="deleteEchantillon(echantillon._id)" class="btn btn-danger">Supprimer</button>
+  <button (click)="update(echantillon._id)" class="btn btn-primary" *ngIf="roleUtilisateur !== 'TECHNICIEN_IPREM'">Modifier</button> &nbsp; &nbsp;
+  <button (click)="deleteEchantillon(echantillon._id)"  class="btn btn-danger" *ngIf="roleUtilisateur !== 'TECHNICIEN_IPREM'">Supprimer</button>
 </div>

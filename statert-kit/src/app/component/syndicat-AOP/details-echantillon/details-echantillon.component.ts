@@ -5,6 +5,7 @@ import { CommonModule, Location } from "@angular/common";
 import Swal from "sweetalert2";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
+import { jwtDecode } from "jwt-decode";
 
 @Component({
     selector: "app-details-echantillon",
@@ -19,6 +20,8 @@ export class DetailsEchantillonComponent implements OnInit {
     production: any;
     affinage: any;
     fabrication: any;
+    decodedToken: any;
+    roleUtilisateur: any;
 
     constructor(
         private route: ActivatedRoute,
@@ -28,6 +31,10 @@ export class DetailsEchantillonComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        const token = localStorage.getItem("token") as string;
+        this.decodedToken = jwtDecode(token);
+        this.roleUtilisateur = this.decodedToken.user.role;
+
         this.route.queryParams.subscribe((params) => {
             this.id_echantillon = params["id"];
         });

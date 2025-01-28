@@ -93,7 +93,7 @@ export class LoginComponent implements OnInit {
                                 case Role.TECHNICIEN_IPREM:
                                     redirectUrl = '/iprem/liste-echantillons';
                                     break;
-                                case Role.INGENIEUR_PREM:
+                                case Role.INGENIEUR_IPREM:
                                     redirectUrl = '/iprem/liste-echantillons';
                                     break;
                                 case Role.CHEF_PROJET_IPREM:

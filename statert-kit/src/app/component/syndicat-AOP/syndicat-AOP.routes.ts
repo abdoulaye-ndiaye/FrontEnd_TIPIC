@@ -3,6 +3,8 @@ import { FormulaireIdentiteComponent } from "./formulaire-identite/formulaire-id
 import { ListeEchantillonsComponent } from "./liste-echantillons/liste-echantillons.component";
 import { DetailsEchantillonComponent } from "./details-echantillon/details-echantillon.component";
 import { UpdateEchantillonComponent } from "./update-echantillon/update-echantillon.component";
+import { Role } from "../../shared/services/models/Role";
+import { authGuard } from "../../guard/auth.guard";
 
 
 export const syndicat: Routes = [
@@ -31,7 +33,9 @@ export const syndicat: Routes = [
                 data: {
                     title: "Details Echantillon",
                     breadcrumb: "Details Echantillon",
+                    expectedRoles: [Role.SYNDICAT_AOP, Role.CHEF_PROJET_IPREM, Role.INGENIEUR_IPREM, Role.TECHNICIEN_IPREM, Role.ADMIN],  
                 },
+                canActivate: [authGuard],
             },
             {
                 path: "update-echantillon",
