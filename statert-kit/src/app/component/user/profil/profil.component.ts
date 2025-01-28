@@ -12,6 +12,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnInit } from "@angular/core";
 import { jwtDecode } from "jwt-decode";
 import { AuthService } from "../../../services/auth.service";
+import { Role } from "../../../shared/services/models/Role";
 
 @Component({
     selector: "app-profil",
@@ -30,6 +31,7 @@ export class ProfilComponent implements OnInit {
     prenomUtilisateur: any;
     nomUtilisateur: any;
     roleUtilisateur: any;
+    redirectUrl: string;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -57,6 +59,34 @@ export class ProfilComponent implements OnInit {
         this.prenomUtilisateur = this.decodedToken.user.prenom;
         this.id_utilisateur = this.decodedToken.user._id;
         this.roleUtilisateur = this.decodedToken.user.role;
+
+        // Rediriger en fonction du rôle
+        switch (this.roleUtilisateur) {
+            case Role.ADMIN:
+                this.redirectUrl = "/admin/dashboard";
+                break;
+            case Role.PRODUCTEUR:
+                this.redirectUrl = "/producteur/dashboard-producteur";
+                break;
+            case Role.SYNDICAT_AOP:
+                this.redirectUrl = "/syndicat/liste-echantillons";
+                break;
+            case Role.PARTENAIRE_PTF2A:
+                this.redirectUrl = "/PTF2A/liste-echantillons";
+                break;
+            case Role.TECHNICIEN_IPREM:
+                this.redirectUrl = "/iprem/liste-echantillons";
+                break;
+            case Role.INGENIEUR_IPREM:
+                this.redirectUrl = "/iprem/liste-echantillons";
+                break;
+            case Role.CHEF_PROJET_IPREM:
+                this.redirectUrl = "/iprem/liste-echantillons";
+                break;
+            default:
+                this.redirectUrl = "/auth/login"; // Redirection par défaut
+                break;
+        }
 
         // Écoute les changements de la sélection du rôle pour afficher le champ 'codeProducteur'
         this.profileForm.get("role")?.valueChanges.subscribe((role) => {
@@ -119,9 +149,7 @@ export class ProfilComponent implements OnInit {
                                                 data.token
                                             );
                                             this.router
-                                                .navigate([
-                                                    "/producteur/dashboard-producteur",
-                                                ])
+                                                .navigate([this.redirectUrl])
                                                 .then(() => {
                                                     window.location.reload();
                                                 });
@@ -161,10 +189,29 @@ export class ProfilComponent implements OnInit {
                                 text: "L'utilisateur a été mis à jour avec succès!",
                                 confirmButtonColor: "var(--theme-default)",
                             }).then(() => {
-                                localStorage.removeItem("token");
-                                this.router.navigate(["/auth/login"]);
+                                this.authService
+                                    .login(
+                                        this.email!.value,
+                                        this.password!.value
+                                    )
+                                    .subscribe({
+                                        next: (data) => {
+                                            localStorage.setItem(
+                                                "token",
+                                                data.token
+                                            );
+                                            this.router
+                                                .navigate([this.redirectUrl])
+                                                .then(() => {
+                                                    window.location.reload();
+                                                });
+                                        },
+                                        error: (err) => {
+                                            console.error(err);
+                                        },
+                                    });
                             });
-                            console.log(data);
+                            //console.log(data);
                         },
                         error: (err) => {
                             Swal.fire({
