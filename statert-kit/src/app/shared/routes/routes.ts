@@ -41,7 +41,8 @@ export const dashData: Routes = [
         data: {
             title: "syndicat",
             breadcrumb: "syndicat",
-            expectedRoles: [Role.SYNDICAT_AOP,Role.ADMIN],  // Seul un SYNDICAT peut accéder à cette route
+            expectedRoles:[Role.SYNDICAT_AOP, Role.CHEF_PROJET_IPREM, Role.INGENIEUR_IPREM, Role.TECHNICIEN_IPREM, Role.PARTENAIRE_PTF2A, Role.ADMIN],  
+            // Seul un SYNDICAT peut accéder à cette route
         },
         canActivate: [authGuard],
         loadChildren: () =>

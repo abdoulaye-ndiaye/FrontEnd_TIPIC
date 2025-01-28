@@ -33,9 +33,7 @@ export const syndicat: Routes = [
                 data: {
                     title: "Details Echantillon",
                     breadcrumb: "Details Echantillon",
-                    expectedRoles: [Role.SYNDICAT_AOP, Role.CHEF_PROJET_IPREM, Role.INGENIEUR_IPREM, Role.TECHNICIEN_IPREM, Role.ADMIN],  
                 },
-                canActivate: [authGuard],
             },
             {
                 path: "update-echantillon",
