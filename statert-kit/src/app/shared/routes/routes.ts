@@ -4,13 +4,14 @@ import { authGuard } from "../../guard/auth.guard";
 import { JuryComponent } from "../../component/jury/jury.component";
 import { Role } from '../services/models/Role'; // Importez l'enum des rôles
 
+
 export const dashData: Routes = [
     {
         path: "admin",
         data: {
             title: "admin",
             breadcrumb: "admin",
-            expectedRole: Role.ADMIN,  // Seul un ADMIN peut accéder à cette route
+            expectedRoles: [Role.ADMIN],  // Seul un ADMIN peut accéder à cette route
         },
         canActivate: [authGuard],
         loadChildren: () =>
@@ -40,7 +41,9 @@ export const dashData: Routes = [
         data: {
             title: "syndicat",
             breadcrumb: "syndicat",
+            expectedRoles: [Role.SYNDICAT_AOP,Role.ADMIN],  // Seul un SYNDICAT peut accéder à cette route
         },
+        canActivate: [authGuard],
         loadChildren: () =>
             import(
                 "../../../app/component/syndicat-AOP/syndicat-AOP.routes"
@@ -51,7 +54,9 @@ export const dashData: Routes = [
         data: {
             title: "iprem",
             breadcrumb: "iprem",
+            expectedRoles: [Role.TECHNICIEN_IPREM,Role.CHEF_PROJET_IPREM,Role.INGENIEUR_PREM,Role.ADMIN],  // Seul un TECHNICIEN_IPREM peut accéder à cette route
         },
+        canActivate: [authGuard],
         loadChildren: () =>
             import("../../../app/component/iprem/iprem.routes").then(
                 (r) => r.iprem
@@ -62,7 +67,9 @@ export const dashData: Routes = [
         data: {
             title: "PTF2A",
             breadcrumb: "PTF2A",
+            expectedRoles: [Role.PARTENAIRE_PTF2A,Role.ADMIN],  // Seul un PARTENAIRE_PTF2A peut accéder à cette
         },
+        canActivate: [authGuard],
         loadChildren: () =>
             import("../../../app/component/PTF2A/PTF2A.routes").then(
                 (r) => r.PTF2A

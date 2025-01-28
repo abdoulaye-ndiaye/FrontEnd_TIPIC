@@ -3,6 +3,9 @@ import { DashboardAdminComponent } from './dashboard-admin/dashboard-admin.compo
 import { RegisterComponent } from './register/register.component';
 import { UtilisateurComponent } from './utilisateur/utilisateur.component';
 import { UpdateUtilisateurComponent } from './update-utilisateur/update-utilisateur.component';
+import { Role } from '../../shared/services/models/Role';
+import { authGuard } from '../../guard/auth.guard';
+
 
 export const admin: Routes = [
     {

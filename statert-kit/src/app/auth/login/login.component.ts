@@ -10,6 +10,9 @@ import {
 } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import Swal from 'sweetalert2';
+import { jwtDecode } from "jwt-decode";
+import { Role } from "../../shared/services/models/Role";
+import { NavmenuService } from "../../shared/services/navmenu.service";
 
 @Component({
     selector: "app-login",
@@ -28,7 +31,8 @@ export class LoginComponent implements OnInit {
         private authService: AuthService,
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private navmenuService: NavmenuService
     ) {}
 
     showPassword() {
@@ -44,7 +48,7 @@ export class LoginComponent implements OnInit {
 
     onSubmit() {
         this.submitted = true;
-
+    
         if (this.loginForm.invalid) {
             Swal.fire({
                 icon: 'warning',
@@ -60,15 +64,56 @@ export class LoginComponent implements OnInit {
                 )
                 .subscribe(
                     (result) => {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Connexion réussie',
-                            text: 'Vous serez redirigé vers le tableau de bord.',
-                            showConfirmButton: false,
-                            timer: 2000,
-                        }).then(() => {
-                            this.router.navigate(["/admin/dashboard"]);
-                        });
+                        // Décoder le token pour obtenir le rôle de l'utilisateur
+                        const token = localStorage.getItem('token');
+                        if (token) {
+                            const decodedToken: any = jwtDecode(token);
+                            const userRole = decodedToken.user.role;
+                            console.log("Role de l'utilisateur :", userRole);
+
+                            // Ajout : Mettre à jour le menu selon le rôle
+                            this.navmenuService.setUserRole(userRole);
+
+    
+                            // Rediriger en fonction du rôle
+                            let redirectUrl = '';
+                            switch (userRole) {
+                                case Role.ADMIN:
+                                    redirectUrl = '/admin/dashboard';
+                                    break;
+                                case Role.PRODUCTEUR:
+                                    redirectUrl = '/producteur/dashboard';
+                                    break;
+                                case Role.SYNDICAT_AOP:
+                                    redirectUrl = '/syndicat/liste-echantillons';
+                                    break;
+                                case Role.PARTENAIRE_PTF2A:
+                                    redirectUrl = '/PTF2A/liste-echantillons';
+                                    break;
+                                case Role.TECHNICIEN_IPREM:
+                                    redirectUrl = '/iprem/liste-echantillons';
+                                    break;
+                                case Role.INGENIEUR_PREM:
+                                    redirectUrl = '/iprem/liste-echantillons';
+                                    break;
+                                case Role.CHEF_PROJET_IPREM:
+                                    redirectUrl = '/iprem/liste-echantillons';
+                                    break;
+                                default:
+                                    redirectUrl = '/auth/login'; // Redirection par défaut
+                                    break;
+                            }
+    
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Connexion réussie',
+                                text: 'Vous serez redirigé vers votre tableau de bord.',
+                                showConfirmButton: false,
+                                timer: 2000,
+                            }).then(() => {
+                                this.router.navigate([redirectUrl]); // Redirection dynamique
+                            });
+                        }
                     },
                     (error) => {
                         if (error.error.text === "compte bloqué") {
@@ -77,13 +122,7 @@ export class LoginComponent implements OnInit {
                                 title: 'Erreur',
                                 text: 'Ce compte a été bloqué.',
                             });
-                        } else if (error.error.text === "email invalide") {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Erreur',
-                                text: 'Email et/ou mot de passe incorrect !',
-                            });
-                        } else if (error.error.text === "mot de passe incorrect") {
+                        } else if (error.error.text === "email invalide" || error.error.text === "mot de passe incorrect") {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Erreur',
@@ -100,6 +139,7 @@ export class LoginComponent implements OnInit {
                 );
         }
     }
+    
 
     get f() {
         return this.loginForm.controls;

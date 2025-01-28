@@ -19,7 +19,6 @@ export const routes: Routes = [
         path: "",
         component: ContentComponent,
         children: dashData,
-        canActivate: [authGuard],
     },
     {
         path:"jury",
