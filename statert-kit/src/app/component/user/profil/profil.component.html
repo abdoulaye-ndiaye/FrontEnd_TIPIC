@@ -95,7 +95,7 @@
                                 </div>
                             </div>
                 
-                            <div class="col-md-6 position-relative">
+                            <div class="col-md-6 position-relative" *ngIf="roleUtilisateur === 'ADMIN'">
                                 <label class="form-label" for="role">Rôle</label>
                                 <select class="form-select" id="role" formControlName="role"
                                     [ngClass]="{ 'is-invalid': (profileForm.get('role')?.touched || profileForm.get('role')?.dirty) && profileForm.get('role')?.invalid, 'is-valid': profileForm.get('role')?.valid }">

@@ -8,6 +8,7 @@ import {
 } from "@angular/forms";
 import { AuthService } from "../../../services/auth.service";
 import Swal from 'sweetalert2';
+import { Router } from "@angular/router";
 
 @Component({
     selector: "app-register",
@@ -21,7 +22,7 @@ export class RegisterComponent {
     validate = false; // Pour déclencher la validation après soumission
     isProducer: boolean = false; // Variable pour vérifier le rôle
 
-    constructor(private fb: FormBuilder, private authService: AuthService) {
+    constructor(private fb: FormBuilder, private authService: AuthService,private router: Router,) {
         this.registerForm = this.fb.group({
             email: ["", [Validators.required, Validators.email]],
             password: ["", [Validators.required, Validators.minLength(6)]],
@@ -84,6 +85,8 @@ export class RegisterComponent {
                                 title: 'Succès',
                                 text: 'L\'utilisateur producteur a été enregistré avec succès!',
                                 confirmButtonColor: 'var(--theme-default)',
+                            }).then(() => {
+                                this.router.navigate(["/admin/utilisateur"]);
                             });
                             console.log(data);
                         },
@@ -121,6 +124,8 @@ export class RegisterComponent {
                                 icon: 'success',
                                 title: 'Succès',
                                 text: 'L\'utilisateur a été enregistré avec succès!',
+                            }).then(() => {
+                                this.router.navigate(["/admin/utilisateur"]);
                             });
                             console.log(data);
                         },

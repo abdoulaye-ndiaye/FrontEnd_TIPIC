@@ -1,0 +1,204 @@
+<div class="container-fluid default-dashboard">
+    <div class="row">
+        <!-- Carte de bienvenue -->
+        <div class="col-xl-4 col-lg-4 col-md-8 mb-6">
+            <div class="card welcome-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h1>Bonjour, {{prenom}} {{nom}}.</h1>
+                            <p>Bienvenue dans votre tableau de bord.</p>
+                            <a class="btn btn-primary" [routerLink]="['/user/profile']"
+                                routerLinkActive="router-link-active">Mon profil</a>
+                        </div>
+                        <div class="flex-shrink-0 ms-4">
+                            <img src="assets/images/dashboard/welcome.png" alt="Bienvenue" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Carte information-->
+        <div class="col-xxl-6 col-xl-7 col-lg-7 box-col-7 ecommerce-dashboard equal-height">
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 ">
+                    <div class="card total-sales">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-8 xl-12 col-md-8 col-sm-12 col box-col-12">
+                                    <div class="d-flex" [ngClass]="TotalUtilisateur.class">
+                                        <span>
+                                            <svg>
+                                                <use [attr.xlink:href]="'assets/svg/icon-sprite.svg#' + TotalUtilisateur.icon">
+                                                </use>
+                                            </svg>
+                                        </span>
+                                        <div class="flex-shrink-0">
+                                            <h4>{{ TotalUtilisateur.price }}</h4>
+                                            <h6>{{ TotalUtilisateur.title }}</h6>
+                                            <div class="arrow-chart">
+                                                <svg>
+                                                    <use
+                                                        [attr.xlink:href]="'assets/svg/icon-sprite.svg#' + TotalUtilisateur.arrowicon">
+                                                    </use>
+                                                </svg>
+                                                <h5 [ngClass]="'font-' + TotalUtilisateur.color">{{ TotalUtilisateur.percentage }}</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-4 col-4 p-0 ecommerce-chart">
+                                    <div [ngClass]="TotalUtilisateur.chartclass">
+                                        <apx-chart [series]="TotalUtilisateur.series" [chart]="TotalUtilisateur.chart" [stroke]="TotalUtilisateur.stroke"
+                                            [colors]="TotalUtilisateur.colors" [states]="TotalUtilisateur.states"
+                                            [plotOptions]="TotalUtilisateur.plotOptions" [dataLabels]="TotalUtilisateur.dataLabels"
+                                            [grid]="TotalUtilisateur.grid" [yaxis]="TotalUtilisateur.yaxis" [xaxis]="TotalUtilisateur.xaxis"
+                                            [legend]="TotalUtilisateur.legend" [fill]="TotalUtilisateur.fill" [tooltip]="TotalUtilisateur.tooltip"
+                                            [markers]="TotalUtilisateur.markers">
+                                        </apx-chart>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 ">
+                    <div class="card total-sales">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-8 xl-12 col-md-8 col-sm-12 col box-col-12">
+                                    <div class="d-flex" [ngClass]="TotalProducteur.class">
+                                        <span>
+                                            <svg>
+                                                <use [attr.xlink:href]="'assets/svg/icon-sprite.svg#' + TotalProducteur.icon">
+                                                </use>
+                                            </svg>
+                                        </span>
+                                        <div class="flex-shrink-0">
+                                            <h4>{{ TotalProducteur.price }}</h4>
+                                            <h6>{{ TotalProducteur.title }}</h6>
+                                            <div class="arrow-chart">
+                                                <svg>
+                                                    <use
+                                                        [attr.xlink:href]="'assets/svg/icon-sprite.svg#' + TotalProducteur.arrowicon">
+                                                    </use>
+                                                </svg>
+                                                <h5 [ngClass]="'font-' + TotalProducteur.color">{{ TotalProducteur.percentage }}</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-4 col-4 p-0 ecommerce-chart">
+                                    <div [ngClass]="TotalProducteur.chartclass">
+                                        <apx-chart [series]="TotalProducteur.series" [chart]="TotalProducteur.chart" [stroke]="TotalProducteur.stroke"
+                                            [colors]="TotalProducteur.colors" [states]="TotalProducteur.states"
+                                            [plotOptions]="TotalProducteur.plotOptions" [dataLabels]="TotalProducteur.dataLabels"
+                                            [grid]="TotalProducteur.grid" [yaxis]="TotalProducteur.yaxis" [xaxis]="TotalProducteur.xaxis"
+                                            [legend]="TotalProducteur.legend" [fill]="TotalProducteur.fill" [tooltip]="TotalProducteur.tooltip"
+                                            [markers]="TotalProducteur.markers">
+                                        </apx-chart>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 ">
+                    <div class="card total-sales">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-8 xl-12 col-md-8 col-sm-12 col box-col-12">
+                                    <div class="d-flex" [ngClass]="TotalEchantillon.class">
+                                        <span>
+                                            <svg>
+                                                <use [attr.xlink:href]="'assets/svg/icon-sprite.svg#' + TotalEchantillon.icon">
+                                                </use>
+                                            </svg>
+                                        </span>
+                                        <div class="flex-shrink-0">
+                                            <h4>{{ TotalEchantillon.price }}</h4>
+                                            <h6>{{ TotalEchantillon.title }}</h6>
+                                            <div class="arrow-chart">
+                                                <svg>
+                                                    <use
+                                                        [attr.xlink:href]="'assets/svg/icon-sprite.svg#' + TotalEchantillon.arrowicon">
+                                                    </use>
+                                                </svg>
+                                                <h5 [ngClass]="'font-' + TotalEchantillon.color">{{ TotalEchantillon.percentage }}</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-4 col-4 p-0 ecommerce-chart">
+                                    <div [ngClass]="TotalEchantillon.chartclass">
+                                        <apx-chart [series]="TotalEchantillon.series" [chart]="TotalEchantillon.chart" [stroke]="TotalEchantillon.stroke"
+                                            [colors]="TotalEchantillon.colors" [states]="TotalEchantillon.states"
+                                            [plotOptions]="TotalEchantillon.plotOptions" [dataLabels]="TotalEchantillon.dataLabels"
+                                            [grid]="TotalEchantillon.grid" [yaxis]="TotalEchantillon.yaxis" [xaxis]="TotalEchantillon.xaxis"
+                                            [legend]="TotalEchantillon.legend" [fill]="TotalEchantillon.fill" [tooltip]="TotalEchantillon.tooltip"
+                                            [markers]="TotalEchantillon.markers">
+                                        </apx-chart>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 ">
+                    <div class="card total-sales">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-8 xl-12 col-md-8 col-sm-12 col box-col-12">
+                                    <div class="d-flex" [ngClass]="TotalSensoriel.class">
+                                        <span>
+                                            <svg>
+                                                <use [attr.xlink:href]="'assets/svg/icon-sprite.svg#' + TotalSensoriel.icon">
+                                                </use>
+                                            </svg>
+                                        </span>
+                                        <div class="flex-shrink-0">
+                                            <h4>{{ TotalSensoriel.price }}</h4>
+                                            <h6>{{ TotalSensoriel.title }}</h6>
+                                            <div class="arrow-chart">
+                                                <svg>
+                                                    <use
+                                                        [attr.xlink:href]="'assets/svg/icon-sprite.svg#' + TotalSensoriel.arrowicon">
+                                                    </use>
+                                                </svg>
+                                                <h5 [ngClass]="'font-' + TotalSensoriel.color">{{ TotalSensoriel.percentage }}</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-4 col-4 p-0 ecommerce-chart">
+                                    <div [ngClass]="TotalSensoriel.chartclass">
+                                        <apx-chart [series]="TotalSensoriel.series" [chart]="TotalSensoriel.chart" [stroke]="TotalSensoriel.stroke"
+                                            [colors]="TotalSensoriel.colors" [states]="TotalSensoriel.states"
+                                            [plotOptions]="TotalSensoriel.plotOptions" [dataLabels]="TotalSensoriel.dataLabels"
+                                            [grid]="TotalSensoriel.grid" [yaxis]="TotalSensoriel.yaxis" [xaxis]="TotalSensoriel.xaxis"
+                                            [legend]="TotalSensoriel.legend" [fill]="TotalSensoriel.fill" [tooltip]="TotalSensoriel.tooltip"
+                                            [markers]="TotalSensoriel.markers">
+                                        </apx-chart>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 ">
+                    <div class="card total-sales">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-8 xl-12 col-md-8 col-sm-12 col box-col-12">
+                                    <div class="marquee">
+                                        <p>Les fromages artisanaux, comme l'Ossau-Iraty, offrent une richesse aromatique unique influencée par leur production traditionnelle. </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->               
+            </div>
+        </div>
+    </div>
+</div>

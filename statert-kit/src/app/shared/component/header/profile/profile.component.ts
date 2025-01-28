@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 
 import { FeathericonComponent } from '../../feathericon/feathericon.component';
 import Swal from 'sweetalert2';
+import { NavmenuService } from '../../../services/navmenu.service';
 
 @Component({
   selector: 'app-profile',
@@ -22,7 +23,7 @@ export class ProfileComponent implements OnInit {
   prenom: any;
   role: any;
 
-  constructor(private router: Router,private UtilisateurService:UtilisateurService) { }
+  constructor(private router: Router,private UtilisateurService:UtilisateurService,private navMenuService: NavmenuService) { }
 
   ngOnInit(): void {
     const token = localStorage.getItem("token") as string;
@@ -47,6 +48,7 @@ export class ProfileComponent implements OnInit {
       cancelButtonText: "Non"
   }).then((result) => {
       if (result.isConfirmed) {
+        this.navMenuService.clearMenu();
         localStorage.removeItem("token");
         this.router.navigate(["/auth/login"]);
       }

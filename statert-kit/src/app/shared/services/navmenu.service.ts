@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { Role } from "../../shared/services/models/Role";
+import { UtilisateurService } from "../../services/utilisateur.service";
 
 export interface Menu {
     headTitle1?: string;
@@ -27,38 +28,55 @@ export class NavmenuService {
     
     // Map qui définit quels IDs de menu sont visibles pour chaque rôle
     private readonly ROLE_MENU_MAP = {
-        [Role.ADMIN]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], // Admin voit tout
+        [Role.ADMIN]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], // Admin voit tout
         [Role.SYNDICAT_AOP]: [5, 6, 7], // Section syndicat-AOP
         [Role.TECHNICIEN_IPREM]: [8, 9], // Section IPREM
         [Role.INGENIEUR_PREM]: [8, 9],
         [Role.CHEF_PROJET_IPREM]: [8, 9],
         [Role.PARTENAIRE_PTF2A]: [10, 11], // Section PTF2A
-        [Role.PRODUCTEUR]: [12, 13] // Section jury
+        [Role.PRODUCTEUR]: [14, 15] // Section producteur
     };
 
-    private currentRole: Role = Role.ADMIN;
-    
-    // Le BehaviorSubject qui contiendra les items du menu filtrés
-    item = new BehaviorSubject<Menu[]>([]);
+    private currentRole: Role;
+    public item = new BehaviorSubject<Menu[]>([]); // Changé en public item
 
-    constructor() {
-        this.updateMenuItems(Role.ADMIN); // Par défaut, on commence avec le menu admin
+    constructor(private utilisateurService: UtilisateurService) {
+        this.initializeMenuFromToken();
     }
 
-    // Méthode pour mettre à jour le rôle et le menu
-    setUserRole(role: Role) {
-        this.currentRole = role;
-        this.updateMenuItems(role);
+    private initializeMenuFromToken() {
+        try {
+            const token = localStorage.getItem('token');
+            if (token) {
+                const decodedToken = this.utilisateurService.getDecodedToken(token);
+                const userToken = decodedToken as { user: { role: Role } };
+                if (userToken && userToken.user && userToken.user.role) {
+                    const userToken = decodedToken as { user: { role: Role } };
+                    this.currentRole = userToken.user.role;
+                    this.updateMenuItems(this.currentRole);
+                    return;
+                }
+            }
+            this.clearMenu();
+        } catch (error) {
+            console.error('Erreur lors de l\'initialisation du menu:', error);
+            this.clearMenu();
+        }
     }
 
-    // Méthode privée qui met à jour les items du menu selon le rôle
-    private updateMenuItems(role: Role) {
+    updateMenuItems(role: Role) {
         const allowedIds = this.ROLE_MENU_MAP[role] || [];
         const filteredItems = this.MENUITEMS.filter(item => 
             item.id !== undefined && allowedIds.includes(item.id)
         );
         this.item.next(filteredItems);
     }
+
+    clearMenu() {
+        this.currentRole = undefined!;
+        this.item.next([]);
+    }
+
     MENUITEMS: Menu[] = [
         {
             id: 1,
@@ -156,7 +174,22 @@ export class NavmenuService {
             level: 1,
             active: false,
             id: 13,
-        }
+        },
+        {
+            id: 14,
+            headTitle1: "PRODUCTEUR",
+            active: true,
+        },
+        {
+            title:"Dashboard Producteur",
+            icon:"to-do",
+            path:"/producteur/dashboard-producteur",
+            type:"link",
+            level:1,
+            active:false,
+            id:15
+        },
     ];
-
 }
+
+

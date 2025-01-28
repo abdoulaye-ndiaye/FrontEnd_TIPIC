@@ -85,5 +85,18 @@ export const dashData: Routes = [
             import("../../../app/component/user/user.routes").then(
                 (r) => r.user
             ),
+    },
+    {
+        path: "producteur",
+        data: {
+            title: "producteur",
+            breadcrumb: "producteur",
+            expectedRoles: [Role.PRODUCTEUR,Role.ADMIN],  // Seul un PRODUCTEUR peut accéder à cette route
+        },
+        canActivate: [authGuard],
+        loadChildren: () =>
+            import("../../../app/component/producteur/producteur.routes").then(
+                (r) => r.producteur
+            ),
     }
 ];

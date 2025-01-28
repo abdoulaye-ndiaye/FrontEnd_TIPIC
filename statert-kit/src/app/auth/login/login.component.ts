@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
                             console.log("Role de l'utilisateur :", userRole);
 
                             // Ajout : Mettre à jour le menu selon le rôle
-                            this.navmenuService.setUserRole(userRole);
+                            this.navmenuService.updateMenuItems(userRole);
 
     
                             // Rediriger en fonction du rôle
@@ -82,7 +82,7 @@ export class LoginComponent implements OnInit {
                                     redirectUrl = '/admin/dashboard';
                                     break;
                                 case Role.PRODUCTEUR:
-                                    redirectUrl = '/producteur/dashboard';
+                                    redirectUrl = '/producteur/dashboard-producteur';
                                     break;
                                 case Role.SYNDICAT_AOP:
                                     redirectUrl = '/syndicat/liste-echantillons';
