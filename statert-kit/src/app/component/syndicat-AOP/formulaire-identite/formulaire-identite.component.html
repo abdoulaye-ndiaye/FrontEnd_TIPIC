@@ -1,514 +1,1098 @@
 <!-- multi-step-form.component.html -->
 <div class="container" id="grad1">
-    <div class="row justify-content-center">
-        <div class="col-12 col-md-8">
-            <div class="card mt-4">
-                <div class="card-body" style="background-color: #2F2F3B;">
-                    <h2 class="text-center" style="color: white;">Formulaire d'identité pour le fromage</h2>
-                    <br>
-                    <div class="card-body">
-                        <ul id="progressbar" class="text-center">
-                            <li [ngClass]="{'active': currentStep === 0, 'clickable': true}" (click)="goToStep(0)" style="cursor: pointer;"><strong>Identifiants</strong></li>
-                            <li [ngClass]="{'active': currentStep === 1, 'clickable': true}" (click)="goToStep(1)" style="cursor: pointer;"><strong>Production</strong></li>
-                            <li [ngClass]="{'active': currentStep === 2, 'clickable': true}" (click)="goToStep(2)" style="cursor: pointer;"><strong>Fabrication</strong></li>
-                            <li [ngClass]="{'active': currentStep === 3, 'clickable': true}" (click)="goToStep(3)" style="cursor: pointer;"><strong>Affinage</strong></li>
-                        </ul>
-                        <div class="card-body ">
-                            <form [formGroup]="cheeseForm" (ngSubmit)="onSubmit()" id="msform">
-                                <div [ngSwitch]="currentStep">
-                                    <!-- IDENTIFIANTS -->
-                                    <div *ngSwitchCase="0">
-                                        <div class="card p-3 mb-4">
-                                            <h4 class="fs-title">Identifiants</h4>
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8">
+      <div class="card mt-4">
+        <div class="card-body" style="background-color: #2f2f3b">
+          <h2 class="text-center" style="color: white">
+            Formulaire d'identité pour le fromage
+          </h2>
+          <br />
+          <div class="card-body">
+            <ul id="progressbar" class="text-center">
+              <li
+                [ngClass]="{ active: currentStep === 0, clickable: true }"
+                (click)="goToStep(0)"
+                style="cursor: pointer"
+              >
+                <strong>Identifiants</strong>
+              </li>
+              <li
+                [ngClass]="{ active: currentStep === 1, clickable: true }"
+                (click)="goToStep(1)"
+                style="cursor: pointer"
+              >
+                <strong>Production</strong>
+              </li>
+              <li
+                [ngClass]="{ active: currentStep === 2, clickable: true }"
+                (click)="goToStep(2)"
+                style="cursor: pointer"
+              >
+                <strong>Fabrication</strong>
+              </li>
+              <li
+                [ngClass]="{ active: currentStep === 3, clickable: true }"
+                (click)="goToStep(3)"
+                style="cursor: pointer"
+              >
+                <strong>Affinage</strong>
+              </li>
+            </ul>
+            <div class="card-body">
+              <form
+                [formGroup]="cheeseForm"
+                (ngSubmit)="onSubmit()"
+                id="msform"
+              >
+                <div [ngSwitch]="currentStep">
+                  <!-- IDENTIFIANTS -->
+                  <div *ngSwitchCase="0">
+                    <div class="card p-3 mb-4">
+                      <h4 class="fs-title">Identifiants</h4>
 
-                                            <div class="form-group mb-3">
-                                                <label for="datePrelevement">Date de prélèvement</label>
-                                                <input type="date" class="form-control" id="datePrelevement"
-                                                    formControlName="datePrelevement"
-                                                    [ngClass]="{ 'is-invalid': (datePrelevement?.touched || validate) && datePrelevement?.errors, 'is-valid': !datePrelevement?.errors }" />
-                                                <div class="invalid-feedback"
-                                                    *ngIf="(datePrelevement?.touched || validate) && datePrelevement?.errors">
-                                                    Date de prélèvement est requise.
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group mb-3">
-                                                <label for="numeroEchantillon">Numéro de l'échantillon</label>
-                                                <input type="text" class="form-control" id="numeroEchantillon"
-                                                    formControlName="numeroEchantillon" maxlength="10" minlength="10"
-                                                    (input)="cleanInput($event)" [ngClass]="{
-                                                    'is-invalid': (numeroEchantillon?.touched || validate) && numeroEchantillon?.errors,
-                                                    'is-valid': !numeroEchantillon?.errors
-                                                  }" />
-                                                <div class="invalid-feedback"
-                                                    *ngIf="(numeroEchantillon?.touched || numeroEchantillon?.dirty  || validate) && numeroEchantillon?.errors">
-                                                    <div *ngIf="numeroEchantillon?.errors?.['required']">
-                                                        Numéro de l'échantillon est requis.
-                                                    </div>
-
-                                                    <div *ngIf="numeroEchantillon?.errors?.['minlength']">
-                                                        Le numéro de l'échantillon doit être de 10 caractères.
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-
-                                            <div class="form-group mb-3">
-                                                <label for="identifiantProducteur">Identifiant du producteur</label>
-                                                <input type="text" class="form-control" id="identifiantProducteur"
-                                                    formControlName="identifiantProducteur" maxlength="6"
-                                                    (input)="cleanInput($event)" [ngClass]="{
-                                                    'is-invalid': (identifiantProducteur?.touched || validate) && identifiantProducteur?.errors,
-                                                    'is-valid': !identifiantProducteur?.errors
-                                                  }" />
-                                                <div class="invalid-feedback"
-                                                    *ngIf="(identifiantProducteur?.touched || validate) && identifiantProducteur?.errors">
-                                                    <div *ngIf="identifiantProducteur?.errors?.['required']">
-                                                        Identifiant du producteur est requis.
-                                                    </div>
-                                                    <div *ngIf="identifiantProducteur?.errors?.['minlength']">
-                                                        L'identifiant du producteur doit être de 6 caractères.
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                            <div class="form-group mb-3">
-                                                <label for="typicite">Typicité</label>
-                                                <select class="form-control" id="typicite" formControlName="typicite"
-                                                    [ngClass]="{ 'is-invalid': (typicite?.touched || validate) && typicite?.errors, 'is-valid': !typicite?.errors }">
-                                                    <option value="" disabled selected>Sélectionnez la typicité</option>
-                                                    <option value="BASQUE">Basque</option>
-                                                    <option value="BEARNAISE">Béarnaise</option>
-                                                </select>
-                                                <div class="invalid-feedback"
-                                                    *ngIf="(typicite?.touched || validate) && typicite?.errors">
-                                                    Typicité est requise.
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <!-- PRODUCTION -->
-                                    <div *ngSwitchCase="1">
-                                        <div class="card p-3 mb-4">
-                                            <h4 class="fs-title">Production</h4>
-
-                                            <div class="form-group mb-3">
-                                                <label for="categorie">Catégorie</label>
-                                                <select class="form-control" id="categorie" formControlName="categorie"
-                                                    [ngClass]="{ 'is-invalid': (categorie?.touched || validate) && categorie?.errors, 'is-valid': !categorie?.errors }">
-                                                    <option value="" disabled selected>Sélectionnez une catégorie
-                                                    </option>
-                                                    <option value="FERMIER">Fermier</option>
-                                                    <option value="LAITIER">Laitier</option>
-                                                </select>
-                                                <div class="invalid-feedback"
-                                                    *ngIf="(categorie?.touched || validate) && categorie?.errors">
-                                                    La catégorie est requise.
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group mb-3">
-                                                <label for="raceDominante">Race dominante (à partir de 80 %)</label>
-                                                <select class="form-control" id="raceDominante"
-                                                    formControlName="raceDominante"
-                                                    [ngClass]="{ 'is-invalid': (raceDominante?.touched || validate) && raceDominante?.errors, 'is-valid': !raceDominante?.errors }">
-                                                    <option value="" disabled selected>Sélectionnez la race dominante
-                                                    </option>
-                                                    <option value="BASCO_BEARNAISE">Basco-béarnaise</option>
-                                                    <option value="MANECHE_TETE_ROUSSE">Manech tête rousse</option>
-                                                    <option value="MANECHE_TETE_NOIRE">Manech tête noire</option>
-                                                    <option value="MIX">Mix</option>
-                                                </select>
-                                                <div class="invalid-feedback"
-                                                    *ngIf="(raceDominante?.touched || validate) && raceDominante?.errors">
-                                                    La race dominante est requise.
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group mb-3">
-                                                <label for="nbBrebis">Nombre de brebis de plus de 6 mois au 1er janvier
-                                                    n-1</label>
-                                                <input type="number" min="0" class="form-control" id="nbBrebis"
-                                                    (input)="cleanInput($event)" formControlName="nbBrebis"
-                                                    [ngClass]="{ 'is-invalid': (nbBrebis?.touched || validate) && nbBrebis?.errors, 'is-valid': !nbBrebis?.errors }" />
-                                                <div class="invalid-feedback"
-                                                    *ngIf="(nbBrebis?.touched || validate) && nbBrebis?.errors">
-                                                    Le nombre de brebis est requis et doit être un nombre valide.
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group mb-3">
-                                                <label for="productivite">Productivité sur la campagne précédente (en
-                                                    litres)</label>
-                                                <input type="number" min="0" class="form-control" id="productivite"
-                                                    (input)="replaceCommaWithDot($event)" formControlName="productivite"
-                                                    [ngClass]="{ 'is-invalid': (productivite?.touched || validate) && productivite?.errors, 'is-valid': !productivite?.errors }" />
-                                                <div class="invalid-feedback"
-                                                    *ngIf="(productivite?.touched || validate) && productivite?.errors">
-                                                    La productivité est requise et doit être un nombre valide.
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group mb-3">
-                                                <label for="periodeAgnelage">Période d'agnelage</label>
-                                                <select class="form-control" id="periodeAgnelage"
-                                                    formControlName="periodeAgnelage"
-                                                    [ngClass]="{ 'is-invalid': (periodeAgnelage?.touched || validate) && periodeAgnelage?.errors, 'is-valid': !periodeAgnelage?.errors }">
-                                                    <option value="" disabled selected>Sélectionnez la période
-                                                        d'agnelage</option>
-                                                    <option value="OCT_NOV">Oct-Nov</option>
-                                                    <option value="NOV_JANV">Nov-Janv</option>
-                                                    <option value="JANV_MARS">Janv-Mars</option>
-                                                    <option value="AVRIL">Avril</option>
-                                                </select>
-                                                <div class="invalid-feedback"
-                                                    *ngIf="(periodeAgnelage?.touched || validate) && periodeAgnelage?.errors">
-                                                    La période d'agnelage est requise.
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group mb-3 d-flex flex-column">
-                                                <label class="me-4">Ce fromage a-t-il été fabriqué en estive ?</label>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="form-check form-check-inline me-4">
-                                                        <input type="radio" class="form-check-input" id="estiveOui"
-                                                            formControlName="estive" [value]="true" />
-                                                        <label for="estiveOui" class="form-check-label ms-1">Oui</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input type="radio" class="form-check-input" id="estiveNon"
-                                                            formControlName="estive" [value]="false" />
-                                                        <label for="estiveNon" class="form-check-label ms-1">Non</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                            <div class="form-group mb-3 d-flex flex-column">
-                                                <label class="me-4">Ce fromage a-t-il été fait en période de pâturage
-                                                    ?</label>
-                                                <div class="d-flex align-items-center">
-                                                    <!-- Utilisation de flex pour aligner horizontalement -->
-                                                    <div class="form-check form-check-inline me-4">
-                                                        <input type="radio" class="form-check-input" id="paturageOui"
-                                                            formControlName="paturage" [value]="true" />
-                                                        <label for="paturageOui"
-                                                            class="form-check-label ms-1">Oui</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input type="radio" class="form-check-input" id="paturageNon"
-                                                            formControlName="paturage" [value]="false" />
-                                                        <label for="paturageNon"
-                                                            class="form-check-label ms-1">Non</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group mb-3 d-flex flex-column">
-                                                <label class="me-4">Ce fromage est-il fabriqué au lait cru ?</label>
-                                                <div class="d-flex align-items-center">
-                                                    <!-- Utilisation de flex pour aligner horizontalement -->
-                                                    <div class="form-check form-check-inline me-4">
-                                                        <input type="radio" class="form-check-input" id="laitCruOui"
-                                                            formControlName="laitCru" [value]="true" />
-                                                        <label for="laitCruOui"
-                                                            class="form-check-label ms-1">Oui</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input type="radio" class="form-check-input" id="laitCruNon"
-                                                            formControlName="laitCru" [value]="false" />
-                                                        <label for="laitCruNon"
-                                                            class="form-check-label ms-1">Non</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-                                    </div>
-
-                                    <!-- FABRICATION -->
-                                    <div *ngSwitchCase="2">
-                                        <div class="card p-3 mb-4">
-                                            <h4 class="fs-title">Fabrication</h4>
-                                            <div class="form-group mb-3">
-                                                <label for="dateFabrication">Date de fabrication</label>
-                                                <input type="date" class="form-control" id="dateFabrication"
-                                                    formControlName="dateFabrication"
-                                                    [ngClass]="{ 'is-invalid': (dateFabrication?.invalid && (dateFabrication?.touched || validate)), 'is-valid': (dateFabrication?.valid) }" />
-                                                <div class="invalid-feedback"
-                                                    *ngIf="(dateFabrication?.touched || validate) && dateFabrication?.errors">
-                                                    Date de fabrication est requise.
-                                                </div>
-                                            </div>
-                                            <div class="form-group mb-3">
-                                                <label for="nombreTraites">Nombre de traites mises en
-                                                    fabrication</label>
-                                                <input type="number" min="0" class="form-control" id="nombreTraites"
-                                                    (input)="cleanInput($event)" formControlName="nombreTraites"
-                                                    [ngClass]="{ 'is-invalid': (nombreTraites?.invalid && (nombreTraites?.touched || validate)), 'is-valid': (nombreTraites?.valid) }" />
-                                                <div class="invalid-feedback"
-                                                    *ngIf="(nombreTraites?.touched || validate) && nombreTraites?.errors">
-                                                    Nombre de traites est requis.
-                                                </div>
-                                            </div>
-                                            <div class="form-group mb-3">
-                                                <label for="temperatureEmpressurage">Température d'emprésurage
-                                                    (°C)</label>
-                                                <input type="number" class="form-control" id="temperatureEmpressurage"
-                                                    (input)="replaceCommaWithDot($event)"
-                                                    formControlName="temperatureEmpressurage"
-                                                    [ngClass]="{ 'is-invalid': (temperatureEmpressurage?.invalid && (temperatureEmpressurage?.touched || validate)), 'is-valid': (temperatureEmpressurage?.valid) }" />
-                                                <div class="invalid-feedback"
-                                                    *ngIf="(temperatureEmpressurage?.touched || validate) && temperatureEmpressurage?.errors">
-                                                    La température d'emprésurage est requise.
-                                                </div>
-                                            </div>
-                                            <div class="form-group mb-3">
-                                                <label for="quantitePresure">Quantité de présure pour 100L de lait (en
-                                                    ml)</label>
-                                                <input type="number" min="0" class="form-control" id="quantitePresure"
-                                                    (input)="replaceCommaWithDot($event)"
-                                                    formControlName="quantitePresure"
-                                                    [ngClass]="{ 'is-invalid': (quantitePresure?.invalid && (quantitePresure?.touched || validate)), 'is-valid': (quantitePresure?.valid) }" />
-                                                <div class="invalid-feedback"
-                                                    *ngIf="(quantitePresure?.touched || validate) && quantitePresure?.errors">
-                                                    La quantité de présure est requise.
-                                                </div>
-                                            </div>
-                                            <div class="form-group mb-3">
-                                                <label for="typeFerments">Type de ferments lactiques</label>
-                                                <input type="text" class="form-control" id="typeFerments"
-                                                    formControlName="typeFerments"
-                                                    [ngClass]="{ 'is-invalid': (typeFerments?.invalid && (typeFerments?.touched || validate)), 'is-valid': (typeFerments?.valid) }" />
-                                                <div class="invalid-feedback"
-                                                    *ngIf="(typeFerments?.touched || validate) && typeFerments?.errors">
-                                                    Le type de ferments lactiques est requis.
-                                                </div>
-                                            </div>
-                                            <div class="form-group mb-3">
-                                                <label for="dureeCoagulation">Durée de coagulation (minutes)</label>
-                                                <input type="number" min="0" class="form-control" id="dureeCoagulation"
-                                                    (input)="replaceCommaWithDot($event)"
-                                                    formControlName="dureeCoagulation"
-                                                    [ngClass]="{ 'is-invalid': (dureeCoagulation?.invalid && (dureeCoagulation?.touched || validate)), 'is-valid': (dureeCoagulation?.valid) }" />
-                                                <div class="invalid-feedback"
-                                                    *ngIf="(dureeCoagulation?.touched || validate) && dureeCoagulation?.errors">
-                                                    La durée de coagulation est requise.
-                                                </div>
-                                            </div>
-                                            <div class="form-group mb-3">
-                                                <label for="temperatureCaillage">Température de chauffage du caillé
-                                                    (°C)</label>
-                                                <input type="number" min="0" class="form-control"
-                                                    (input)="replaceCommaWithDot($event)" id="temperatureCaillage"
-                                                    formControlName="temperatureCaillage"
-                                                    [ngClass]="{ 'is-invalid': (temperatureCaillage?.invalid && (temperatureCaillage?.touched || validate)), 'is-valid': (temperatureCaillage?.valid) }" />
-                                                <div class="invalid-feedback"
-                                                    *ngIf="(temperatureCaillage?.touched || validate) && temperatureCaillage?.errors">
-                                                    La température de chauffage du caillé est requise.
-                                                </div>
-                                            </div>
-                                            <div class="form-group mb-3 d-flex flex-column">
-                                                <label class="me-4">Type de salage</label>
-                                                <div class="d-flex align-items-center">
-                                                    <!-- Flexbox pour aligner horizontalement -->
-                                                    <div class="form-check form-check-inline me-4">
-                                                        <input type="radio" class="form-check-input" id="salageSec"
-                                                            formControlName="salage" value="A_SEC" required />
-                                                        <label for="salageSec" class="form-check-label ms-1">À
-                                                            sec</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input type="radio" class="form-check-input" id="salageSaumure"
-                                                            formControlName="salage" value="SAUMURE" required />
-                                                        <label for="salageSaumure" class="form-check-label ms-1">En
-                                                            saumure</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group mb-3 d-flex flex-column">
-                                                <label class="me-4">Report sous vide avant affinage</label>
-                                                <div class="d-flex align-items-center">
-                                                    <!-- Flexbox pour aligner horizontalement -->
-                                                    <div class="form-check form-check-inline me-4">
-                                                        <input type="radio" class="form-check-input" id="reportVideOui"
-                                                            formControlName="reportVide" [value]="true" required />
-                                                        <label for="reportVideOui"
-                                                            class="form-check-label ms-1">Oui</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input type="radio" class="form-check-input" id="reportVideNon"
-                                                            formControlName="reportVide" [value]="false" required />
-                                                        <label for="reportVideNon"
-                                                            class="form-check-label ms-1">Non</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group mb-3">
-                                                <label for="dateMiseVide">Date de mise sous vide</label>
-                                                <input type="date" class="form-control" id="dateMiseVide"
-                                                    formControlName="dateMiseVide"
-                                                    [ngClass]="{ 'is-invalid': (dateMiseVide?.invalid && (dateMiseVide?.touched || validate)), 'is-valid': (dateMiseVide?.valid) }" />
-                                                <div class="invalid-feedback"
-                                                    *ngIf="(dateMiseVide?.touched || validate) && dateMiseVide?.errors">
-                                                    La date de mise sous vide est requise.
-                                                </div>
-                                            </div>
-                                            <div class="form-group mb-3">
-                                                <label for="dateSortieVide">Date de sortie sous vide</label>
-                                                <input type="date" class="form-control" id="dateSortieVide"
-                                                    formControlName="dateSortieVide"
-                                                    [ngClass]="{ 'is-invalid': (dateSortieVide?.invalid && (dateSortieVide?.touched || validate)), 'is-valid': (dateSortieVide?.valid) }" />
-                                                <div class="invalid-feedback"
-                                                    *ngIf="(dateSortieVide?.touched || validate) && dateSortieVide?.errors">
-                                                    La date de sortie sous vide est requise.
-                                                </div>
-                                            </div>
-                                            <!-- Ajoutez ce bloc pour afficher l'erreur de plage de dates au niveau du formulaire -->
-                                            <div class="alert alert-danger" *ngIf="cheeseForm.errors?.['invalidDateRange']">
-                                                La date de sortie sous vide doit être postérieure à la date de mise sous vide.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- AFFINAGE -->
-                                    <div *ngSwitchCase="3">
-                                        <div class="card p-3 mb-4">
-                                            <h4 class="fs-title">Affinage</h4>
-                                            <!-- Nom Affineur-->
-                                            <div class="form-group mb-3 d-flex ">
-                                                <label class="me-4">Affineur</label>
-                                                <input type="text" class="form-control" formControlName="nomAffineur"
-                                                    [ngClass]="{ 'is-invalid': nomAffineur?.invalid && (nomAffineur?.dirty || nomAffineur?.touched) }"
-                                                    required />
-                                                <div class="invalid-feedback"
-                                                    *ngIf="nomAffineur?.invalid && (nomAffineur?.dirty || nomAffineur?.touched)">
-                                                    L'affineur est requis.
-                                                </div>
-                                            </div>
-                                            <!-- Pré-affinage -->
-                                            <div class="form-group mb-3 d-flex flex-column">
-                                                <label class="me-4">Pré-affinage</label>
-                                                <div class="d-flex align-items-center">
-                                                    <!-- Flexbox pour aligner horizontalement -->
-                                                    <div class="form-check form-check-inline me-4">
-                                                        <input type="radio" class="form-check-input" id="preAffinageOui"
-                                                            formControlName="preAffinage" [value]="true" required />
-                                                        <label for="preAffinageOui"
-                                                            class="form-check-label ms-1">Oui</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input type="radio" class="form-check-input" id="preAffinageNon"
-                                                            formControlName="preAffinage" [value]="false" required />
-                                                        <label for="preAffinageNon"
-                                                            class="form-check-label ms-1">Non</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                            <!-- Champs supplémentaires pour Pré-affinage -->
-                                            <div *ngIf="cheeseForm.get('preAffinage')?.value" class="mb-3">
-                                                <div class="d-flex align-items-center">
-                                                    <label class="me-4">Durée (jours)</label>
-                                                    <input type="number" class="form-control me-4"
-                                                        (input)="cleanInput($event)" formControlName="dureeAffinage"
-                                                        min="0"
-                                                        [ngClass]="{ 'is-invalid': dureeAffinage?.invalid && (dureeAffinage?.dirty || dureeAffinage?.touched) }"
-                                                        required />
-
-                                                    <label class="me-4">Température (°C)</label>
-                                                    <input type="number" class="form-control"
-                                                        formControlName="tempPreAffinage" min="0"
-                                                        (input)="replaceCommaWithDot($event)"
-                                                        [ngClass]="{ 'is-invalid': tempPreAffinage?.invalid && (tempPreAffinage?.dirty || tempPreAffinage?.touched) }"
-                                                        required />
-                                                </div>
-                                                <div class="invalid-feedback"
-                                                    *ngIf="dureeAffinage?.invalid && (dureeAffinage?.dirty || dureeAffinage?.touched) && dureeAffinage?.errors">
-                                                    La durée est requise et doit être un nombre valide.
-                                                </div>
-                                                <div class="invalid-feedback"
-                                                    *ngIf="tempPreAffinage?.invalid && (tempPreAffinage?.dirty || tempPreAffinage?.touched) && tempPreAffinage?.errors">
-                                                    La température est requise et doit être un nombre valide.
-                                                </div>
-
-                                            </div>
-
-                                            <!-- Brossage manuel -->
-                                            <div class="form-group mb-3 d-flex flex-column">
-                                                <label class="me-4">Brossage manuel</label>
-                                                <div class="d-flex align-items-center">
-                                                    <!-- Flexbox pour aligner horizontalement -->
-                                                    <div class="form-check form-check-inline me-4">
-                                                        <input type="radio" class="form-check-input"
-                                                            id="brossageManuelOui" formControlName="brossageManuel"
-                                                            [value]="true" required />
-                                                        <label for="brossageManuelOui"
-                                                            class="form-check-label ms-1">Oui</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input type="radio" class="form-check-input"
-                                                            id="brossageManuelNon" formControlName="brossageManuel"
-                                                            [value]="false" required />
-                                                        <label for="brossageManuelNon"
-                                                            class="form-check-label ms-1">Non</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                            <!-- Température d'affinage -->
-                                            <div class="form-group mb-3 d-flex ">
-                                                <label class="me-4">Température d'affinage (°C)</label>
-                                                <input type="number" class="form-control" formControlName="tempAffinage"
-                                                    (input)="replaceCommaWithDot($event)" min="0"
-                                                    [ngClass]="{ 'is-invalid': tempAffinage?.invalid && (tempAffinage?.dirty || tempAffinage?.touched) }"
-                                                    required />
-                                                <div class="invalid-feedback"
-                                                    *ngIf="tempAffinage?.invalid && (tempAffinage?.dirty || tempAffinage?.touched)">
-                                                    La température d'affinage est requise et doit être un nombre valide.
-                                                </div>
-                                            </div>
-
-                                            <!-- Système d'humidification de la cave -->
-                                            <div class="form-group mb-3 d-flex ">
-                                                <label class="me-4">Système d'humidification de la cave</label>
-                                                <input type="text" class="form-control"
-                                                    formControlName="humidificationCave"
-                                                    [ngClass]="{ 'is-invalid': humidificationCave?.invalid && (humidificationCave?.dirty || humidificationCave?.touched) }"
-                                                    required />
-                                                <div class="invalid-feedback"
-                                                    *ngIf="humidificationCave?.invalid && (humidificationCave?.dirty || humidificationCave?.touched)">
-                                                    Le système d'humidification est requis.
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <!-- Boutons de navigation -->
-                                <div class="d-flex justify-content-between mt-4">
-                                    <button type="button" class="action-button-previous" (click)="previousStep()"
-                                        *ngIf="currentStep > 0">Précédent</button>
-                                    <button type="button" class="action-button" (click)="nextStep()"
-                                        [disabled]="isNextDisabled()" *ngIf="currentStep < 3">Suivant</button>
-                                    <button type="submit" class="action-button"
-                                        *ngIf="currentStep === 3" [disabled]="isNextDisabled()" >Terminer</button>
-                                </div>
-
-                            </form>
+                      <div class="form-group mb-3">
+                        <label for="datePrelevement">Date de prélèvement</label>
+                        <input
+                          type="date"
+                          class="form-control"
+                          id="datePrelevement"
+                          formControlName="datePrelevement"
+                          [ngClass]="{
+                            'is-invalid':
+                              (datePrelevement?.touched || validate) &&
+                              datePrelevement?.errors,
+                            'is-valid': !datePrelevement?.errors
+                          }"
+                        />
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            (datePrelevement?.touched || validate) &&
+                            datePrelevement?.errors
+                          "
+                        >
+                          Date de prélèvement est requise.
                         </div>
+                      </div>
+
+                      <div class="form-group mb-3">
+                        <label for="numeroEchantillon"
+                          >Numéro de l'échantillon</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="numeroEchantillon"
+                          formControlName="numeroEchantillon"
+                          maxlength="10"
+                          minlength="10"
+                          (input)="cleanInput($event)"
+                          [ngClass]="{
+                            'is-invalid':
+                              (numeroEchantillon?.touched || validate) &&
+                              numeroEchantillon?.errors,
+                            'is-valid': !numeroEchantillon?.errors
+                          }"
+                        />
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            (numeroEchantillon?.touched ||
+                              numeroEchantillon?.dirty ||
+                              validate) &&
+                            numeroEchantillon?.errors
+                          "
+                        >
+                          <div *ngIf="numeroEchantillon?.errors?.['']">
+                            Numéro de l'échantillon est requis.
+                          </div>
+
+                          <div *ngIf="numeroEchantillon?.errors?.['minlength']">
+                            Le numéro de l'échantillon doit être de 10
+                            caractères.
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group mb-3">
+                        <label for="identifiantProducteur"
+                          >Identifiant du producteur</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="identifiantProducteur"
+                          formControlName="identifiantProducteur"
+                          maxlength="6"
+                          (input)="cleanInput($event)"
+                          [ngClass]="{
+                            'is-invalid':
+                              (identifiantProducteur?.touched || validate) &&
+                              identifiantProducteur?.errors,
+                            'is-valid': !identifiantProducteur?.errors
+                          }"
+                        />
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            (identifiantProducteur?.touched || validate) &&
+                            identifiantProducteur?.errors
+                          "
+                        >
+                          <div *ngIf="identifiantProducteur?.errors?.['']">
+                            Identifiant du producteur est requis.
+                          </div>
+                          <div
+                            *ngIf="identifiantProducteur?.errors?.['minlength']"
+                          >
+                            L'identifiant du producteur doit être de 6
+                            caractères.
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group mb-3">
+                        <label for="typicite">Typicité</label>
+                        <select
+                          class="form-control"
+                          id="typicite"
+                          formControlName="typicite"
+                          [ngClass]="{
+                            'is-invalid':
+                              (typicite?.touched || validate) &&
+                              typicite?.errors,
+                            'is-valid': !typicite?.errors
+                          }"
+                        >
+                          <option value="" disabled selected>
+                            Sélectionnez la typicité
+                          </option>
+                          <option value="BASQUE">Basque</option>
+                          <option value="BEARNAISE">Béarnaise</option>
+                          <option value="AUCUNE">Aucune</option>
+                        </select>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            (typicite?.touched || validate) && typicite?.errors
+                          "
+                        >
+                          Typicité est requise.
+                        </div>
+                      </div>
                     </div>
+                  </div>
+
+                  <!-- PRODUCTION -->
+                  <div *ngSwitchCase="1">
+                    <div class="card p-3 mb-4">
+                      <h4 class="fs-title">Production</h4>
+
+                      <div class="form-group mb-3">
+                        <label for="categorie">Catégorie</label>
+                        <select
+                          class="form-control"
+                          id="categorie"
+                          formControlName="categorie"
+                          [ngClass]="{
+                            'is-invalid':
+                              (categorie?.touched || validate) &&
+                              categorie?.errors,
+                            'is-valid': !categorie?.errors
+                          }"
+                        >
+                          <option value="" disabled selected>
+                            Sélectionnez une catégorie
+                          </option>
+                          <option value="FERMIER">Fermier</option>
+                          <option value="LAITIER">Laitier</option>
+                        </select>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            (categorie?.touched || validate) &&
+                            categorie?.errors
+                          "
+                        >
+                          La catégorie est requise.
+                        </div>
+                      </div>
+
+                      <div class="form-group mb-3">
+                        <label for="raceDominante"
+                          >Race dominante (à partir de 80 %)</label
+                        >
+                        <select
+                          class="form-control"
+                          id="raceDominante"
+                          formControlName="raceDominante"
+                          [ngClass]="{
+                            'is-invalid':
+                              (raceDominante?.touched || validate) &&
+                              raceDominante?.errors,
+                            'is-valid': !raceDominante?.errors
+                          }"
+                        >
+                          <option value="" disabled selected>
+                            Sélectionnez la race dominante
+                          </option>
+                          <option value="BASCO_BEARNAISE">
+                            Basco-béarnaise
+                          </option>
+                          <option value="MANECHE_TETE_ROUSSE">
+                            Manech tête rousse
+                          </option>
+                          <option value="MANECHE_TETE_NOIRE">
+                            Manech tête noire
+                          </option>
+                          <option value="MIX">Mix</option>
+                        </select>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            (raceDominante?.touched || validate) &&
+                            raceDominante?.errors
+                          "
+                        >
+                          La race dominante est requise.
+                        </div>
+                      </div>
+
+                      <div class="form-group mb-3">
+                        <label for="nbBrebis"
+                          >Nombre de brebis de plus de 6 mois au 1er janvier
+                          n-1</label
+                        >
+                        <input
+                          type="number"
+                          min="0"
+                          class="form-control"
+                          id="nbBrebis"
+                          (input)="cleanInput($event)"
+                          formControlName="nbBrebis"
+                          [ngClass]="{
+                            'is-invalid':
+                              (nbBrebis?.touched || validate) &&
+                              nbBrebis?.errors,
+                            'is-valid': !nbBrebis?.errors
+                          }"
+                        />
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            (nbBrebis?.touched || validate) && nbBrebis?.errors
+                          "
+                        >
+                          Le nombre de brebis est requis et doit être un nombre
+                          valide.
+                        </div>
+                      </div>
+
+                      <div class="form-group mb-3">
+                        <label for="productivite"
+                          >Productivité sur la campagne précédente (en
+                          litres)</label
+                        >
+                        <input
+                          type="number"
+                          min="0"
+                          class="form-control"
+                          id="productivite"
+                          (input)="replaceCommaWithDot($event)"
+                          formControlName="productivite"
+                          [ngClass]="{
+                            'is-invalid':
+                              (productivite?.touched || validate) &&
+                              productivite?.errors,
+                            'is-valid': !productivite?.errors
+                          }"
+                        />
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            (productivite?.touched || validate) &&
+                            productivite?.errors
+                          "
+                        >
+                          La productivité est requise et doit être un nombre
+                          valide.
+                        </div>
+                      </div>
+
+                      <div class="form-group mb-3">
+                        <label for="periodeAgnelage">Période d'agnelage</label>
+                        <select
+                          class="form-control"
+                          id="periodeAgnelage"
+                          formControlName="periodeAgnelage"
+                          [ngClass]="{
+                            'is-invalid':
+                              (periodeAgnelage?.touched || validate) &&
+                              periodeAgnelage?.errors,
+                            'is-valid': !periodeAgnelage?.errors
+                          }"
+                        >
+                          <option value="" disabled selected>
+                            Sélectionnez la période d'agnelage
+                          </option>
+                          <option value="OCT_NOV">Oct-Nov</option>
+                          <option value="NOV_JANV">Nov-Janv</option>
+                          <option value="JANV_MARS">Janv-Mars</option>
+                          <option value="AVRIL">Avril</option>
+                        </select>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            (periodeAgnelage?.touched || validate) &&
+                            periodeAgnelage?.errors
+                          "
+                        >
+                          La période d'agnelage est requise.
+                        </div>
+                      </div>
+
+                      <div class="form-group mb-3 d-flex flex-column">
+                        <label class="me-4"
+                          >Ce fromage a-t-il été fabriqué en estive ?</label
+                        >
+                        <div class="d-flex align-items-center">
+                          <div class="form-check form-check-inline me-4">
+                            <input
+                              type="radio"
+                              class="form-check-input"
+                              id="estiveOui"
+                              formControlName="estive"
+                              [value]="true"
+                            />
+                            <label for="estiveOui" class="form-check-label ms-1"
+                              >Oui</label
+                            >
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input
+                              type="radio"
+                              class="form-check-input"
+                              id="estiveNon"
+                              formControlName="estive"
+                              [value]="false"
+                            />
+                            <label for="estiveNon" class="form-check-label ms-1"
+                              >Non</label
+                            >
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group mb-3 d-flex flex-column">
+                        <label class="me-4"
+                          >Ce fromage a-t-il été fait en période de pâturage
+                          ?</label
+                        >
+                        <div class="d-flex align-items-center">
+                          <!-- Utilisation de flex pour aligner horizontalement -->
+                          <div class="form-check form-check-inline me-4">
+                            <input
+                              type="radio"
+                              class="form-check-input"
+                              id="paturageOui"
+                              formControlName="paturage"
+                              [value]="true"
+                            />
+                            <label
+                              for="paturageOui"
+                              class="form-check-label ms-1"
+                              >Oui</label
+                            >
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input
+                              type="radio"
+                              class="form-check-input"
+                              id="paturageNon"
+                              formControlName="paturage"
+                              [value]="false"
+                            />
+                            <label
+                              for="paturageNon"
+                              class="form-check-label ms-1"
+                              >Non</label
+                            >
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group mb-3 d-flex flex-column">
+                        <label class="me-4"
+                          >Ce fromage est-il fabriqué au lait cru ?</label
+                        >
+                        <div class="d-flex align-items-center">
+                          <!-- Utilisation de flex pour aligner horizontalement -->
+                          <div class="form-check form-check-inline me-4">
+                            <input
+                              type="radio"
+                              class="form-check-input"
+                              id="laitCruOui"
+                              formControlName="laitCru"
+                              [value]="true"
+                            />
+                            <label
+                              for="laitCruOui"
+                              class="form-check-label ms-1"
+                              >Oui</label
+                            >
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input
+                              type="radio"
+                              class="form-check-input"
+                              id="laitCruNon"
+                              formControlName="laitCru"
+                              [value]="false"
+                            />
+                            <label
+                              for="laitCruNon"
+                              class="form-check-label ms-1"
+                              >Non</label
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- FABRICATION -->
+                  <div *ngSwitchCase="2">
+                    <div class="card p-3 mb-4">
+                      <h4 class="fs-title">Fabrication</h4>
+                      <div class="form-group mb-3">
+                        <label for="dateFabrication">Date de fabrication</label>
+                        <input
+                          type="date"
+                          class="form-control"
+                          id="dateFabrication"
+                          formControlName="dateFabrication"
+                          [ngClass]="{ 
+                                                           'is-invalid': (dateFabrication?.invalid && (dateFabrication?.touched || validate)) || cheeseForm.errors?.['fabricationDateError'],
+                                                           'is-valid': (dateFabrication?.valid && !cheeseForm.errors?.['fabricationDateError'])
+                                                       }"
+                        />
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            (dateFabrication?.touched || validate) &&
+                            dateFabrication?.errors
+                          "
+                        >
+                          Date de fabrication est requise.
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="cheeseForm.errors?.['fabricationDateError']"
+                        >
+                          La date de fabrication doit être antérieure à la date
+                          de prélèvement
+                        </div>
+                      </div>
+                      <div class="form-group mb-3">
+                        <label for="nombreTraites"
+                          >Nombre de traites mises en fabrication</label
+                        >
+                        <input
+                          type="number"
+                          min="0"
+                          class="form-control"
+                          id="nombreTraites"
+                          (input)="cleanInput($event)"
+                          formControlName="nombreTraites"
+                          [ngClass]="{
+                            'is-invalid':
+                              nombreTraites?.invalid &&
+                              (nombreTraites?.touched || validate),
+                            'is-valid': nombreTraites?.valid
+                          }"
+                        />
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            (nombreTraites?.touched || validate) &&
+                            nombreTraites?.errors
+                          "
+                        >
+                          Nombre de traites est requis.
+                        </div>
+                      </div>
+                      <div class="form-group mb-3">
+                        <label for="temperatureEmpressurage"
+                          >Température d'emprésurage (°C)</label
+                        >
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="temperatureEmpressurage"
+                          (input)="replaceCommaWithDot($event)"
+                          formControlName="temperatureEmpressurage"
+                          [ngClass]="{
+                            'is-invalid':
+                              temperatureEmpressurage?.invalid &&
+                              (temperatureEmpressurage?.touched || validate),
+                            'is-valid': temperatureEmpressurage?.valid
+                          }"
+                        />
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            (temperatureEmpressurage?.touched || validate) &&
+                            temperatureEmpressurage?.errors
+                          "
+                        >
+                          La température d'emprésurage est requise.
+                        </div>
+                      </div>
+                      <div class="form-group mb-3">
+                        <label for="quantitePresure"
+                          >Quantité de présure pour 100L de lait (en ml)</label
+                        >
+                        <input
+                          type="number"
+                          min="0"
+                          class="form-control"
+                          id="quantitePresure"
+                          (input)="replaceCommaWithDot($event)"
+                          formControlName="quantitePresure"
+                          [ngClass]="{
+                            'is-invalid':
+                              quantitePresure?.invalid &&
+                              (quantitePresure?.touched || validate),
+                            'is-valid': quantitePresure?.valid
+                          }"
+                        />
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            (quantitePresure?.touched || validate) &&
+                            quantitePresure?.errors
+                          "
+                        >
+                          La quantité de présure est requise.
+                        </div>
+                      </div>
+                      <div class="form-group mb-3">
+                        <label for="typeFerments"
+                          >Type de ferments lactiques</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="typeFerments"
+                          formControlName="typeFerments"
+                          [ngClass]="{
+                            'is-invalid':
+                              typeFerments?.invalid &&
+                              (typeFerments?.touched || validate),
+                            'is-valid': typeFerments?.valid
+                          }"
+                        />
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            (typeFerments?.touched || validate) &&
+                            typeFerments?.errors
+                          "
+                        >
+                          Le type de ferments lactiques est requis.
+                        </div>
+                      </div>
+                      <div class="form-group mb-3">
+                        <label for="dureeCoagulation"
+                          >Durée de coagulation (minutes)</label
+                        >
+                        <input
+                          type="number"
+                          min="0"
+                          class="form-control"
+                          id="dureeCoagulation"
+                          (input)="replaceCommaWithDot($event)"
+                          formControlName="dureeCoagulation"
+                          [ngClass]="{
+                            'is-invalid':
+                              dureeCoagulation?.invalid &&
+                              (dureeCoagulation?.touched || validate),
+                            'is-valid': dureeCoagulation?.valid
+                          }"
+                        />
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            (dureeCoagulation?.touched || validate) &&
+                            dureeCoagulation?.errors
+                          "
+                        >
+                          La durée de coagulation est requise.
+                        </div>
+                      </div>
+                      <div class="form-group mb-3">
+                        <label for="temperatureCaillage"
+                          >Température de chauffage du caillé (°C)</label
+                        >
+                        <input
+                          type="number"
+                          min="0"
+                          class="form-control"
+                          (input)="replaceCommaWithDot($event)"
+                          id="temperatureCaillage"
+                          formControlName="temperatureCaillage"
+                          [ngClass]="{
+                            'is-invalid':
+                              temperatureCaillage?.invalid &&
+                              (temperatureCaillage?.touched || validate),
+                            'is-valid': temperatureCaillage?.valid
+                          }"
+                        />
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            (temperatureCaillage?.touched || validate) &&
+                            temperatureCaillage?.errors
+                          "
+                        >
+                          La température de chauffage du caillé est requise.
+                        </div>
+                      </div>
+                      <div class="form-group mb-3 d-flex flex-column">
+                        <label class="me-4">Type de salage</label>
+                        <div class="d-flex align-items-center">
+                          <!-- Flexbox pour aligner horizontalement -->
+                          <div class="form-check form-check-inline me-4">
+                            <input
+                              type="radio"
+                              class="form-check-input"
+                              id="salageSec"
+                              formControlName="salage"
+                              value="A_SEC"
+                            />
+                            <label for="salageSec" class="form-check-label ms-1"
+                              >À sec</label
+                            >
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input
+                              type="radio"
+                              class="form-check-input"
+                              id="salageSaumure"
+                              formControlName="salage"
+                              value="SAUMURE"
+                            />
+                            <label
+                              for="salageSaumure"
+                              class="form-check-label ms-1"
+                              >En saumure</label
+                            >
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group mb-3 d-flex flex-column">
+                        <label class="me-4"
+                          >Report sous vide avant affinage</label
+                        >
+                        <div class="d-flex align-items-center">
+                          <div class="form-check form-check-inline me-4">
+                            <input
+                              type="radio"
+                              class="form-check-input"
+                              id="reportVideOui"
+                              formControlName="reportVide"
+                              [value]="true"
+                            />
+                            <label
+                              for="reportVideOui"
+                              class="form-check-label ms-1"
+                              >Oui</label
+                            >
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input
+                              type="radio"
+                              class="form-check-input"
+                              id="reportVideNon"
+                              formControlName="reportVide"
+                              [value]="false"
+                            />
+                            <label
+                              for="reportVideNon"
+                              class="form-check-label ms-1"
+                              >Non</label
+                            >
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group mb-3">
+                        <label for="dateMiseVide">Date de mise sous vide</label>
+                        <input
+                          type="date"
+                          class="form-control"
+                          id="dateMiseVide"
+                          formControlName="dateMiseVide"
+                          [ngClass]="{
+                            'is-invalid':
+                              dateMiseVide?.invalid &&
+                              (dateMiseVide?.touched || validate),
+                            'is-valid': dateMiseVide?.valid && reportVide?.value
+                          }"
+                        />
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            (dateMiseVide?.touched || validate) &&
+                            dateMiseVide?.errors &&
+                            reportVide?.value
+                          "
+                        >
+                          La date de mise sous vide est requise.
+                        </div>
+                      </div>
+
+                      <div class="form-group mb-3">
+                        <label for="dateSortieVide"
+                          >Date de sortie sous vide</label
+                        >
+                        <input
+                          type="date"
+                          class="form-control"
+                          id="dateSortieVide"
+                          formControlName="dateSortieVide"
+                          [ngClass]="{
+                            'is-invalid':
+                              dateSortieVide?.invalid &&
+                              (dateSortieVide?.touched || validate),
+                            'is-valid':
+                              dateSortieVide?.valid && reportVide?.value
+                          }"
+                        />
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            (dateSortieVide?.touched || validate) &&
+                            dateSortieVide?.errors &&
+                            reportVide?.value
+                          "
+                        >
+                          La date de sortie sous vide est requise.
+                        </div>
+                      </div>
+
+                      <!-- Durée sous vide calculée -->
+                      <div class="form-group mb-3" *ngIf="reportVide?.value">
+                        <label>Durée sous vide (jours)</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          formControlName="dureeSousVide"
+                          [attr.disabled]="true"
+                          [ngClass]="{
+                            'is-valid': dureeSousVide?.value !== null
+                          }"
+                        />
+                      </div>
+
+                      <!-- Message d'erreur pour la plage de dates -->
+                      <div
+                        class="alert alert-danger"
+                        *ngIf="cheeseForm.errors?.['invalidDateRange'] && reportVide?.value"
+                      >
+                        La date de sortie sous vide doit être postérieure à la
+                        date de mise sous vide.
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- AFFINAGE -->
+                  <div *ngSwitchCase="3">
+                    <div class="card p-3 mb-4">
+                      <h4 class="fs-title">Affinage</h4>
+                      <!-- Nom Affineur-->
+                      <div class="form-group mb-3 d-flex">
+                        <label class="me-4">Affineur</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="nomAffineur"
+                          [ngClass]="{
+                            'is-invalid':
+                              nomAffineur?.invalid &&
+                              (nomAffineur?.dirty || nomAffineur?.touched)
+                          }"
+                        />
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            nomAffineur?.invalid &&
+                            (nomAffineur?.dirty || nomAffineur?.touched)
+                          "
+                        >
+                          L'affineur est requis.
+                        </div>
+                      </div>
+                      <!-- Durée d'affinage -->
+                      <div class="form-group mb-3 d-flex">
+                        <label class="me-4">Durée d'affinage (jours)</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          formControlName="dureeAffinage"
+                          [attr.disabled]="true"
+                          [ngClass]="{
+                            'is-valid': dureeAffinage?.value !== null
+                          }"
+                        />
+                        <div
+                          class="form-text text-muted"
+                          *ngIf="dureeAffinage?.value === null"
+                        >
+                          La durée sera calculée automatiquement à partir de la
+                          date de fabrication et de prélèvement
+                        </div>
+                      </div>
+                      <!-- Pré-affinage -->
+                      <div class="form-group mb-3 d-flex flex-column">
+                        <label class="me-4">Pré-affinage</label>
+                        <div class="d-flex align-items-center">
+                          <div class="form-check form-check-inline me-4">
+                            <input
+                              type="radio"
+                              class="form-check-input"
+                              id="preAffinageOui"
+                              formControlName="preAffinage"
+                              [value]="true"
+                            />
+                            <label
+                              for="preAffinageOui"
+                              class="form-check-label ms-1"
+                              >Oui</label
+                            >
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input
+                              type="radio"
+                              class="form-check-input"
+                              id="preAffinageNon"
+                              formControlName="preAffinage"
+                              [value]="false"
+                            />
+                            <label
+                              for="preAffinageNon"
+                              class="form-check-label ms-1"
+                              >Non</label
+                            >
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Champs supplémentaires pour Pré-affinage -->
+                      <div *ngIf="preAffinage?.value" class="mb-3">
+                        <div class="d-flex align-items-center">
+                          <!-- Durée -->
+                          <div class="me-4 flex-grow-1">
+                            <label class="me-4">Durée (jours)</label>
+                            <input
+                              type="number"
+                              class="form-control"
+                              formControlName="dureePreAffinage"
+                              (input)="cleanInput($event)"
+                              min="0"
+                              [ngClass]="{
+                                'is-invalid':
+                                  dureePreAffinage?.invalid &&
+                                  (dureePreAffinage?.touched ||
+                                    dureePreAffinage?.dirty),
+                                'is-valid':
+                                  dureePreAffinage?.valid && preAffinage?.value
+                              }"
+                            />
+                            <div
+                              class="invalid-feedback"
+                              *ngIf="
+                                dureePreAffinage?.invalid &&
+                                (dureePreAffinage?.touched ||
+                                  dureePreAffinage?.dirty)
+                              "
+                            >
+                              <span
+                                *ngIf="dureePreAffinage?.errors?.['required']"
+                                >La durée est requise</span
+                              >
+                              <span *ngIf="dureePreAffinage?.errors?.['min']"
+                                >La durée doit être positive</span
+                              >
+                            </div>
+                          </div>
+
+                          <!-- Température -->
+                          <div class="flex-grow-1">
+                            <label class="me-4">Température (°C)</label>
+                            <input
+                              type="number"
+                              class="form-control"
+                              formControlName="tempPreAffinage"
+                              (input)="replaceCommaWithDot($event)"
+                              min="0"
+                              [ngClass]="{
+                                'is-invalid':
+                                  tempPreAffinage?.invalid &&
+                                  (tempPreAffinage?.touched ||
+                                    tempPreAffinage?.dirty),
+                                'is-valid':
+                                  tempPreAffinage?.valid && preAffinage?.value
+                              }"
+                            />
+                            <div
+                              class="invalid-feedback"
+                              *ngIf="
+                                tempPreAffinage?.invalid &&
+                                (tempPreAffinage?.touched ||
+                                  tempPreAffinage?.dirty)
+                              "
+                            >
+                              <span
+                                *ngIf="tempPreAffinage?.errors?.['required']"
+                                >La température est requise</span
+                              >
+                              <span *ngIf="tempPreAffinage?.errors?.['min']"
+                                >La température doit être positive</span
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Brossage manuel -->
+                      <div class="form-group mb-3 d-flex flex-column">
+                        <label class="me-4">Brossage manuel</label>
+                        <div class="d-flex align-items-center">
+                          <!-- Flexbox pour aligner horizontalement -->
+                          <div class="form-check form-check-inline me-4">
+                            <input
+                              type="radio"
+                              class="form-check-input"
+                              id="brossageManuelOui"
+                              formControlName="brossageManuel"
+                              [value]="true"
+                            />
+                            <label
+                              for="brossageManuelOui"
+                              class="form-check-label ms-1"
+                              >Oui</label
+                            >
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input
+                              type="radio"
+                              class="form-check-input"
+                              id="brossageManuelNon"
+                              formControlName="brossageManuel"
+                              [value]="false"
+                            />
+                            <label
+                              for="brossageManuelNon"
+                              class="form-check-label ms-1"
+                              >Non</label
+                            >
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Température d'affinage -->
+                      <div class="form-group mb-3 d-flex">
+                        <label class="me-4">Température d'affinage (°C)</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          formControlName="tempAffinage"
+                          (input)="replaceCommaWithDot($event)"
+                          min="0"
+                          [ngClass]="{
+                            'is-invalid':
+                              tempAffinage?.invalid &&
+                              (tempAffinage?.dirty || tempAffinage?.touched)
+                          }"
+                        />
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            tempAffinage?.invalid &&
+                            (tempAffinage?.dirty || tempAffinage?.touched)
+                          "
+                        >
+                          La température d'affinage est requise et doit être un
+                          nombre valide.
+                        </div>
+                      </div>
+
+                      <!-- Système d'humidification de la cave -->
+                      <div class="form-group mb-3 d-flex">
+                        <label class="me-4"
+                          >Système d'humidification de la cave</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="humidificationCave"
+                          [ngClass]="{
+                            'is-invalid':
+                              humidificationCave?.invalid &&
+                              (humidificationCave?.dirty ||
+                                humidificationCave?.touched)
+                          }"
+                        />
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            humidificationCave?.invalid &&
+                            (humidificationCave?.dirty ||
+                              humidificationCave?.touched)
+                          "
+                        >
+                          Le système d'humidification est requis.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+                <!-- Boutons de navigation -->
+                <div class="d-flex justify-content-between mt-4">
+                  <button
+                    type="button"
+                    class="action-button-previous"
+                    (click)="previousStep()"
+                    *ngIf="currentStep > 0"
+                  >
+                    Précédent
+                  </button>
+                  <button
+                    type="button"
+                    class="action-button"
+                    (click)="nextStep()"
+                    [disabled]="isNextDisabled()"
+                    *ngIf="currentStep < 3"
+                  >
+                    Suivant
+                  </button>
+                  <button
+                    type="submit"
+                    class="action-button"
+                    *ngIf="currentStep === 3"
+                    [disabled]="isNextDisabled()"
+                  >
+                    Terminer
+                  </button>
+                </div>
+              </form>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>

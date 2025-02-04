@@ -10,6 +10,7 @@
             <table class="display dataTable" id="userTable" style="text-align: center;">
               <thead>
                 <tr>
+                  <th>Date d'Ajout</th>
                   <th>Numéro Echantillon</th>
                   <th>Code Producteur</th>
                   <th>Typicité</th>
@@ -19,6 +20,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let echantillon of echantillons">
+                  <td>{{ echantillon.updatedAt | date:'dd-MM-YYYY HH:mm:ss' }}</td>
                   <td>{{ echantillon.numeroEchan }}</td>
                   <td>{{ echantillon.codeProducteur }}</td>
                   <td>{{ echantillon.typicite }}</td>

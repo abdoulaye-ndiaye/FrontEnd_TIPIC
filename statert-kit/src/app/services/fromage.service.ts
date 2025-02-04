@@ -105,6 +105,7 @@ export class FromageService {
         reportSvAvAffinage: Boolean,
         dateMiseSousVide: Date,
         dateSortieSousVide: Date,
+        dureeSousVide: Number,
         echantillonId: string
     ) {
         return this.httpClient.post<any>(`${environment.apiUrl}/fabrication`, {
@@ -119,6 +120,7 @@ export class FromageService {
             reportSvAvAffinage,
             dateMiseSousVide,
             dateSortieSousVide,
+            dureeSousVide,
             echantillonId,
         });
     }
@@ -158,6 +160,7 @@ export class FromageService {
 
     createAffinage(
         affineur: string,
+        dureeAffinage: Number,
         preAffinage: Boolean,
         dureePreAffinage: Number,
         tempPreAffinage: Number,
@@ -168,6 +171,7 @@ export class FromageService {
     ) {
         return this.httpClient.post<any>(`${environment.apiUrl}/affinage`, {
             affineur,
+            dureeAffinage,
             preAffinage,
             dureePreAffinage,
             tempPreAffinage,

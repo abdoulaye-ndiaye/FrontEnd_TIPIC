@@ -18,6 +18,7 @@
               <thead>
                 <tr>
                   <th></th> <!-- Colonne pour les cases à cocher -->
+                  <th>Date d'Ajout</th>
                   <th>Numéro Echantillon</th>
                   <th>Code Producteur</th>
                   <th>Typicité</th>
@@ -32,6 +33,7 @@
                       type="checkbox" 
                       (change)="toggleSelection(echantillon._id, $event)" />
                   </td>
+                  <td>{{ echantillon.updatedAt | date:'dd-MM-YYYY HH:mm:ss' }}</td>
                   <td>{{ echantillon.numeroEchan }}</td>
                   <td>{{ echantillon.codeProducteur }}</td>
                   <td>{{ echantillon.typicite }}</td>

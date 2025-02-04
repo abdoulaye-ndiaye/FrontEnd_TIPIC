@@ -1,6 +1,13 @@
 <div class="card">
-  <div class="card-header">
+  <div class="card-header d-flex justify-content-between align-items-center">
     <h3>Liste des Echantillons</h3>
+    <button 
+      (click)="exportationfichier()" 
+      class="btn btn-primary"
+      [disabled]="selectedEchantillons.length === 0">
+      <i class="fa-solid fa-plus"></i>&nbsp; 
+      exportation manuelle partielle
+    </button>
   </div>
   <div class="row">
     <div class="col-lg-12 stretch-card">
@@ -10,6 +17,8 @@
             <table class="display dataTable" id="userTable" style="text-align: center;">
               <thead>
                 <tr>
+                  <th></th> <!-- Colonne pour les cases à cocher -->
+                  <th>Date d'Ajout</th>
                   <th>Numéro Echantillon</th>
                   <th>Code Producteur</th>
                   <th>Typicité</th>
@@ -19,6 +28,12 @@
               </thead>
               <tbody>
                 <tr *ngFor="let echantillon of echantillons">
+                  <td>
+                    <input 
+                      type="checkbox" 
+                      (change)="toggleSelection(echantillon._id, $event)" />
+                  </td>
+                  <td>{{ echantillon.updatedAt | date:'dd-MM-YYYY HH:mm:ss' }}</td>
                   <td>{{ echantillon.numeroEchan }}</td>
                   <td>{{ echantillon.codeProducteur }}</td>
                   <td>{{ echantillon.typicite }}</td>

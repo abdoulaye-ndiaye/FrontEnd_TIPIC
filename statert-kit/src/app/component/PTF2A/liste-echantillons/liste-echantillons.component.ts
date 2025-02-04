@@ -40,9 +40,9 @@ export class ListeEchantillonsComponent implements OnInit, OnDestroy {
             emptyTable: "Aucune donnée disponible dans le tableau",
           },
           pagingType: "full_numbers",
-          pageLength: 5,
+          pageLength: 25,
           processing: true,
-          lengthMenu: [5, 10, 25],
+          lengthMenu: [25, 40, 50, 75, 100],
         });
       }, 1000);
     }
