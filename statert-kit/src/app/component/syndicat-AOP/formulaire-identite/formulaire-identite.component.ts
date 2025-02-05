@@ -66,10 +66,10 @@ export class FormulaireIdentiteComponent implements OnInit {
 
         // Production
         categorie: ["", Validators.required],
-        raceDominante: [""],
+        raceDominante: ["BASCO_BEARNAISE"],
         nbBrebis: ["", nbBrebisValidator()],
         productivite: ["", productiviteValidator()],
-        periodeAgnelage: [""],
+        periodeAgnelage: ["OCT_NOV"],
         estive: [null],
         paturage: [null],
         laitCru: [null],
@@ -79,10 +79,11 @@ export class FormulaireIdentiteComponent implements OnInit {
         nombreTraites: [null],
         temperatureEmpressurage: [null],
         quantitePresure: [null],
-        typeFerments: [""],
+        categorieFerment: ['MESOPHILE'],  // pour mésophile, thermophile, méso&thermophile 
+        typeFerments: [""], // pour la saisie libre
         dureeCoagulation: [null],
         temperatureCaillage: [null],
-        salage: [""],
+        salage: ["A_SEC"], 
         reportVide: [null],
         dateMiseVide: [{ value: "", disabled: true }],
         dateSortieVide: [{ value: "", disabled: true }],
@@ -90,13 +91,14 @@ export class FormulaireIdentiteComponent implements OnInit {
 
         // Affinage
         nomAffineur: [""],
-        dureeAffinage: [{ value: null, disabled: true }],
+        dureeAffinage: [{ value: '', disabled: true }],
         preAffinage: [null],
         dureePreAffinage: [{ value: '', disabled: true }],
         tempPreAffinage: [{ value: '', disabled: true }],
         brossageManuel: [null],
         tempAffinage: [null],
-        humidificationCave: [""],
+        humidificationActive: [null],  // boolean pour oui/non
+        humidificationCave: [''],      // texte pour le type d'humidificateur
       },
       { validators: [this.dateRangeValidator, this.fabricationDateValidator] }
     );
@@ -210,6 +212,17 @@ export class FormulaireIdentiteComponent implements OnInit {
 
     this.cheeseForm.get("dateSortieVide")?.valueChanges.subscribe(() => {
       calculateSousVideDuration();
+    });
+
+    // Ajout d'un listener pour la gestion conditionnelle
+    this.cheeseForm.get('humidificationActive')?.valueChanges.subscribe(value => {
+        const humidificationControl = this.cheeseForm.get('humidificationCave');
+        if (value === true) {
+            humidificationControl?.setValidators([Validators.required]);
+        } else {
+            humidificationControl?.clearValidators();
+        }
+        humidificationControl?.updateValueAndValidity();
     });
   }
 
@@ -344,6 +357,11 @@ replaceCommaWithDot(event: any) {
           ? this.dateMiseVide?.valid && this.dateSortieVide?.valid
           : true; // Si "Non" est sélectionné ou null, on n'exige pas les dates
 
+        // Validation pour l'humidification
+        const isHumidificationValid = this.cheeseForm.get('humidificationActive')?.value === true
+        ? this.cheeseForm.get('humidificationCave')?.valid
+        : true;
+
         // return (
         //     !this.nomAffineur?.valid ||
         //     !this.preAffinage?.valid ||
@@ -361,7 +379,8 @@ replaceCommaWithDot(event: any) {
           this.cheeseForm.hasError("fabricationDateError") ||
           !this.preAffinage?.valid ||
           !isPreAffinageValid ||
-          !isFinalSousVideValid
+          !isFinalSousVideValid ||
+          !isHumidificationValid
         );
       default:
         return true; // Par défaut, le bouton est activé
@@ -376,6 +395,9 @@ replaceCommaWithDot(event: any) {
 
   // Getter pour faciliter l'accès aux contrôles dans le template
 
+  get categorieFerment() {
+    return this.cheeseForm.get("categorieFerment");
+  }
   get dureeSousVide() {
     return this.cheeseForm.get("dureeSousVide");
   }
@@ -507,6 +529,8 @@ replaceCommaWithDot(event: any) {
     this.validate = true;
     if (this.cheeseForm.valid) {
       const formValue = this.cheeseForm.value;
+      const humidificationValue = formValue.humidificationActive ? 
+        formValue.humidificationCave : null;
 
       try {
         // Utilisation de firstValueFrom
@@ -543,29 +567,32 @@ replaceCommaWithDot(event: any) {
             formValue.nombreTraites,
             formValue.temperatureEmpressurage,
             formValue.quantitePresure,
+            formValue.categorieFerment,
             formValue.typeFerments,
             formValue.dureeCoagulation,
             formValue.temperatureCaillage,
             formValue.salage,
             formValue.reportVide,
-            formValue.dateMiseVide,
-            formValue.dateSortieVide,
-            formValue.dureeSousVide,
+            formValue.dateMiseVide ?? null,
+            formValue.dateSortieVide ?? null,
+            formValue.dureeSousVide ?? null,
             echantillonId
           )
         );
+        // Récupération de la valeur calculée avec vérification
+        const dureeAffinageValue = this.cheeseForm.get('dureeAffinage')?.value ?? null; // Valeur par défaut 0 si null
 
         // Appel au service createAffinage
         await firstValueFrom(
           this.fromage.createAffinage(
             formValue.nomAffineur,
-            formValue.dureeAffinage,
+            dureeAffinageValue,
             formValue.preAffinage,
-            formValue.dureePreAffinage,
-            formValue.tempPreAffinage,
+            formValue.dureePreAffinage ?? null,
+            formValue.tempPreAffinage ?? null,
             formValue.brossageManuel,
             formValue.tempAffinage,
-            formValue.humidificationCave,
+            humidificationValue,
             echantillonId
           )
         );
@@ -575,6 +602,8 @@ replaceCommaWithDot(event: any) {
           icon: "success",
           title: "Succès",
           text: "Formulaire soumis avec succès !",
+        }).then(() => {
+          this.cheeseForm.reset(); // Réinitialiser le formulaire
         });
       } catch (error: any) {
         console.error("Erreur lors de la soumission du formulaire:", error);

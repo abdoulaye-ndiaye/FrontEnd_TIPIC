@@ -2,7 +2,7 @@
 .form-check {
     display: flex; /* Utiliser flexbox pour aligner les éléments sur la même ligne */
     align-items: center; /* Aligne les éléments au centre verticalement */
-    margin-right: 20px; /* Ajoute un espace entre les boutons radio */
+    margin-right: 70px; /* Ajoute un espace entre les boutons radio */
 }
 
 /* Spécificités pour les labels */
@@ -217,3 +217,14 @@ select.list-dt:focus {
     background-color: #ffffff;
     transform: scale(1.05);
 }
+
+.form-check {
+    width: 50px;  /* largeur fixe pour tous les conteneurs */
+}
+
+.form-check-input {
+    width: 20px;   /* taille fixe pour les boutons radio */
+    height: 20px;  /* taille fixe pour les boutons radio */
+    margin-top: 2px;  /* ajustement de l'alignement vertical */
+}
+

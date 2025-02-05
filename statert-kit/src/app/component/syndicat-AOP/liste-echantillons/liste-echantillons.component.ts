@@ -25,7 +25,8 @@ export class ListeEchantillonsComponent implements OnInit, OnDestroy {
         this.fromageService.getAll().subscribe((data) => {
             this.echantillons = data;
         });
-
+        
+        
         // Initialisation de DataTables avec setTimeout
         setTimeout(() => {
             $("#userTable").DataTable({
@@ -47,6 +48,11 @@ export class ListeEchantillonsComponent implements OnInit, OnDestroy {
                 pageLength: 25,
                 processing: true,
                 lengthMenu: [25, 40, 50, 75, 100],
+                columnDefs: [
+                    { targets: [1,5], type: 'date' }
+                ],
+                order: [[1, "desc"]]
+                
             });
         }, 1000);
     }
