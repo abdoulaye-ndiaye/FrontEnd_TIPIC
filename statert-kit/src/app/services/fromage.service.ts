@@ -139,6 +139,7 @@ export class FromageService {
         reportSvAvAffinage: Boolean,
         dateMiseSousVide: Date,
         dateSortieSousVide: Date,
+        dureeSousVide: Number,
         echantillonId: string
     ) {
         return this.httpClient.put<any>(
@@ -155,6 +156,7 @@ export class FromageService {
                 reportSvAvAffinage,
                 dateMiseSousVide,
                 dateSortieSousVide,
+                dureeSousVide,
                 echantillonId,
             }
         );
@@ -168,6 +170,7 @@ export class FromageService {
         tempPreAffinage: Number,
         brossManuel: Boolean,
         tempAffinage: Number,
+        humidificationActive: Boolean,
         sysHumidCave: string,
         echantillonId: string
     ) {
@@ -179,6 +182,7 @@ export class FromageService {
             tempPreAffinage,
             brossManuel,
             tempAffinage,
+            humidificationActive,
             sysHumidCave,
             echantillonId,
         });
@@ -186,11 +190,13 @@ export class FromageService {
     updateAffinage(
         id: string,
         affineur: string,
+        dureeAffinage: Number,
         preAffinage: Boolean,
         dureePreAffinage: Number,
         tempPreAffinage: Number,
         brossManuel: Boolean,
         tempAffinage: Number,
+        humidificationActive: Boolean,
         sysHumidCave: string,
         echantillonId: string
     ) {
@@ -198,11 +204,13 @@ export class FromageService {
             `${environment.apiUrl}/affinage/${id}`,
             {
                 affineur,
+                dureeAffinage,
                 preAffinage,
                 dureePreAffinage,
                 tempPreAffinage,
                 brossManuel,
                 tempAffinage,
+                humidificationActive,
                 sysHumidCave,
                 echantillonId,
             }

@@ -592,6 +592,7 @@ replaceCommaWithDot(event: any) {
             formValue.tempPreAffinage ?? null,
             formValue.brossageManuel,
             formValue.tempAffinage,
+            formValue.humidificationActive,
             humidificationValue,
             echantillonId
           )

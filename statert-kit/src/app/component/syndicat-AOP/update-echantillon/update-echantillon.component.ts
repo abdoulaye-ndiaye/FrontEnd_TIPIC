@@ -5,6 +5,7 @@ import {
     FormGroup,
     ReactiveFormsModule,
     ValidationErrors,
+    ValidatorFn,
     Validators,
 } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -13,6 +14,27 @@ import Swal from "sweetalert2";
 import { FromageService } from "../../../services/fromage.service";
 import { CommonModule, DatePipe, Location } from "@angular/common";
 
+// Validateur personnalisé pour nbBrebis
+export function nbBrebisValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+        const value = control.value;
+        if (!value) {
+            return null; // Retourne null si le champ est vide (optionnel)
+        }
+        return value >= 1 ? null : { minValue: { min: 1, actual: value } };
+    };
+}
+
+// Validateur personnalisé pour productivite
+export function productiviteValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+        const value = control.value;
+        if (!value) {
+            return null; // Retourne null si le champ est vide (optionnel)
+        }
+        return value >= 0 ? null : { minValue: { min: 0, actual: value } };
+    };
+}
 @Component({
     selector: "app-update-echantillon",
     standalone: true,
@@ -39,52 +61,58 @@ export class UpdateEchantillonComponent implements OnInit {
         private router: Router,
         private location: Location
     ) {
-        this.cheeseForm = this.fb.group({
-            // Identifiants
-            datePrelevement: ["", Validators.required],
-            numeroEchantillon: [
-                "",
-                [Validators.required, Validators.minLength(10)],
-            ],
-            identifiantProducteur: [
-                "",
-                [Validators.required, Validators.minLength(6)],
-            ],
-            typicite: ["", Validators.required],
+        this.cheeseForm = this.fb.group(
+            {
+                // Identifiants
+                datePrelevement: ["", Validators.required],
+                numeroEchantillon: [
+                    "",
+                    [Validators.required, Validators.minLength(10)],
+                ],
+                identifiantProducteur: [
+                    "",
+                    [Validators.required, Validators.minLength(6)],
+                ],
+                typicite: ["", Validators.required],
 
-            // Production
-            categorie: ["", Validators.required],
-            raceDominante: ["", Validators.required],
-            nbBrebis: ["", [Validators.required, Validators.min(1)]],
-            productivite: ["", [Validators.required, Validators.min(0)]],
-            periodeAgnelage: ["", Validators.required],
-            estive: [null, Validators.required],
-            paturage: [null, Validators.required],
-            laitCru: [null, Validators.required],
+                // Production
+                categorie: ["", Validators.required],
+                raceDominante: ["BASCO_BEARNAISE"],
+                nbBrebis: ["", nbBrebisValidator()],
+                productivite: ["", productiviteValidator()],
+                periodeAgnelage: ["OCT_NOV"],
+                estive: [null],
+                paturage: [null],
+                laitCru: [null],
 
-            // Fabrication
-            dateFabrication: ["", Validators.required],
-            nombreTraites: [null, Validators.required],
-            temperatureEmpressurage: [null, Validators.required],
-            quantitePresure: [null, Validators.required],
-            typeFerments: ["", Validators.required],
-            dureeCoagulation: [null, Validators.required],
-            temperatureCaillage: [null, Validators.required],
-            salage: ["", Validators.required],
-            reportVide: ["", Validators.required],
-            // Adding custom validators for date fields
-            dateMiseVide: ["", [Validators.required, this.dateValidator]],
-            dateSortieVide: ["", [Validators.required, this.dateValidator]],
+                // Fabrication
+                dateFabrication: [""],
+                nombreTraites: [null],
+                temperatureEmpressurage: [null],
+                quantitePresure: [null],
+                categorieFerment: ['MESOPHILE'],  // pour mésophile, thermophile, méso&thermophile 
+                typeFerments: [""], // pour la saisie libre
+                dureeCoagulation: [null],
+                temperatureCaillage: [null],
+                salage: ["A_SEC"],
+                reportVide: [null],
+                dateMiseVide: [{ value: "", disabled: true }],
+                dateSortieVide: [{ value: "", disabled: true }],
+                dureeSousVide: [{ value: null, disabled: true }],
 
-            // Affinage
-            nomAffineur: ["", Validators.required],
-            preAffinage: [null, Validators.required],
-            dureeAffinage: [null, Validators.required],
-            brossageManuel: [null, Validators.required],
-            tempPreAffinage: [null, Validators.required],
-            tempAffinage: [null, Validators.required],
-            humidificationCave: ["", Validators.required],
-        },{ validators: this.dateRangeValidator });
+                // Affinage
+                nomAffineur: [""],
+                dureeAffinage: [{ value: '', disabled: true }],
+                preAffinage: [null],
+                dureePreAffinage: [{ value: '', disabled: true }],
+                tempPreAffinage: [{ value: '', disabled: true }],
+                brossageManuel: [null],
+                tempAffinage: [null],
+                humidificationActive: [null],  // boolean pour oui/non
+                humidificationCave: [''],      // texte pour le type d'humidificateur
+            },
+            { validators: [this.dateRangeValidator, this.fabricationDateValidator] }
+        );
     }
 
     ngOnInit(): void {
@@ -92,21 +120,126 @@ export class UpdateEchantillonComponent implements OnInit {
             this.id_echantillon = params["id"];
         });
 
-        // Surveiller les changements du champ "preAffinage"
-        this.cheeseForm.get("preAffinage")?.valueChanges.subscribe((value) => {
-            if (!value) {
-                this.cheeseForm.get("dureeAffinage")?.setValue(null);
-                this.cheeseForm.get("tempAffinage")?.setValue(null);
+        // Observer pour le preAffinage
+        this.cheeseForm.get('preAffinage')?.valueChanges.subscribe((value) => {
+            const dureeControl = this.cheeseForm.get('dureePreAffinage');
+            const tempControl = this.cheeseForm.get('tempPreAffinage');
+
+            if (value === true) {
+                dureeControl?.enable();
+                tempControl?.enable();
+                dureeControl?.setValidators([Validators.required, Validators.min(0)]);
+                tempControl?.setValidators([Validators.required, Validators.min(0)]);
+            } else {
+                dureeControl?.disable();
+                tempControl?.disable();
+                dureeControl?.clearValidators();
+                tempControl?.clearValidators();
+                dureeControl?.setValue('');
+                tempControl?.setValue('');
             }
+
+            dureeControl?.updateValueAndValidity();
+            tempControl?.updateValueAndValidity();
         });
 
-         // Add a subscriber to validate date relationships
-         this.cheeseForm.get('dateMiseVide')?.valueChanges.subscribe(() => {
-            this.cheeseForm.get('dateSortieVide')?.updateValueAndValidity();
+        // Nouveau : Calcul automatique de la durée d'affinage
+        const calculateAgingDuration = () => {
+            const fabricationDate = this.cheeseForm.get("dateFabrication")?.value;
+            const samplingDate = this.cheeseForm.get("datePrelevement")?.value;
+
+            if (fabricationDate && samplingDate) {
+                const fabrication = new Date(fabricationDate);
+                const sampling = new Date(samplingDate);
+
+                // Calcul de la différence en jours
+                const diffTime = Math.abs(sampling.getTime() - fabrication.getTime());
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                this.cheeseForm.get("dureeAffinage")?.patchValue(diffDays);
+            } else {
+                this.cheeseForm.get("dureeAffinage")?.patchValue(null);
+            }
+        };
+
+        // Surveillance des changements de dates pour mettre à jour la durée d'affinage
+        this.cheeseForm.get("dateFabrication")?.valueChanges.subscribe(() => {
+            calculateAgingDuration();
         });
 
-        this.cheeseForm.get('dateSortieVide')?.valueChanges.subscribe(() => {
-            this.cheeseForm.get('dateMiseVide')?.updateValueAndValidity();
+        this.cheeseForm.get("datePrelevement")?.valueChanges.subscribe(() => {
+            calculateAgingDuration();
+        });
+
+        // Observer pour le reportVide
+        this.cheeseForm.get("reportVide")?.valueChanges.subscribe((value) => {
+            const dateMiseVideControl = this.cheeseForm.get("dateMiseVide");
+            const dateSortieVideControl = this.cheeseForm.get("dateSortieVide");
+
+            if (value === true) {
+                dateMiseVideControl?.enable();
+                dateSortieVideControl?.enable();
+                dateMiseVideControl?.setValidators([
+                    Validators.required,
+                    this.dateValidator,
+                ]);
+                dateSortieVideControl?.setValidators([
+                    Validators.required,
+                    this.dateValidator,
+                ]);
+            } else {
+                dateMiseVideControl?.disable();
+                dateSortieVideControl?.disable();
+                dateMiseVideControl?.clearValidators();
+                dateSortieVideControl?.clearValidators();
+                dateMiseVideControl?.setValue("");
+                dateSortieVideControl?.setValue("");
+                this.cheeseForm.get("dureeSousVide")?.setValue(null);
+            }
+
+            dateMiseVideControl?.updateValueAndValidity();
+            dateSortieVideControl?.updateValueAndValidity();
+        });
+
+        // Calcul automatique de la durée sous vide
+        const calculateSousVideDuration = () => {
+            const startDate = this.cheeseForm.get("dateMiseVide")?.value;
+            const endDate = this.cheeseForm.get("dateSortieVide")?.value;
+
+            if (startDate && endDate) {
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+
+                if (start <= end) {
+                    const diffTime = Math.abs(end.getTime() - start.getTime());
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    this.cheeseForm.get("dureeSousVide")?.setValue(diffDays);
+                } else {
+                    this.cheeseForm.get("dureeSousVide")?.setValue(null);
+                }
+            } else {
+                this.cheeseForm.get("dureeSousVide")?.setValue(null);
+            }
+        };
+
+        // Observe les changements de dates pour calculer la durée
+        this.cheeseForm.get("dateMiseVide")?.valueChanges.subscribe(() => {
+            calculateSousVideDuration();
+        });
+
+        this.cheeseForm.get("dateSortieVide")?.valueChanges.subscribe(() => {
+            calculateSousVideDuration();
+        });
+
+        // Ajout d'un listener pour la gestion conditionnelle
+        this.cheeseForm.get('humidificationActive')?.valueChanges.subscribe(value => {
+            const humidificationControl = this.cheeseForm.get('humidificationCave');
+            if (value === true) {
+                humidificationControl?.setValidators([Validators.required]);
+            } else {
+                humidificationControl?.clearValidators();
+            }
+            humidificationControl?.updateValueAndValidity();
         });
 
         this.fromageService
@@ -143,11 +276,13 @@ export class UpdateEchantillonComponent implements OnInit {
 
                                 this.cheeseForm.patchValue({
                                     nomAffineur: data2[0].affineur,
+                                    dureeAffinage: data2[0].dureeAffinage, // Correction de la propriété
                                     preAffinage: data2[0].preAffinage,
-                                    dureeAffinage: data2[0].dureePreAffinage,
+                                    dureePreAffinage: data2[0].dureePreAffinage, // Ajout de cette propriété manquante
                                     tempAffinage: data2[0].tempAffinage,
                                     tempPreAffinage: data2[0].tempPreAffinage,
                                     brossageManuel: data2[0].brossManuel,
+                                    humidificationActive: data2[0].humidificationActive,
                                     humidificationCave: data2[0].sysHumidCave,
                                 });
                                 this.fromageService
@@ -162,20 +297,14 @@ export class UpdateEchantillonComponent implements OnInit {
                                                     data3[0].dateFabri,
                                                     "yyyy-MM-dd"
                                                 ),
-                                            nombreTraites:
-                                                data3[0].nbreTraitesFabri,
-                                            temperatureEmpressurage:
-                                                data3[0].tempEmpresurage,
-                                            quantitePresure:
-                                                data3[0].quantEmpresurage,
+                                            nombreTraites: data3[0].nbreTraitesFabri,
+                                            temperatureEmpressurage: data3[0].tempEmpresurage,
+                                            quantitePresure: data3[0].quantEmpresurage,
                                             typeFerments: data3[0].typeFerment,
-                                            dureeCoagulation:
-                                                data3[0].dureeCoagulation,
-                                            temperatureCaillage:
-                                                data3[0].tempChauffage,
+                                            dureeCoagulation: data3[0].dureeCoagulation,
+                                            temperatureCaillage: data3[0].tempChauffage,
                                             salage: data3[0].typeSalage,
-                                            reportVide:
-                                                data3[0].reportSvAvAffinage,
+                                            reportVide: data3[0].reportSvAvAffinage,
                                             dateMiseVide:
                                                 this.datePipe.transform(
                                                     data3[0].dateMiseSousVide,
@@ -186,12 +315,13 @@ export class UpdateEchantillonComponent implements OnInit {
                                                     data3[0].dateSortieSousVide,
                                                     "yyyy-MM-dd"
                                                 ),
+                                            dureeSousVide: data3[0].dureeSousVide // Ajout de cette propriété manquante
                                         });
                                     });
                             });
                     });
             });
-            
+
     }
 
     // Custom date validator to ensure valid date format
@@ -215,8 +345,8 @@ export class UpdateEchantillonComponent implements OnInit {
 
     // Custom validator to ensure dateSortieVide is after dateMiseVide
     dateRangeValidator(group: FormGroup): ValidationErrors | null {
-        const dateMiseVide = group.get('dateMiseVide')?.value;
-        const dateSortieVide = group.get('dateSortieVide')?.value;
+        const dateMiseVide = group.get("dateMiseVide")?.value;
+        const dateSortieVide = group.get("dateSortieVide")?.value;
 
         if (!dateMiseVide || !dateSortieVide) {
             return null;
@@ -225,11 +355,27 @@ export class UpdateEchantillonComponent implements OnInit {
         const miseVideDate = new Date(dateMiseVide);
         const sortieVideDate = new Date(dateSortieVide);
 
-        return sortieVideDate <= miseVideDate 
-            ? { invalidDateRange: true } 
-            : null;
+        return sortieVideDate <= miseVideDate ? { invalidDateRange: true } : null;
     }
 
+    // Ajout du validateur pour les dates de fabrication/prélèvement
+    fabricationDateValidator(group: AbstractControl): ValidationErrors | null {
+        const fabricationDate = group.get("dateFabrication")?.value;
+        const samplingDate = group.get("datePrelevement")?.value;
+
+        if (fabricationDate && samplingDate) {
+            const fabrication = new Date(fabricationDate);
+            const sampling = new Date(samplingDate);
+
+            if (fabrication > sampling) {
+                return {
+                    fabricationDateError:
+                        "La date de fabrication doit être antérieure à la date de prélèvement",
+                };
+            }
+        }
+        return null;
+    }
     goToStep(step: number) {
         if (step >= 0 && step <= 3) {
             this.currentStep = step;
@@ -256,7 +402,7 @@ export class UpdateEchantillonComponent implements OnInit {
         input.value = input.value.replace(/[^0-9]/g, "");
     }
 
-    replaceCommaWithDot(event: Event) {}
+    replaceCommaWithDot(event: Event) { }
 
     isNextDisabled(): boolean {
         switch (this.currentStep) {
@@ -269,7 +415,7 @@ export class UpdateEchantillonComponent implements OnInit {
                 );
             case 1:
                 return (
-                    !this.categorie?.valid 
+                    !this.categorie?.valid
                     // !this.raceDominante?.valid ||
                     // !this.nbBrebis?.valid ||
                     // !this.productivite?.valid ||
@@ -282,19 +428,19 @@ export class UpdateEchantillonComponent implements OnInit {
                 return (
                     this.cheeseForm.hasError('invalidDateRange')
                 );
-                // return (
-                //     !this.dateFabrication?.valid ||
-                //     !this.nombreTraites?.valid ||
-                //     !this.temperatureEmpressurage?.valid ||
-                //     !this.quantitePresure?.valid ||
-                //     !this.typeFerments?.valid ||
-                //     !this.dureeCoagulation?.valid ||
-                //     !this.temperatureCaillage?.valid ||
-                //     !this.salage?.valid ||
-                //     !this.reportVide?.valid ||
-                //     !this.dateMiseVide?.valid ||
-                //     !this.dateSortieVide?.valid
-                // );
+            // return (
+            //     !this.dateFabrication?.valid ||
+            //     !this.nombreTraites?.valid ||
+            //     !this.temperatureEmpressurage?.valid ||
+            //     !this.quantitePresure?.valid ||
+            //     !this.typeFerments?.valid ||
+            //     !this.dureeCoagulation?.valid ||
+            //     !this.temperatureCaillage?.valid ||
+            //     !this.salage?.valid ||
+            //     !this.reportVide?.valid ||
+            //     !this.dateMiseVide?.valid ||
+            //     !this.dateSortieVide?.valid
+            // );
             case 3:
                 // Vérifier si le pré-affinage est activé et si les champs associés sont valides
                 // const isPreAffinageValid = this.cheeseForm.get('preAffinage')?.value
@@ -322,6 +468,13 @@ export class UpdateEchantillonComponent implements OnInit {
     }
 
     // Getter pour faciliter l'accès aux contrôles dans le template
+
+    get categorieFerment() {
+        return this.cheeseForm.get("categorieFerment");
+    }
+    get dureeSousVide() {
+        return this.cheeseForm.get("dureeSousVide");
+    }
     get datePrelevement() {
         return this.cheeseForm.get("datePrelevement");
     }
@@ -418,6 +571,10 @@ export class UpdateEchantillonComponent implements OnInit {
         return this.cheeseForm.get("dureeAffinage");
     }
 
+    get dureePreAffinage() {
+        return this.cheeseForm.get("dureePreAffinage");
+    }
+
     get nomAffineur() {
         return this.cheeseForm.get("nomAffineur");
     }
@@ -492,6 +649,7 @@ export class UpdateEchantillonComponent implements OnInit {
                         formValue.reportVide,
                         formValue.dateMiseVide,
                         formValue.dateSortieVide,
+                        formValue.dureeSousVide,
                         echantillonId
                     )
                 );
@@ -501,11 +659,13 @@ export class UpdateEchantillonComponent implements OnInit {
                     this.fromageService.updateAffinage(
                         this.affinage._id,
                         formValue.nomAffineur,
-                        formValue.preAffinage,
                         formValue.dureeAffinage,
+                        formValue.preAffinage,
+                        formValue.dureePreAffinage,
                         formValue.tempAffinage,
                         formValue.brossageManuel,
                         formValue.tempAffinage,
+                        formValue.humidificationActive,
                         formValue.humidificationCave,
                         echantillonId
                     )
