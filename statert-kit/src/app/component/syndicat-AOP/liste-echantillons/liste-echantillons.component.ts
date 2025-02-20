@@ -4,6 +4,7 @@ import { FromageService } from "../../../services/fromage.service";
 import $ from "jquery";
 import "datatables.net";
 import { Router } from "@angular/router";
+import { ChangeDetectorRef } from "@angular/core";
 
 @Component({
     selector: "app-liste-echantillons",
@@ -18,15 +19,15 @@ export class ListeEchantillonsComponent implements OnInit, OnDestroy {
 
     constructor(
         private fromageService: FromageService,
-        private router: Router
+        private router: Router,
+        private cdr: ChangeDetectorRef
     ) {}
 
     ngOnInit(): void {
         this.fromageService.getAll().subscribe((data) => {
             this.echantillons = data;
         });
-        
-        
+
         // Initialisation de DataTables avec setTimeout
         setTimeout(() => {
             $("#userTable").DataTable({
@@ -48,11 +49,8 @@ export class ListeEchantillonsComponent implements OnInit, OnDestroy {
                 pageLength: 25,
                 processing: true,
                 lengthMenu: [25, 40, 50, 75, 100],
-                columnDefs: [
-                    { targets: [1,5], type: 'date' }
-                ],
-                order: [[1, "desc"]]
-                
+                columnDefs: [{ targets: [1, 5], type: "date" }],
+                order: [[1, "desc"]],
             });
         }, 1000);
     }
@@ -70,14 +68,51 @@ export class ListeEchantillonsComponent implements OnInit, OnDestroy {
     toggleSelection(id: string, event: Event): void {
         const checkbox = event.target as HTMLInputElement;
         if (checkbox.checked) {
-          this.selectedEchantillons.push(id);
+            this.selectedEchantillons.push(id);
         } else {
-          this.selectedEchantillons = this.selectedEchantillons.filter(
-            (selectedId) => selectedId !== id
-          );
+            this.selectedEchantillons = this.selectedEchantillons.filter(
+                (selectedId) => selectedId !== id
+            );
         }
-      }
-      exportationfichier(): void {
+    }
+    // Vérifier si tous les échantillons sont sélectionnés
+    isAllSelected(): boolean {
+        return (
+            this.echantillons.length > 0 &&
+            this.selectedEchantillons.length === this.echantillons.length
+        );
+    }
+
+    // Sélectionner / Désélectionner tous les échantillons
+    toggleSelectAll(event: Event): void {
+        const checked = (event.target as HTMLInputElement).checked;
+
+        if (checked) {
+            this.selectedEchantillons = this.echantillons.map(
+                (e: { _id: any }) => e._id
+            );
+        } else {
+            this.selectedEchantillons = [];
+        }
+
+        this.cdr.detectChanges(); // Force Angular à mettre à jour les cases à cocher
+    }
+
+    isChecked(id: string): boolean {
+        return this.selectedEchantillons.includes(id);
+    }
+
+    exportationfichier(): void {
         // code pour l'exportation du fichier
-      }
+        this.fromageService
+            .exportEchantillons(this.selectedEchantillons)
+            .subscribe((blob) => {
+                const a = document.createElement("a");
+                const objectUrl = URL.createObjectURL(blob);
+                a.href = objectUrl;
+                a.download = "export_echantillons.csv";
+                a.click();
+                URL.revokeObjectURL(objectUrl);
+            });
+    }
 }

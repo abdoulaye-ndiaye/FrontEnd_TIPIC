@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../environments/environment";
+import { Observable } from "rxjs/internal/Observable";
 
 @Injectable({
     providedIn: "root",
@@ -39,6 +40,13 @@ export class FromageService {
                 datePrelevement,
                 codeProducteur,
             }
+        );
+    }
+    exportEchantillons(ids: string[]): Observable<Blob> {
+        return this.httpClient.post(
+            `${environment.apiUrl}/echantillon/csv`,
+            { ids },
+            { responseType: "blob" }
         );
     }
 
