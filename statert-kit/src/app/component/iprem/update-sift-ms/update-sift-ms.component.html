@@ -1,0 +1,182 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <button (click)="goBack()" class="btn btn-light">
+                    <i class="fa fa-arrow-left"></i> Retour
+                </button>
+                <div class="card-body">
+                    <form [formGroup]="siftMsForm" (ngSubmit)="onSubmit()">
+                        <div class="form theme-form">
+                            <h4 class="page-title">Modification des fichiers SIFT-MS pour l'echantillon {{fromage?.numeroEchan}}</h4>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="mb-3">
+                                        <label>Nombre de réplicats ({{initialReplicatCount}} existant(s), ajoutez-en)</label>
+                                        <input class="form-control" type="number" min="{{initialReplicatCount}}" max="100" 
+                                            formControlName="nombreReplicats"
+                                            (change)="onReplicatsChange()" 
+                                            [ngClass]="{ 'is-invalid' : (nombreReplicats?.touched || validate) && nombreReplicats?.errors, 'is-valid' : !nombreReplicats?.errors}">
+                                        <div class="invalid-feedback"
+                                            *ngIf="(nombreReplicats?.touched || validate) && nombreReplicats?.errors">
+                                            Le nombre de réplicats est requis (minimum {{initialReplicatCount}}, maximum 100).
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div *ngFor="let replicat of replicats; let i = index">
+                                <hr>
+                                <div class="card mb-4" [ngClass]="{'border-primary': i < initialReplicatCount}">
+                                    <div class="card-header" [ngClass]="{'bg-light': i < initialReplicatCount}">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h5>Réplicat {{i+1}} {{i < initialReplicatCount ? '(existant)' : '(nouveau)'}}</h5>
+                                            <div *ngIf="i < initialReplicatCount">
+                                                <!-- Ajout des boutons pour les réplicats existants -->
+                                                <div class="btn-group" role="group">
+                                                    <!-- Affichage des boutons de téléchargement pour les fichiers existants -->
+                                                    <button type="button" class="btn btn-sm btn-info me-1" 
+                                                        *ngIf="hasExistingFile(i, 'echantillon_positif')" 
+                                                        (click)="telecharger(siftMsList[i]._id, 'echantillon_positif')">
+                                                        <i class="fa fa-download"></i> Éch. Positif
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-info me-1" 
+                                                        *ngIf="hasExistingFile(i, 'echantillon_negatif')" 
+                                                        (click)="telecharger(siftMsList[i]._id, 'echantillon_negatif')">
+                                                        <i class="fa fa-download"></i> Éch. Négatif
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-info me-1" 
+                                                        *ngIf="hasExistingFile(i, 'blanc_positif')" 
+                                                        (click)="telecharger(siftMsList[i]._id, 'blanc_positif')">
+                                                        <i class="fa fa-download"></i> Blanc Positif
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-info me-1"
+                                                    *ngIf="hasExistingFile(i, 'blanc_negatif')" 
+                                                        (click)="telecharger(siftMsList[i]._id, 'blanc_negatif')">
+                                                        <i class="fa fa-download"></i> Blanc Négatif
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-danger" 
+                                                        (click)="delete(siftMsList[i]._id)">
+                                                        <i class="fa fa-trash"></i> Supprimer
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <!-- Fichiers de blanc (optionnels) -->
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Fichier Blanc Positif</label>
+                                                <div class="input-group">
+                                                    <input class="form-control" type="text"
+                                                        formControlName="blanc_positif_{{i}}">
+                                                    <input type="file" class="d-none" #fileInputBlancPositif
+                                                        id="blanc_positif_file_{{i}}"
+                                                        (change)="onFileChange($event, i, 'blanc_positif')">
+                                                    <button class="btn btn-outline-secondary" type="button"
+                                                        (click)="fileInputBlancPositif.click()">
+                                                        <i class="fa fa-upload"></i> Sélectionner
+                                                    </button>
+                                                </div>
+                                                <div class="form-text" *ngIf="hasFile(i, 'blanc_positif')">
+                                                    <span class="text-success"><i class="fa fa-check"></i> Fichier sélectionné</span>
+                                                </div>
+                                                <div class="form-text" *ngIf="i < initialReplicatCount && hasExistingFile(i, 'blanc_positif') && !hasFile(i, 'blanc_positif')">
+                                                    <span class="text-info"><i class="fa fa-info-circle"></i> Fichier existant</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Fichier Blanc Négatif</label>
+                                                <div class="input-group">
+                                                    <input class="form-control" type="text"
+                                                        formControlName="blanc_negatif_{{i}}">
+                                                    <input type="file" class="d-none" #fileInputBlancNegatif
+                                                        id="blanc_negatif_file_{{i}}"
+                                                        (change)="onFileChange($event, i, 'blanc_negatif')">
+                                                    <button class="btn btn-outline-secondary" type="button"
+                                                        (click)="fileInputBlancNegatif.click()">
+                                                        <i class="fa fa-upload"></i> Sélectionner
+                                                    </button>
+                                                </div>
+                                                <div class="form-text" *ngIf="hasFile(i, 'blanc_negatif')">
+                                                    <span class="text-success"><i class="fa fa-check"></i> Fichier sélectionné</span>
+                                                </div>
+                                                <div class="form-text" *ngIf="i < initialReplicatCount && hasExistingFile(i, 'blanc_negatif') && !hasFile(i, 'blanc_negatif')">
+                                                    <span class="text-info"><i class="fa fa-info-circle"></i> Fichier existant</span>
+                                                </div>
+                                            </div>
+                                            <!-- Fichiers d'échantillon (obligatoires) -->
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Fichier Échantillon Positif <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <input class="form-control" type="text"
+                                                        formControlName="echantillon_positif_{{i}}"
+                                                        [ngClass]="{ 'is-invalid': (validate) && siftMsForm.get('echantillon_positif_'+i)?.errors }">
+                                                    <input type="file" class="d-none" #fileInputPositif
+                                                        id="echantillon_positif_file_{{i}}"
+                                                        (change)="onFileChange($event, i, 'echantillon_positif')">
+                                                    <button class="btn btn-outline-secondary" type="button"
+                                                        (click)="fileInputPositif.click()">
+                                                        <i class="fa fa-upload"></i> Sélectionner
+                                                    </button>
+                                                </div>
+                                                <div class="form-text" *ngIf="hasFile(i, 'echantillon_positif')">
+                                                    <span class="text-success"><i class="fa fa-check"></i> Fichier sélectionné</span>
+                                                </div>
+                                                <div class="form-text" *ngIf="i < initialReplicatCount && hasExistingFile(i, 'echantillon_positif') && !hasFile(i, 'echantillon_positif')">
+                                                    <span class="text-info"><i class="fa fa-info-circle"></i> Fichier existant</span>
+                                                </div>
+                                                <div class="invalid-feedback" *ngIf="(validate) && siftMsForm.get('echantillon_positif_'+i)?.errors">
+                                                    L'identifiant d'échantillon positif est requis.
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Fichier Échantillon Négatif <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <input class="form-control" type="text"
+                                                        formControlName="echantillon_negatif_{{i}}"
+                                                        [ngClass]="{ 'is-invalid': (validate) && siftMsForm.get('echantillon_negatif_'+i)?.errors }">
+                                                    <input type="file" class="d-none" #fileInputNegatif
+                                                        id="echantillon_negatif_file_{{i}}"
+                                                        (change)="onFileChange($event, i, 'echantillon_negatif')">
+                                                    <button class="btn btn-outline-secondary" type="button"
+                                                        (click)="fileInputNegatif.click()">
+                                                        <i class="fa fa-upload"></i> Sélectionner
+                                                    </button>
+                                                </div>
+                                                <div class="form-text" *ngIf="hasFile(i, 'echantillon_negatif')">
+                                                    <span class="text-success"><i class="fa fa-check"></i> Fichier sélectionné</span>
+                                                </div>
+                                                <div class="form-text" *ngIf="i < initialReplicatCount && hasExistingFile(i, 'echantillon_negatif') && !hasFile(i, 'echantillon_negatif')">
+                                                    <span class="text-info"><i class="fa fa-info-circle"></i> Fichier existant</span>
+                                                </div>
+                                                <div class="invalid-feedback" *ngIf="(validate) && siftMsForm.get('echantillon_negatif_'+i)?.errors">
+                                                    L'identifiant d'échantillon négatif est requis.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-4">
+                                <div class="col-sm-12">
+                                    <div class="d-flex justify-content-between">
+                                        <button type="button" class="btn btn-secondary" (click)="reset()">
+                                            <i class="fa fa-refresh"></i> Réinitialiser
+                                        </button>
+                                        <button type="submit" class="btn btn-primary" [disabled]="!isFormValid() || !hasChanges()">
+                                            <i class="fa fa-save"></i> Enregistrer
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

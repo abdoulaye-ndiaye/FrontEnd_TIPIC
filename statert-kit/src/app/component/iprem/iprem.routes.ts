@@ -1,6 +1,8 @@
 import { Routes } from "@angular/router";
 import { AjoutSiftMsComponent } from "./ajout-sift-ms/ajout-sift-ms.component";
 import { ListeEchantillonsComponent } from "./liste-echantillons/liste-echantillons.component";
+import { UpdateSiftMsComponent } from "./update-sift-ms/update-sift-ms.component";
+
 export const iprem: Routes = [
     {
         path: "",
@@ -21,6 +23,14 @@ export const iprem: Routes = [
                     breadcrumb: "Liste Echantillons",
                 },
             },
+            {
+                path: "update-sift-ms",
+                component: UpdateSiftMsComponent,
+                data: {
+                    title: "Update SIFT-MS",
+                    breadcrumb: "Update SIFT-MS",
+                },
+            }
         ],
     },
 ];

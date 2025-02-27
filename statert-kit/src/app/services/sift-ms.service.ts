@@ -19,19 +19,64 @@ export class SiftMsService {
         );
     }
 
-    dowloadSiftMs(id: string) {
+    downloadSiftMs(id: string, fileType: string) {
+        // Afficher une notification de chargement
+        Swal.fire({
+            title: 'Téléchargement en cours',
+            text: 'Veuillez patienter...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+        
+        // Construire l'URL avec le paramètre fileType
+        const url = `${environment.apiUrl}/siftms/download/${id}?fileType=${fileType}`;
+        
         this.httpClient
-            .get(`${environment.apiUrl}/download-siftMs/${id}`, {
+            .get(url, {
                 responseType: "blob",
             })
-            .subscribe((res) => {
-                window.open(window.URL.createObjectURL(res));
-                Swal.close();
-            });
+            .subscribe(
+                (res) => {
+                    // Créer un objet URL pour le blob
+                    const fileUrl = window.URL.createObjectURL(res);
+                    
+                    // Ouvrir le fichier dans un nouvel onglet
+                    window.open(fileUrl);
+                    
+                    // Fermer la notification de chargement
+                    Swal.close();
+                },
+                (error) => {
+                    // Gérer les erreurs de téléchargement
+                    console.error('Erreur lors du téléchargement:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erreur de téléchargement',
+                        text: 'Impossible de télécharger le fichier demandé.'
+                    });
+                }
+            );
     }
     delete(id: string) {
         return this.httpClient.delete<any>(
             `${environment.apiUrl}/siftMs/${id}`
         );
+    }
+    update(data: any) {
+        return this.httpClient.put<any>(
+            `${environment.apiUrl}/siftMs/update`,
+            data
+        );
+    }
+    updateWithFiles(data: any) {
+        return this.httpClient.put<any>(
+            `${environment.apiUrl}/siftMs/updateWithFiles`,
+            data
+        );
+    }
+    uploadNew(data: any) {
+        return this.httpClient.post<any>(`${environment.apiUrl}/siftMs/upload`, data);
     }
 }

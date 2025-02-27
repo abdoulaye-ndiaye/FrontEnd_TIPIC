@@ -6,127 +6,222 @@
                     <i class="fa fa-arrow-left"></i> Retour
                 </button>
                 @if (!siftMs) {
-                <div class="card-body">
-                    <form [formGroup]="siftMsForm" (ngSubmit)="onSubmit()">
-                        <div class="form theme-form">
-                            <h4 class="page-title">Ajout du fichier SIFT-MS pour l'echantillon {{fromage?.numeroEchan}}
-                            </h4>
-                            <br>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="mb-3">
-                                        <label>Blanc Positif</label>
-                                        <input class="form-control" type="text" formControlName="blanc_positif"
-                                            [ngClass]="{ 'is-invalid' : (blanc_positif?.touched || validate) && blanc_positif?.errors , 'is-valid' : !blanc_positif?.errors}">
-                                        <div class="invalid-feedback"
-                                            *ngIf="(blanc_positif?.touched || validate) && blanc_positif?.errors">
-                                            Le blanc positif est requis.
+                    <div class="card-body">
+                        <form [formGroup]="siftMsForm" (ngSubmit)="onSubmit()">
+                            <div class="form theme-form">
+                                <h4 class="page-title">Ajout du fichier SIFT-MS pour l'echantillon {{fromage?.numeroEchan}}</h4>
+                                <br>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="mb-3">
+                                            <label>Nombre de réplicats ? (entre 1 et 100)</label>
+                                            <input class="form-control" type="number" min="1" max="100" formControlName="nombreReplicats"
+                                                (change)="onReplicatsChange()" 
+                                                [ngClass]="{ 'is-invalid' : (nombreReplicats?.touched || validate) && nombreReplicats?.errors, 'is-valid' : !nombreReplicats?.errors}">
+                                            <div class="invalid-feedback"
+                                                *ngIf="(nombreReplicats?.touched || validate) && nombreReplicats?.errors">
+                                                Le nombre de réplicats est requis (entre 1 et 100).
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="mb-3">
-                                        <label>Blanc Négatif</label>
-                                        <input class="form-control" type="text" formControlName="blanc_negatif"
-                                            [ngClass]="{ 'is-invalid' : (blanc_negatif?.touched || validate) && blanc_negatif?.errors , 'is-valid' : !blanc_negatif?.errors}">
-                                        <div class="invalid-feedback"
-                                            *ngIf="(blanc_negatif?.touched || validate) && blanc_negatif?.errors">
-                                            Le blanc négatif est requis.
+                                
+                                <div *ngFor="let replicat of replicats; let i = index">
+                                    <hr>
+                                    <div class="card mb-4">
+                                        <div class="card-header">
+                                            <h5>Réplicat {{i+1}}</h5>
                                         </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="mb-3">
-                                        <label>Fromage Positif</label>
-                                        <input class="form-control" type="text" formControlName="fromage_positif"
-                                            [ngClass]="{ 'is-invalid' : (fromage_positif?.touched || validate) && fromage_positif?.errors , 'is-valid' : !fromage_positif?.errors}">
-                                        <div class="invalid-feedback"
-                                            *ngIf="(fromage_positif?.touched || validate) && fromage_positif?.errors">
-                                            Le fromage positif est requis.
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label>Blanc positif</label>
+                                                        <input class="form-control" type="text" [formControlName]="'blanc_positif_' + i"
+                                                            [ngClass]="{ 'is-invalid' : (siftMsForm.get('blanc_positif_' + i)?.touched || validate) && siftMsForm.get('blanc_positif_' + i)?.errors, 'is-valid' : !siftMsForm.get('blanc_positif_' + i)?.errors}">
+                                                        <div class="invalid-feedback"
+                                                            *ngIf="(siftMsForm.get('blanc_positif_' + i)?.touched || validate) && siftMsForm.get('blanc_positif_' + i)?.errors">
+                                                            Le blanc positif est requis.
+                                                        </div>
+                                                        <input class="form-control mb-2" type="file" [id]="'blanc_positif_file_' + i" 
+                                                            (change)="onFileChange($event, i, 'blanc_positif')"
+                                                            accept=".xml"
+                                                            [ngClass]="{ 'is-invalid': (validate) && !hasFile(i, 'blanc_positif'), 'is-valid': hasFile(i, 'blanc_positif') }">
+                                                        <div class="invalid-feedback"
+                                                            *ngIf="(validate) && !hasFile(i, 'blanc_positif')">
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label>Blanc négatif</label>
+                                                        <input class="form-control" type="text" [formControlName]="'blanc_negatif_' + i"
+                                                            [ngClass]="{ 'is-invalid' : (siftMsForm.get('blanc_negatif_' + i)?.touched || validate) && siftMsForm.get('blanc_negatif_' + i)?.errors, 'is-valid' : !siftMsForm.get('blanc_negatif_' + i)?.errors}">
+                                                        <div class="invalid-feedback"
+                                                            *ngIf="(siftMsForm.get('blanc_negatif_' + i)?.touched || validate) && siftMsForm.get('blanc_negatif_' + i)?.errors">
+                                                            Le blanc négatif est requis.
+                                                        </div>
+                                                        <input class="form-control mb-2" type="file" [id]="'blanc_negatif_file_' + i" 
+                                                            (change)="onFileChange($event, i, 'blanc_negatif')"
+                                                            accept=".xml"
+                                                            [ngClass]="{ 'is-invalid': (validate) && !hasFile(i, 'blanc_negatif'), 'is-valid': hasFile(i, 'blanc_negatif') }">
+                                                        <div class="invalid-feedback"
+                                                            *ngIf="(validate) && !hasFile(i, 'blanc_negatif')">
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label>Échantillon positif</label>
+                                                        <input class="form-control" type="text" [formControlName]="'echantillon_positif_' + i"
+                                                            [ngClass]="{ 'is-invalid' : (siftMsForm.get('echantillon_positif_' + i)?.touched || validate) && siftMsForm.get('echantillon_positif_' + i)?.errors, 'is-valid' : !siftMsForm.get('echantillon_positif_' + i)?.errors}">
+                                                        <div class="invalid-feedback"
+                                                            *ngIf="(siftMsForm.get('echantillon_positif_' + i)?.touched || validate) && siftMsForm.get('echantillon_positif_' + i)?.errors">
+                                                            L'échantillon positif est requis.
+                                                        </div>
+                                                        <input class="form-control mb-2" type="file" [id]="'echantillon_positif_file_' + i" 
+                                                            (change)="onFileChange($event, i, 'echantillon_positif')"
+                                                            accept=".xml"
+                                                            [ngClass]="{ 'is-invalid': (validate) && !hasFile(i, 'echantillon_positif'), 'is-valid': hasFile(i, 'echantillon_positif') }">
+                                                        <div class="invalid-feedback"
+                                                            *ngIf="(validate) && !hasFile(i, 'echantillon_positif')">
+                                                            Le fichier échantillon positif est requis.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label>Échantillon négatif</label>
+                                                        <input class="form-control" type="text" [formControlName]="'echantillon_negatif_' + i"
+                                                            [ngClass]="{ 'is-invalid' : (siftMsForm.get('echantillon_negatif_' + i)?.touched || validate) && siftMsForm.get('echantillon_negatif_' + i)?.errors, 'is-valid' : !siftMsForm.get('echantillon_negatif_' + i)?.errors}">
+                                                        <div class="invalid-feedback"
+                                                            *ngIf="(siftMsForm.get('echantillon_negatif_' + i)?.touched || validate) && siftMsForm.get('echantillon_negatif_' + i)?.errors">
+                                                            L'échantillon négatif est requis.
+                                                        </div>
+                                                        <input class="form-control mb-2" type="file" [id]="'echantillon_negatif_file_' + i" 
+                                                            (change)="onFileChange($event, i, 'echantillon_negatif')"
+                                                            accept=".xml"
+                                                            [ngClass]="{ 'is-invalid': (validate) && !hasFile(i, 'echantillon_negatif'), 'is-valid': hasFile(i, 'echantillon_negatif') }">
+                                                        <div class="invalid-feedback"
+                                                            *ngIf="(validate) && !hasFile(i, 'echantillon_negatif')">
+                                                            Le fichier échantillon négatif est requis.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="mb-3">
-                                        <label>Fromage Négatif</label>
-                                        <input class="datepicker-here form-control" type="text"
-                                            formControlName="fromage_negatif"
-                                            [ngClass]="{ 'is-invalid' : (fromage_negatif?.touched || validate) && fromage_negatif?.errors , 'is-valid' : !fromage_negatif?.errors}">
-                                        <div class="invalid-feedback"
-                                            *ngIf="(fromage_negatif?.touched || validate) && fromage_negatif?.errors">
-                                            Le fromage négatif est requis.
+                                
+                                <div class="row">
+                                    <div class="col">
+                                        <div *ngIf="validate && !allFilesUploaded()" class="alert alert-danger mb-3">
+                                            Veuillez télécharger tous les fichiers requis pour chaque réplicat.
+                                        </div>
+                                        <div class="text-end">
+                                            <button type="submit" class="btn btn-success me-3" [disabled]="!isFormValid()">Ajouter</button>
+                                            <button type="button" class="btn btn-danger" (click)="reset()">Annuler</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label>Ajoutez le fichier SIFT-MS</label>
-                                        <label for="file" class="drop-container" id="dropcontainer">
-                                            <span class="drop-title">Déposer le fichier ici</span>
-                                            ou
-                                            <input type="file" formControlName="file" id="file"
-                                                accept=".csv, .xls, .xlsx" required (change)="onFileChange($event)"
-                                                [ngClass]="{ 'is-invalid' : (file?.touched || validate) && file?.errors , 'is-valid' : !file?.errors}" />
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="text-end">
-                                        <button type="submit" class="btn btn-success me-3"
-                                            [disabled]="!siftMsForm.valid">Ajouter
-                                        </button>
-                                        <button type="reset" class="btn btn-danger" (click)="reset()">Annuler</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                        </form>
+                    </div>
                 }
                 @else {
                 <div class="row mr-5 ml-5">
                     <div class="card m-5 p-3">
                         <div class="card-body">
-                            <div align="center">Un Fichier SIFT-MS existe déjà pour l'échantillon
-                                {{fromage.numeroEchan}} !</div>
-                            <br>
-                            <table class="table table-bordered table-striped table-hover" id="memoire">
-                                <thead>
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h4 align="center">Un Fichier SIFT-MS existe déjà pour l'échantillon
+                                    {{fromage.numeroEchan}} !</h4>
+                                    <button 
+                                    (click)="update(fromage._id)" 
+                                    class="btn btn-primary" *ngIf="roleUtilisateur !== 'TECHNICIEN_IPREM'">
+                                    <i class="fa-solid fa-plus"></i>&nbsp; 
+                                    Modifier
+                                  </button>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover">
+                                  <thead>
                                     <tr>
-                                        <th>Blanc Positif</th>
-                                        <th>Blanc Négatif</th>
-                                        <th>Fromage Positif</th>
-                                        <th>Fromage Négatif</th>
-                                        <th>Action</th>
+                                      <th>Nombre de réplicats: {{ siftMsList.length }}</th>
+                                      <th class="text-center">Blanc positif</th>
+                                      <th class="text-center">Blanc négatif</th>
+                                      <th class="text-center">Echantillon positif</th>
+                                      <th class="text-center">Echantillon négatif</th>
+                                      <th class="text-center" *ngIf="roleUtilisateur !== 'TECHNICIEN_IPREM'">Actions</th>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{ siftMs.blanc_positif }}</td>
-                                        <td>{{ siftMs.blanc_negatif }}</td>
-                                        <td>{{ siftMs.fromage_positif }}</td>
-                                        <td>{{ siftMs.fromage_negatif }}</td>
-                                        <td>
-                                            <a (click)="telecharger(siftMs._id)" class="btn btn-info">
-                                                <i class="fas fa-file-download"></i>&nbsp; Télécharger
-                                            </a> &nbsp; &nbsp;
-                                            <button (click)="delete(siftMs._id)"
-                                                class="btn btn-danger" *ngIf="roleUtilisateur !== 'TECHNICIEN_IPREM'">Supprimer</button>
-
+                                  </thead>
+                                  <tbody>
+                                    <ng-container *ngFor="let siftMs of siftMsList; let i = index">
+                                      <tr>
+                                        <td class="align-middle font-weight-bold">
+                                          <span class="font-weight-bold">Réplicat {{ siftMs.replicatNumber + 1 }}</span>
                                         </td>
-
-                                    </tr>
-                                </tbody>
-                            </table>
+                                        
+                                        <!-- Blanc positif -->
+                                        <td class="text-center">
+                                          <div *ngIf="siftMs.blanc_positif">{{ siftMs.blanc_positif }}</div>
+                                          <button 
+                                            *ngIf="siftMs.fichier_blanc_positif"
+                                            class="btn btn-sm btn-outline-primary mt-2" 
+                                            (click)="telecharger(siftMs._id, 'blanc_positif')">
+                                            Charger le fichier
+                                          </button>
+                                        </td>
+                                        
+                                        <!-- Blanc négatif -->
+                                        <td class="text-center">
+                                          <div *ngIf="siftMs.blanc_negatif">{{ siftMs.blanc_negatif }}</div>
+                                          <button 
+                                            *ngIf="siftMs.fichier_blanc_negatif"
+                                            class="btn btn-sm btn-outline-primary mt-2" 
+                                            (click)="telecharger(siftMs._id, 'blanc_negatif')">
+                                            Charger le fichier
+                                          </button>
+                                        </td>
+                                        
+                                        <!-- Echantillon positif -->
+                                        <td class="text-center">
+                                          <div *ngIf="siftMs.echantillon_positif">{{ siftMs.echantillon_positif }}</div>
+                                          <button 
+                                            *ngIf="siftMs.fichier_echantillon_positif"
+                                            class="btn btn-sm btn-outline-primary mt-2" 
+                                            (click)="telecharger(siftMs._id, 'echantillon_positif')">
+                                            Charger le fichier
+                                          </button>
+                                        </td>
+                                        
+                                        <!-- Echantillon négatif -->
+                                        <td class="text-center">
+                                          <div *ngIf="siftMs.echantillon_negatif">{{ siftMs.echantillon_negatif }}</div>
+                                          <button 
+                                            *ngIf="siftMs.fichier_echantillon_negatif"
+                                            class="btn btn-sm btn-outline-primary mt-2" 
+                                            (click)="telecharger(siftMs._id, 'echantillon_negatif')">
+                                            Charger le fichier
+                                          </button>
+                                        </td>
+                                        
+                                        <!-- Actions -->
+                                        <td class="text-center align-middle" *ngIf="roleUtilisateur !== 'TECHNICIEN_IPREM'">
+                                          <button (click)="delete(siftMs._id)" class="btn btn-danger">
+                                            <i class="fas fa-trash"></i> Supprimer
+                                          </button>
+                                        </td>
+                                      </tr>
+                                    </ng-container>
+                                  </tbody>
+                                </table>
+                            </div>
                         </div>
-
                     </div>
                 </div>
                 }
