@@ -68,7 +68,7 @@ export const dashData: Routes = [
         data: {
             title: "PTF2A",
             breadcrumb: "PTF2A",
-            expectedRoles: [Role.PARTENAIRE_PTF2A,Role.ADMIN],  // Seul un PARTENAIRE_PTF2A peut accéder à cette
+            expectedRoles: [Role.PARTENAIRE_PTF2A,Role.CHEF_PROJET_IPREM,Role.INGENIEUR_IPREM,Role.ADMIN],  // Seul un PARTENAIRE_PTF2A peut accéder à cette
         },
         canActivate: [authGuard],
         loadChildren: () =>
