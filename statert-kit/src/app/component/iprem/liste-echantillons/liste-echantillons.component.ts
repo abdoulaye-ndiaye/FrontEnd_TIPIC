@@ -47,7 +47,7 @@ export class ListeEchantillonsComponent implements OnInit, OnDestroy {
                 processing: true,
                 lengthMenu: [25, 40, 50, 75, 100],
                 columnDefs: [
-                    { targets: [0,4], type: 'date' }
+                    { targets: [0], type: 'date' }
                 ],
                 order: [[0, "desc"]]
             });

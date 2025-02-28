@@ -31,8 +31,8 @@ export class NavmenuService {
         [Role.ADMIN]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], // Admin voit tout
         [Role.SYNDICAT_AOP]: [5, 6, 7], // Section syndicat-AOP
         [Role.TECHNICIEN_IPREM]: [8, 9], // Section IPREM
-        [Role.INGENIEUR_IPREM]: [8, 9],
-        [Role.CHEF_PROJET_IPREM]: [8, 9],
+        [Role.INGENIEUR_IPREM]: [5, 6, 7, 8, 9,10, 11],
+        [Role.CHEF_PROJET_IPREM]: [5, 6, 7, 8, 9,10, 11],
         [Role.PARTENAIRE_PTF2A]: [10, 11], // Section PTF2A
         [Role.PRODUCTEUR]: [14, 15], // Section producteur
     };

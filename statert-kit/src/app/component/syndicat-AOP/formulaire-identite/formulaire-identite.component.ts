@@ -559,7 +559,8 @@ replaceCommaWithDot(event: any) {
             echantillonId
           )
         );
-
+        // recupeation de la valeur dureeSousVide
+        const dureeSousVideValue = this.cheeseForm.get('dureeSousVide')?.value ?? null; // Valeur par défaut 0 si null
         // Appel au service createFabrication
         await firstValueFrom(
           this.fromage.createFabrication(
@@ -575,7 +576,7 @@ replaceCommaWithDot(event: any) {
             formValue.reportVide,
             formValue.dateMiseVide ?? null,
             formValue.dateSortieVide ?? null,
-            formValue.dureeSousVide ?? null,
+            dureeSousVideValue,
             echantillonId
           )
         );
