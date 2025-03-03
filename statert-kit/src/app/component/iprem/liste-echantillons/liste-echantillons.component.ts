@@ -18,12 +18,37 @@ export class ListeEchantillonsComponent implements OnInit, OnDestroy {
     constructor(
         private fromageService: FromageService,
         private router: Router
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         this.fromageService.getAll().subscribe((data) => {
             this.echantillons = data;
         });
+
+        // Ajouter un parser de date personnalisé pour le format dd-MM-YYYY HH:mm:ss
+        $.fn.dataTable.ext.type.order['date-fr-pre'] = function (data: string | null | undefined) {
+            // Si la donnée est vide, retourner une valeur minimale
+            if (data === null || data === '' || data === undefined) {
+                return -Infinity;
+            }
+
+            // Format attendu: dd-MM-YYYY HH:mm:ss
+            var dateParts = data.split(' ')[0].split('-');
+            var timeParts = data.split(' ')[1] ? data.split(' ')[1].split(':') : ['00', '00', '00'];
+
+            // Inverser jour et mois pour obtenir MM-dd-YYYY
+            var year = parseInt(dateParts[2], 10);
+            var month = parseInt(dateParts[1], 10) - 1; // Les mois dans JS sont 0-11
+            var day = parseInt(dateParts[0], 10);
+            var hour = parseInt(timeParts[0], 10);
+            var minute = parseInt(timeParts[1], 10);
+            var second = parseInt(timeParts[2], 10);
+
+            // Créer un timestamp pour le tri
+            var timestamp = new Date(year, month, day, hour, minute, second).getTime();
+
+            return isNaN(timestamp) ? -Infinity : timestamp;
+        };
 
         // Initialisation de DataTables avec setTimeout
         setTimeout(() => {
@@ -47,7 +72,7 @@ export class ListeEchantillonsComponent implements OnInit, OnDestroy {
                 processing: true,
                 lengthMenu: [25, 40, 50, 75, 100],
                 columnDefs: [
-                    { targets: [0], type: 'date' }
+                    { targets: [0], type: 'date-fr-pre' }
                 ],
                 order: [[0, "desc"]]
             });
