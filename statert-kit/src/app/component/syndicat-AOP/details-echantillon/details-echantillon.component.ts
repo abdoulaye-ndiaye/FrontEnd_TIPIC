@@ -28,7 +28,7 @@ export class DetailsEchantillonComponent implements OnInit {
         private fromageService: FromageService,
         private router: Router,
         private location: Location
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         const token = localStorage.getItem("token") as string;
@@ -78,29 +78,17 @@ export class DetailsEchantillonComponent implements OnInit {
         }).then((result) => {
             if (result.isConfirmed) {
                 this.fromageService
-                    .deleteFabrication(this.fabrication._id)
+                    .deleteEchantillon(id)
                     .subscribe((data) => {
-                        this.fromageService
-                            .deleteAffinage(this.affinage._id)
-                            .subscribe((data) => {
-                                this.fromageService
-                                    .deleteProduction(this.production._id)
-                                    .subscribe((data) => {
-                                        this.fromageService
-                                            .deleteEchantillon(id)
-                                            .subscribe((data) => {
-                                                Swal.fire(
-                                                    "Supprimé !",
-                                                    "L'enregistrement a été supprimé avec succès.",
-                                                    "success"
-                                                ).then(() => {
-                                                    this.router.navigate([
-                                                        "/syndicat/liste-echantillons",
-                                                    ]);
-                                                });
-                                            });
-                                    });
-                            });
+                        Swal.fire(
+                            "Supprimé !",
+                            "L'enregistrement a été supprimé avec succès.",
+                            "success"
+                        ).then(() => {
+                            this.router.navigate([
+                                "/syndicat/liste-echantillons",
+                            ]);
+                        });
                     });
             }
         });
